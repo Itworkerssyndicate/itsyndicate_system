@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاقتراحات والشكاوي - ITWS Union</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* نفس تنسيقات الصفحات السابقة مع تعديلات */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            margin-right: 280px;
+            padding: 20px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .suggestions-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .new-suggestion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .new-suggestion-card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .suggestions-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .suggestion-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f5f5f5;
+            padding-bottom: 10px;
+        }
+
+        .suggestion-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .suggestion-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .suggestion-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+        }
+
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+
+        .suggestion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-type {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .type-suggestion {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .type-complaint {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .suggestion-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-reviewed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-content {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .ai-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255,107,107,0.3);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط الجانبي (نفس الهيكل السابق) -->
+    <div class="sidebar">
+        <div class="sidebar-header" id="userInfo"></div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">الرئيسية</a>
+            <a href="committees.html" class="menu-item">اللجان</a>
+            <a href="branches.html" class="menu-item">الفروع</a>
+            <a href="members.html" class="menu-item">الأعضاء</a>
+            <a href="suggestions.html" class="menu-item active">الاقتراحات والشكاوي</a>
+            <a href="#" onclick="logout()" class="menu-item">تسجيل الخروج</a>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title">
+                <h2>الاقتراحات والشكاوي</h2>
+                <p id="currentDateTime"></p>
+            </div>
+        </div>
+
+        <div class="suggestions-container">
+            <!-- إضافة اقتراح/شكوى جديد -->
+            <div class="new-suggestion-card">
+                <h3><i class="fas fa-plus-circle" style="color: #667eea;"></i> إضافة جديد</h3>
+                <form id="suggestionForm">
+                    <div class="form-group">
+                        <label>النوع</label>
+                        <select id="suggestionType" required>
+                            <option value="suggestion">اقتراح</option>
+                            <option value="complaint">شكوى</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>العنوان</label>
+                        <input type="text" id="suggestionTitle" required placeholder="عنوان الاقتراح أو الشكوى">
+                    </div>
+
+                    <div class="form-group">
+                        <label>المحتوى</label>
+                        <textarea id="suggestionContent" rows="5" required placeholder="اكتب محتوى الاقتراح أو الشكوى..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>إلى (اختياري)</label>
+                        <select id="suggestionTo">
+                            <option value="">الكل</option>
+                            <option value="president">النقيب العام</option>
+                            <option value="vice">النائب الأول</option>
+                            <optgroup label="اللجان">
+                                <!-- يتم تعبئتها ديناميكياً -->
+                            </optgroup>
+                            <optgroup label="الفروع">
+                                <!-- يتم تعبئتها ديناميكياً -->
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        إرسال
+                    </button>
+                </form>
+            </div>
+
+            <!-- قائمة الاقتراحات والشكاوي -->
+            <div class="suggestions-list">
+                <div class="suggestion-tabs">
+                    <div class="suggestion-tab active" onclick="switchSuggestionTab('all')">الكل</div>
+                    <div class="suggestion-tab" onclick="switchSuggestionTab('suggestion')">اقتراحات</div>
+                    <div class="suggestion-tab" onclick="switchSuggestionTab('complaint')">شكاوي</div>
+                    <div class="suggestion-tab" onclick="switchSuggestionTab('my')">خاصة بي</div>
+                </div>
+
+                <div id="suggestionsList">
+                    <!-- يتم تعبئتها ديناميكياً -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- زر ITWS AI -->
+    <div class="ai-toggle" onclick="toggleAIChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <script type="module">
+        // استيراد Firebase وتنفيذ المنطق
+        // (سيتم إضافة الكود الكامل هنا - مشابه للصفحات السابقة)
+    </script>
+</body>
+</html>
