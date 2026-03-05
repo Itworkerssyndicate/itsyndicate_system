@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأعضاء - ITWS Union</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* نفس تنسيقات الصفحات السابقة مع تعديلات */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            padding: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-left: 10px;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .main-content {
+            margin-right: 280px;
+            padding: 20px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .page-title h2 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .filter-group input, .filter-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .member-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-online {
+            background: #4caf50;
+            box-shadow: 0 0 10px #4caf50;
+        }
+
+        .status-offline {
+            background: #9e9e9e;
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .member-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .member-info h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .member-info .role {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .member-info .title {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .member-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item i {
+            width: 20px;
+            color: #667eea;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .member-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-view {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-edit {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination button {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .ai-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255,107,107,0.3);
+            z-index: 999;
+        }
+
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 2000;
+            display: none;
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 3000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط الجانبي -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header" id="userInfo">
+            <!-- يتم تعبئتها ديناميكياً -->
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                الرئيسية
+            </a>
+            <a href="committees.html" class="menu-item">
+                <i class="fas fa-users"></i>
+                اللجان
+                <span class="badge" id="committeesCount">0</span>
+            </a>
+            <a href="branches.html" class="menu-item">
+                <i class="fas fa-building"></i>
+                الفروع
+                <span class="badge" id="branchesCount">0</span>
+            </a>
+            <a href="members.html" class="menu-item active">
+                <i class="fas fa-user-tie"></i>
+                الأعضاء
+                <span class="badge" id="membersCount">0</span>
+            </a>
+            <a href="requests.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                طلبات التسجيل
+                <span class="badge" id="pendingRequests">0</span>
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                التقارير
+            </a>
+            <a href="tracking.html" class="menu-item">
+                <i class="fas fa-exchange-alt"></i>
+                نظام التتبع
+            </a>
+            <a href="suggestions.html" class="menu-item">
+                <i class="fas fa-lightbulb"></i>
+                الاقتراحات
+            </a>
+            
+            <div style="height: 20px;"></div>
+            
+            <a href="#" class="menu-item" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); color: white;" onclick="toggleAIChat()">
+                <i class="fas fa-robot"></i>
+                ITWS AI مساعد
+            </a>
+            
+            <div style="height: 20px;"></div>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                تسجيل الخروج
+            </a>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <!-- الشريط العلوي -->
+        <div class="top-bar">
+            <div class="page-title">
+                <h2>إدارة الأعضاء</h2>
+                <p id="currentDateTime"></p>
+            </div>
+            <div>
+                <button class="btn-primary" onclick="showAddMemberModal()">
+                    <i class="fas fa-user-plus"></i>
+                    إضافة عضو
+                </button>
+            </div>
+        </div>
+
+        <!-- قسم البحث والتصفية -->
+        <div class="search-section">
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label>بحث بالاسم</label>
+                    <input type="text" id="searchName" placeholder="اسم العضو..." onkeyup="filterMembers()">
+                </div>
+                <div class="filter-group">
+                    <label>الدور</label>
+                    <select id="filterRole" onchange="filterMembers()">
+                        <option value="">الكل</option>
+                        <option value="president">نقيب عام</option>
+                        <option value="vice_president">نائب أول</option>
+                        <option value="committee_manager">مدير لجنة</option>
+                        <option value="branch_manager">مدير فرع</option>
+                        <option value="committee_member">عضو لجنة</option>
+                        <option value="branch_member">عضو فرع</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>الحالة</label>
+                    <select id="filterStatus" onchange="filterMembers()">
+                        <option value="">الكل</option>
+                        <option value="online">متصل</option>
+                        <option value="offline">غير متصل</option>
+                        <option value="active">نشط</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>المحافظة</label>
+                    <select id="filterGovernorate" onchange="filterMembers()">
+                        <option value="">الكل</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="الجيزة">الجيزة</option>
+                        <option value="الإسكندرية">الإسكندرية</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn-secondary" onclick="resetFilters()">
+                    <i class="fas fa-undo"></i>
+                    إعادة تعيين
+                </button>
+                <button class="btn-primary" onclick="exportMembers()">
+                    <i class="fas fa-file-export"></i>
+                    تصدير
+                </button>
+            </div>
+        </div>
+
+        <!-- شبكة الأعضاء -->
+        <div class="members-grid" id="membersGrid">
+            <!-- يتم تعبئتها ديناميكياً -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <!-- يتم تعبئتها ديناميكياً -->
+        </div>
+    </div>
+
+    <!-- نافذة إضافة/تعديل عضو -->
+    <div class="modal" id="memberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="memberModalTitle"><i class="fas fa-user-plus"></i> إضافة عضو جديد</h3>
+                <button class="close-modal" onclick="closeMemberModal()">&times;</button>
+            </div>
+            <form id="memberForm">
+                <input type="hidden" id="memberId">
+                
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>الرقم القومي</label>
+                    <input type="text" id="nationalId" required maxlength="14">
+                </div>
+                
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="email">
+                </div>
+                
+                <div class="form-group">
+                    <label>الدور</label>
+                    <select id="role" required onchange="toggleRoleFields()">
+                        <option value="">اختر الدور</option>
+                        <option value="president">نقيب عام</option>
+                        <option value="vice_president">نائب أول</option>
+                        <option value="committee_manager">مدير لجنة</option>
+                        <option value="branch_manager">مدير فرع</option>
+                        <option value="committee_member">عضو لجنة</option>
+                        <option value="branch_member">عضو فرع</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="committeeField" style="display: none;">
+                    <label>اللجنة</label>
+                    <select id="committee">
+                        <option value="">اختر اللجنة</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="branchField" style="display: none;">
+                    <label>الفرع</label>
+                    <select id="branch">
+                        <option value="">اختر الفرع</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>المنصب في اللجنة/الفرع</label>
+                    <select id="position">
+                        <option value="member">عضو</option>
+                        <option value="vice">وكيل</option>
+                        <option value="secretary">أمين عام</option>
+                        <option value="secretary_assistant">مساعد أمين عام</option>
+                        <option value="treasurer">أمين صندوق</option>
+                        <option value="treasurer_assistant">مساعد أمين صندوق</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>المحافظة</label>
+                    <select id="governorate" required>
+                        <option value="">اختر المحافظة</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="الجيزة">الجيزة</option>
+                        <option value="الإسكندرية">الإسكندرية</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>الحالة</label>
+                    <select id="status">
+                        <option value="active">نشط</option>
+                        <option value="inactive">غير نشط</option>
+                        <option value="suspended">موقوف</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>الصلاحيات الإضافية</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" value="can_create_reports"> إنشاء تقارير
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" value="can_manage_members"> إدارة أعضاء
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" value="can_send_messages"> إرسال مراسلات
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" value="can_view_reports"> عرض التقارير
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل العضو -->
+    <div class="modal" id="memberDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-circle"></i> تفاصيل العضو</h3>
+                <button class="close-modal" onclick="closeMemberDetailsModal()">&times;</button>
+            </div>
+            <div id="memberDetailsContent">
+                <!-- يتم تعبئتها ديناميكياً -->
+            </div>
+        </div>
+    </div>
+
+    <!-- زر ITWS AI -->
+    <div class="ai-toggle" onclick="toggleAIChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- نافذة ITWS AI -->
+    <div class="ai-chat-window" id="aiChatWindow" style="display: none;">
+        <!-- نفس هيكل النوافذ السابقة -->
+    </div>
+
+    <!-- رسائل النظام -->
+    <div id="messageBox" class="message-box"></div>
+
+    <!-- شاشة التحميل -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
+    </div>
+
+    <script type="module">
+        // استيراد Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, set, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
+            authDomain: "itws-system.firebaseapp.com",
+            databaseURL: "https://itws-system-default-rtdb.firebaseio.com",
+            projectId: "itws-system",
+            storageBucket: "itws-system.firebasestorage.app",
+            messagingSenderId: "770452248691",
+            appId: "1:770452248691:web:0e94e65e01298b398bb206",
+            measurementId: "G-8V5WSYEX0B"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // التحقق من تسجيل الدخول
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        // متغيرات عامة
+        let allUsers = [];
+        let filteredUsers = [];
+        let currentPage = 1;
+        const pageSize = 12;
+        let committees = {};
+        let branches = {};
+
+        // تحديث التاريخ والوقت
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('ar-EG', options);
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // عرض معلومات المستخدم
+        function displayUserInfo() {
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <div class="user-avatar" style="width: 80px; height: 80px; background: white; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #667eea;">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>${currentUser.fullName || currentUser.username}</h3>
+                <p>${currentUser.title || currentUser.role}</p>
+                <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 12px; margin-top: 10px;">
+                    <i class="fas fa-circle" style="color: #4caf50; font-size: 8px;"></i>
+                    متصل الآن
+                </div>
+            `;
+        }
+        displayUserInfo();
+
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message-box ${type}`;
+            msgBox.style.display = 'block';
+            setTimeout(() => {
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
+
+        // تحميل البيانات
+        async function loadData() {
+            showLoading(true);
+            try {
+                // تحميل المستخدمين
+                const usersRef = ref(database, 'users');
+                const usersSnap = await get(usersRef);
+                if (usersSnap.exists()) {
+                    allUsers = Object.entries(usersSnap.val()).map(([id, data]) => ({
+                        id,
+                        ...data
+                    }));
+                    filteredUsers = [...allUsers];
+                    document.getElementById('membersCount').textContent = allUsers.length;
+                }
+
+                // تحميل اللجان
+                const committeesRef = ref(database, 'committees');
+                const committeesSnap = await get(committeesRef);
+                if (committeesSnap.exists()) {
+                    committees = committeesSnap.val();
+                }
+
+                // تحميل الفروع
+                const branchesRef = ref(database, 'branches');
+                const branchesSnap = await get(branchesRef);
+                if (branchesSnap.exists()) {
+                    branches = branchesSnap.val();
+                }
+
+                // عرض الأعضاء
+                displayMembers();
+                
+                // تعبئة خيارات اللجان والفروع
+                populateSelects();
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showMessage('حدث خطأ في تحميل البيانات', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // تعبئة خيارات اللجان والفروع
+        function populateSelects() {
+            const committeeSelect = document.getElementById('committee');
+            const branchSelect = document.getElementById('branch');
+            
+            if (committeeSelect) {
+                committeeSelect.innerHTML = '<option value="">اختر اللجنة</option>';
+                Object.entries(committees).forEach(([id, committee]) => {
+                    committeeSelect.innerHTML += `<option value="${id}">${committee.name}</option>`;
+                });
+            }
+
+            if (branchSelect) {
+                branchSelect.innerHTML = '<option value="">اختر الفرع</option>';
+                Object.entries(branches).forEach(([id, branch]) => {
+                    branchSelect.innerHTML += `<option value="${id}">${branch.name} - ${branch.governorate}</option>`;
+                });
+            }
+        }
+
+        // عرض الأعضاء
+        function displayMembers() {
+            const grid = document.getElementById('membersGrid');
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageUsers = filteredUsers.slice(start, end);
+
+            if (pageUsers.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">لا يوجد أعضاء</p>';
+            } else {
+                grid.innerHTML = pageUsers.map(user => `
+                    <div class="member-card">
+                        <div class="member-status ${user.online ? 'status-online' : 'status-offline'}"></div>
+                        <div class="member-avatar">
+                            ${(user.fullName || user.username || 'عضو').charAt(0)}
+                        </div>
+                        <div class="member-info">
+                            <h3>${user.fullName || user.username}</h3>
+                            <div class="role">${user.title || user.role}</div>
+                            <div class="title">${user.position || ''}</div>
+                        </div>
+                        <div class="member-details">
+                            <div class="detail-item">
+                                <i class="fas fa-phone"></i>
+                                ${user.phone || 'غير محدد'}
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${user.governorate || 'غير محدد'}
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                آخر ظهور: ${user.lastSeen ? new Date(user.lastSeen).toLocaleString('ar-EG') : 'لم يسجل دخول'}
+                            </div>
+                        </div>
+                        <div class="member-actions">
+                            <button class="btn-view" onclick="viewMember('${user.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${(currentUser.role === 'president' || currentUser.role === 'vice_president') ? `
+                                <button class="btn-edit" onclick="editMember('${user.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            ` : ''}
+                            <button class="btn-primary" onclick="sendMessage('${user.id}')">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            displayPagination();
+        }
+
+        // عرض أزرار التنقل بين الصفحات
+        function displayPagination() {
+            const totalPages = Math.ceil(filteredUsers.length / pageSize);
+            const pagination = document.getElementById('pagination');
+            
+            let buttons = '';
+            for (let i = 1; i <= totalPages; i++) {
+                buttons += `<button class="${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            pagination.innerHTML = `
+                <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>السابق</button>
+                ${buttons}
+                <button onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>التالي</button>
+            `;
+        }
+
+        // التنقل بين الصفحات
+        window.changePage = function(direction) {
+            const totalPages = Math.ceil(filteredUsers.length / pageSize);
+            const newPage = currentPage + direction;
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                displayMembers();
+            }
+        };
+
+        window.goToPage = function(page) {
+            currentPage = page;
+            displayMembers();
+        };
+
+        // تصفية الأعضاء
+        window.filterMembers = function() {
+            const nameFilter = document.getElementById('searchName').value.toLowerCase();
+            const roleFilter = document.getElementById('filterRole').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            const govFilter = document.getElementById('filterGovernorate').value;
+
+            filteredUsers = allUsers.filter(user => {
+                const matchName = !nameFilter || (user.fullName && user.fullName.toLowerCase().includes(nameFilter)) || 
+                                                   (user.username && user.username.toLowerCase().includes(nameFilter));
+                const matchRole = !roleFilter || user.role === roleFilter;
+                const matchGov = !govFilter || user.governorate === govFilter;
+                
+                let matchStatus = true;
+                if (statusFilter === 'online') matchStatus = user.online === true;
+                else if (statusFilter === 'offline') matchStatus = user.online === false;
+                else if (statusFilter === 'active') matchStatus = user.status === 'active';
+                else if (statusFilter === 'inactive') matchStatus = user.status === 'inactive' || !user.status;
+                
+                return matchName && matchRole && matchGov && matchStatus;
+            });
+
+            currentPage = 1;
+            displayMembers();
+        };
+
+        window.resetFilters = function() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('filterRole').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterGovernorate').value = '';
+            filteredUsers = [...allUsers];
+            currentPage = 1;
+            displayMembers();
+        };
+
+        // إضافة/تعديل عضو
+        window.showAddMemberModal = function() {
+            if (currentUser.role !== 'president' && currentUser.role !== 'vice_president') {
+                showMessage('ليس لديك صلاحية إضافة أعضاء', 'error');
+                return;
+            }
+            document.getElementById('memberModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> إضافة عضو جديد';
+            document.getElementById('memberForm').reset();
+            document.getElementById('memberId').value = '';
+            document.getElementById('memberModal').classList.add('active');
+        };
+
+        window.closeMemberModal = function() {
+            document.getElementById('memberModal').classList.remove('active');
+        };
+
+        window.toggleRoleFields = function() {
+            const role = document.getElementById('role').value;
+            document.getElementById('committeeField').style.display = role.includes('committee') ? 'block' : 'none';
+            document.getElementById('branchField').style.display = role.includes('branch') ? 'block' : 'none';
+        };
+
+        document.getElementById('memberForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (currentUser.role !== 'president' && currentUser.role !== 'vice_president') {
+                showMessage('ليس لديك صلاحية إضافة/تعديل أعضاء', 'error');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const memberId = document.getElementById('memberId').value;
+                const memberData = {
+                    fullName: document.getElementById('fullName').value,
+                    nationalId: document.getElementById('nationalId').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    role: document.getElementById('role').value,
+                    committee: document.getElementById('committee').value || null,
+                    branch: document.getElementById('branch').value || null,
+                    position: document.getElementById('position').value,
+                    governorate: document.getElementById('governorate').value,
+                    status: document.getElementById('status').value,
+                    permissions: Array.from(document.querySelectorAll('#memberForm input[type="checkbox"]:checked')).map(cb => cb.value),
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: currentUser.userId
+                };
+
+                if (memberId) {
+                    // تعديل عضو
+                    await update(ref(database, `users/${memberId}`), memberData);
+                    showMessage('تم تعديل العضو بنجاح', 'success');
+                } else {
+                    // إضافة عضو جديد
+                    memberData.password = memberData.nationalId; // الرقم القومي ككلمة مرور
+                    memberData.createdAt = new Date().toISOString();
+                    memberData.createdBy = currentUser.userId;
+                    
+                    const newUserRef = push(ref(database, 'users'));
+                    await set(newUserRef, memberData);
+                    showMessage('تم إضافة العضو بنجاح', 'success');
+                }
+
+                closeMemberModal();
+                loadData();
+
+            } catch (error) {
+                console.error('Error saving member:', error);
+                showMessage('حدث خطأ في حفظ العضو', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // عرض تفاصيل العضو
+        window.viewMember = async function(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            const content = document.getElementById('memberDetailsContent');
+            
+            // تحديد مكان العضو (لجنة أو فرع)
+            let location = '';
+            if (user.committee && committees[user.committee]) {
+                location = `لجنة: ${committees[user.committee].name}`;
+            } else if (user.branch && branches[user.branch]) {
+                location = `فرع: ${branches[user.branch].name}`;
+            }
+
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; font-weight: 600;">
+                        ${(user.fullName || user.username).charAt(0)}
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 5px;">${user.fullName || user.username}</h3>
+                    <p style="color: #667eea; font-weight: 600;">${user.title || user.role}</p>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 15px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div>
+                            <div style="color: #666; font-size: 13px;">الرقم القومي</div>
+                            <div style="color: #333; font-weight: 600;">${user.nationalId || 'غير محدد'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">رقم الهاتف</div>
+                            <div style="color: #333; font-weight: 600;">${user.phone || 'غير محدد'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">البريد الإلكتروني</div>
+                            <div style="color: #333; font-weight: 600;">${user.email || 'غير محدد'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">المحافظة</div>
+                            <div style="color: #333; font-weight: 600;">${user.governorate || 'غير محدد'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">الموقع</div>
+                            <div style="color: #333; font-weight: 600;">${location || 'غير محدد'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">المنصب</div>
+                            <div style="color: #333; font-weight: 600;">${user.position || 'عضو'}</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">الحالة</div>
+                            <div style="color: #333; font-weight: 600;">
+                                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${user.online ? '#4caf50' : '#9e9e9e'}; margin-left: 5px;"></span>
+                                ${user.online ? 'متصل' : 'غير متصل'}
+                            </div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 13px;">آخر ظهور</div>
+                            <div style="color: #333; font-weight: 600;">${user.lastSeen ? new Date(user.lastSeen).toLocaleString('ar-EG') : 'لم يسجل'}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="color: #666; font-size: 13px; margin-bottom: 10px;">الصلاحيات</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${user.permissions ? user.permissions.map(p => `
+                                <span style="background: #e3f2fd; color: #1976d2; padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+                                    ${p}
+                                </span>
+                            `).join('') : 'لا توجد صلاحيات إضافية'}
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    ${(currentUser.role === 'president' || currentUser.role === 'vice_president') ? `
+                        <button class="btn-edit" style="flex: 1;" onclick="editMember('${user.id}')">
+                            <i class="fas fa-edit"></i> تعديل
+                        </button>
+                    ` : ''}
+                    <button class="btn-primary" style="flex: 1;" onclick="sendMessage('${user.id}')">
+                        <i class="fas fa-envelope"></i> مراسلة
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('memberDetailsModal').classList.add('active');
+        };
+
+        window.closeMemberDetailsModal = function() {
+            document.getElementById('memberDetailsModal').classList.remove('active');
+        };
+
+        // تعديل عضو
+        window.editMember = function(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            document.getElementById('memberModalTitle').innerHTML = '<i class="fas fa-edit"></i> تعديل عضو';
+            document.getElementById('memberId').value = userId;
+            document.getElementById('fullName').value = user.fullName || '';
+            document.getElementById('nationalId').value = user.nationalId || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('role').value = user.role || '';
+            document.getElementById('committee').value = user.committee || '';
+            document.getElementById('branch').value = user.branch || '';
+            document.getElementById('position').value = user.position || 'member';
+            document.getElementById('governorate').value = user.governorate || '';
+            document.getElementById('status').value = user.status || 'active';
+
+            // تفعيل الحقول المناسبة
+            toggleRoleFields();
+
+            // تحديد الصلاحيات
+            if (user.permissions) {
+                document.querySelectorAll('#memberForm input[type="checkbox"]').forEach(cb => {
+                    cb.checked = user.permissions.includes(cb.value);
+                });
+            }
+
+            document.getElementById('memberModal').classList.add('active');
+        };
+
+        // إرسال رسالة لعضو
+        window.sendMessage = function(userId) {
+            // التوجيه إلى صفحة المراسلات
+            sessionStorage.setItem('messageRecipient', userId);
+            window.location.href = 'messages.html';
+        };
+
+        // تصدير الأعضاء
+        window.exportMembers = function() {
+            const data = filteredUsers.map(u => ({
+                الاسم: u.fullName || u.username,
+                الدور: u.title || u.role,
+                الهاتف: u.phone,
+                المحافظة: u.governorate,
+                الحالة: u.online ? 'متصل' : 'غير متصل',
+                آخر_ظهور: u.lastSeen ? new Date(u.lastSeen).toLocaleString('ar-EG') : ''
+            }));
+
+            const csv = convertToCSV(data);
+            downloadCSV(csv, 'members.csv');
+        };
+
+        function convertToCSV(data) {
+            const headers = Object.keys(data[0] || {});
+            const rows = data.map(obj => headers.map(header => JSON.stringify(obj[header] || '')).join(','));
+            return [headers.join(','), ...rows].join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // تسجيل الخروج
+        window.logout = async function() {
+            await update(ref(database, `users/${currentUser.userId}`), {
+                online: false,
+                lastSeen: new Date().toISOString()
+            });
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        };
+
+        // تحديث حالة المتصل
+        async function updateOnlineStatus(status) {
+            if (currentUser) {
+                await update(ref(database, `users/${currentUser.userId}`), {
+                    online: status,
+                    lastSeen: new Date().toISOString()
+                });
+            }
+        }
+
+        window.addEventListener('load', () => {
+            updateOnlineStatus(true);
+            loadData();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            updateOnlineStatus(false);
+        });
+
+        onValue(ref(database, 'users'), () => loadData());
+
+    </script>
+</body>
+</html>
