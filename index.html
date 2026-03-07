@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نقابة تكنولوجيا المعلومات والبرمجيات - النظام الذكي</title>
+    <title>نقابة تكنولوجيا المعلومات والبرمجيات - تسجيل الدخول</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -21,20 +21,97 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خلفية متحركة */
+        .animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .animated-bg span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: move 25s linear infinite;
+            bottom: -150px;
+        }
+
+        .animated-bg span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .animated-bg span:nth-child(2) {
+            left: 10%;
+            width: 40px;
+            height: 40px;
+            animation-delay: 2s;
+            animation-duration: 17s;
+        }
+
+        .animated-bg span:nth-child(3) {
+            left: 70%;
+            width: 30px;
+            height: 30px;
+            animation-delay: 4s;
+        }
+
+        .animated-bg span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 22s;
+        }
+
+        .animated-bg span:nth-child(5) {
+            left: 65%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 0s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
         }
 
         .main-container {
             width: 100%;
             max-width: 500px;
             position: relative;
+            z-index: 1;
         }
 
         .card {
-            background: white;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: slideUp 0.5s ease;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         @keyframes slideUp {
@@ -54,8 +131,8 @@
         }
 
         .logo {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
@@ -63,19 +140,45 @@
             justify-content: center;
             margin: 0 auto 20px;
             color: white;
-            font-size: 40px;
+            font-size: 50px;
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(102,126,234,0.4);
         }
 
         h1 {
             color: #333;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 10px;
         }
 
         .subtitle {
             color: #666;
-            font-size: 14px;
+            font-size: 16px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .form-group {
@@ -95,9 +198,22 @@
             color: #667eea;
         }
 
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 18px;
+        }
+
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 14px;
@@ -122,15 +238,31 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover:before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102,126,234,0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         .toggle-link {
@@ -145,9 +277,11 @@
             font-weight: 600;
             margin-right: 5px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .toggle-link a:hover {
+            color: #764ba2;
             text-decoration: underline;
         }
 
@@ -160,7 +294,8 @@
             border-radius: 10px;
             color: white;
             font-weight: 600;
-            z-index: 1000;
+            z-index: 9999;
+            display: none;
             animation: slideDown 0.3s ease;
         }
 
@@ -170,10 +305,6 @@
 
         .message-box.error {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .message-box.info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         @keyframes slideDown {
@@ -193,12 +324,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255,255,255,0.9);
-            display: flex;
+            background: rgba(0,0,0,0.5);
+            display: none;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            z-index: 2000;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
         }
 
         .spinner {
@@ -209,6 +341,11 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
+        }
+
+        .loading-spinner p {
+            color: white;
+            font-size: 16px;
         }
 
         @keyframes spin {
@@ -236,6 +373,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
             padding: 12px;
             background: #f8f9fa;
             border: 2px dashed #667eea;
@@ -243,39 +381,45 @@
             color: #667eea;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .file-upload-label i {
-            margin-left: 10px;
-            font-size: 20px;
-        }
-
-        .ai-badge {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        .file-upload-label:hover {
+            background: #667eea;
             color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-right: 10px;
         }
 
-        .ai-badge i {
+        .security-note {
             font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .security-note i {
+            color: #667eea;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
+    <div class="animated-bg">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <div class="main-container">
-        <!-- رسائل النظام -->
-        <div id="messageBox" class="message-box" style="display: none;"></div>
+        <div id="messageBox" class="message-box"></div>
         
-        <!-- شاشة التحميل -->
-        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
-            <p style="color: #667eea; font-weight: 600;">جاري التحميل...</p>
+            <p>جاري التحميل...</p>
         </div>
 
         <!-- بطاقة تسجيل الدخول -->
@@ -291,12 +435,18 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> اسم المستخدم</label>
-                    <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required autocomplete="off">
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-lock"></i> كلمة المرور (الرقم القومي)</label>
-                    <input type="password" id="loginPassword" placeholder="أدخل الرقم القومي" required>
+                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn">
@@ -309,12 +459,10 @@
                 <span>ليس لديك حساب؟</span>
                 <a onclick="showRegister()">تسجيل جديد</a>
             </div>
-            
-            <div class="toggle-link" style="margin-top: 10px;">
-                <small style="color: #999;">
-                    <i class="fas fa-robot"></i>
-                    ITWS AI جاهز لمساعدتك 24/7
-                </small>
+
+            <div class="security-note">
+                <i class="fas fa-shield-alt"></i>
+                هذا النظام محمي بتقنيات أمان متقدمة
             </div>
         </div>
 
@@ -331,17 +479,26 @@
             <form id="registerForm">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> الاسم الكامل</label>
-                    <input type="text" id="fullName" placeholder="الاسم كما في البطاقة" required>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullName" placeholder="الاسم كما في البطاقة" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-phone"></i> رقم الهاتف (للتواصل عبر واتساب)</label>
-                    <input type="tel" id="phone" placeholder="مثال: 01234567890" required>
+                    <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" placeholder="مثال: 01234567890" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-id-card"></i> الرقم القومي (سيكون كلمة المرور)</label>
-                    <input type="text" id="nationalId" placeholder="الرقم القومي 14 رقم" maxlength="14" required>
+                    <label><i class="fas fa-id-card"></i> الرقم القومي</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="nationalId" placeholder="الرقم القومي 14 رقم" maxlength="14" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -420,23 +577,14 @@
                 <span>لديك حساب بالفعل؟</span>
                 <a onclick="showLogin()">تسجيل الدخول</a>
             </div>
-            
-            <div class="toggle-link" style="margin-top: 10px;">
-                <small style="color: #999;">
-                    <i class="fas fa-robot"></i>
-                    سيتم مراجعة طلبك من قبل النقيب العام
-                </small>
-            </div>
         </div>
     </div>
 
     <script type="module">
-        // استيراد Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, push, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
             authDomain: "itws-system.firebaseapp.com",
@@ -448,12 +596,10 @@
             measurementId: "G-8V5WSYEX0B"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const storage = getStorage(app);
 
-        // دوال مساعدة
         function showMessage(text, type) {
             const msgBox = document.getElementById('messageBox');
             msgBox.textContent = text;
@@ -478,7 +624,6 @@
             document.getElementById('loginCard').style.display = 'block';
         };
 
-        // تحديث الحقول حسب الصفة
         document.getElementById('position').addEventListener('change', function(e) {
             const committeeGroup = document.getElementById('committeeGroup');
             const branchGroup = document.getElementById('branchGroup');
@@ -499,7 +644,6 @@
             }
         });
 
-        // تسجيل الدخول
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -509,7 +653,6 @@
             showLoading(true);
 
             try {
-                // البحث عن المستخدم
                 const usersRef = ref(database, 'users');
                 const snapshot = await get(usersRef);
                 
@@ -529,13 +672,11 @@
                     }
 
                     if (foundUser) {
-                        // تحديث آخر دخول
                         await update(ref(database, `users/${userId}`), {
                             lastLogin: new Date().toISOString(),
                             online: true
                         });
 
-                        // حفظ في الجلسة
                         sessionStorage.setItem('currentUser', JSON.stringify({
                             userId: userId,
                             ...foundUser
@@ -558,14 +699,12 @@
             }
         });
 
-        // طلب تسجيل جديد
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             showLoading(true);
 
             try {
-                // جمع البيانات
                 const fullName = document.getElementById('fullName').value;
                 const phone = document.getElementById('phone').value;
                 const nationalId = document.getElementById('nationalId').value;
@@ -582,7 +721,6 @@
                     branchName = document.getElementById('branchName').value;
                 }
 
-                // رفع الصور
                 const profileImage = document.getElementById('profileImage').files[0];
                 const appointmentDoc = document.getElementById('appointmentDoc').files[0];
 
@@ -592,17 +730,14 @@
                     return;
                 }
 
-                // رفع الصورة الشخصية
                 const imageRef = storageRef(storage, `profiles/${Date.now()}_${profileImage.name}`);
                 await uploadBytes(imageRef, profileImage);
                 const imageUrl = await getDownloadURL(imageRef);
 
-                // رفض مستند القرار
                 const docRef = storageRef(storage, `appointments/${Date.now()}_${appointmentDoc.name}`);
                 await uploadBytes(docRef, appointmentDoc);
                 const docUrl = await getDownloadURL(docRef);
 
-                // إنشاء طلب التسجيل
                 const requestData = {
                     fullName,
                     phone,
@@ -616,27 +751,15 @@
                     appointmentDoc: docUrl,
                     status: 'pending',
                     requestDate: new Date().toISOString(),
-                    userId: `pending_${Date.now()}`
+                    trackingNumber: await generateTrackingNumber('MBR')
                 };
 
-                // حفظ الطلب
                 const requestsRef = ref(database, 'pending_requests');
                 const newRequestRef = push(requestsRef);
                 await set(newRequestRef, requestData);
 
-                // إشعار ITWS AI
-                const aiNotificationRef = ref(database, 'itws_ai/notifications');
-                await push(aiNotificationRef, {
-                    type: 'new_member_request',
-                    requestId: newRequestRef.key,
-                    userName: fullName,
-                    timestamp: new Date().toISOString(),
-                    read: false
-                });
-
                 showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
                 
-                // العودة لتسجيل الدخول بعد 2 ثانية
                 setTimeout(() => {
                     showLogin();
                     document.getElementById('registerForm').reset();
@@ -650,13 +773,23 @@
             }
         });
 
-        // التحقق من وجود النقيب العام
+        async function generateTrackingNumber(prefix) {
+            const year = new Date().getFullYear();
+            const counterRef = ref(database, `counters/${prefix}_${year}`);
+            const snapshot = await get(counterRef);
+            const currentCount = snapshot.exists() ? snapshot.val() : 0;
+            const newCount = currentCount + 1;
+            await set(counterRef, newCount);
+            
+            const paddedNumber = newCount.toString().padStart(4, '0');
+            return `${prefix}-${paddedNumber}-${year}`;
+        }
+
         async function checkAndCreatePresident() {
             const presidentRef = ref(database, 'users/president_001');
             const snapshot = await get(presidentRef);
             
             if (!snapshot.exists()) {
-                // إنشاء النقيب العام تلقائياً
                 const presidentData = {
                     userId: 'president_001',
                     username: 'المهندس / محمود جميل',
@@ -667,7 +800,7 @@
                     title: 'النقيب العام',
                     phone: '01234567890',
                     governorate: 'القاهرة',
-                    profileImage: 'default.png',
+                    profileImage: 'default-president.png',
                     status: 'active',
                     online: false,
                     lastLogin: null,
@@ -684,7 +817,6 @@
             }
         }
 
-        // تهيئة النظام
         checkAndCreatePresident();
     </script>
 </body>
