@@ -612,29 +612,35 @@
                             <option value="committee_head">رئيس لجنة</option>
                             <option value="committee_member">عضو لجنة</option>
                             <option value="branches_manager">مدير الفروع</option>
+                            
+                            <!-- وكالة -->
                             <option value="governorate_agent">وكيل محافظة</option>
                             <option value="governorate_assistant">مساعد وكيل محافظة</option>
+                            
+                            <!-- مجلس محافظة -->
                             <option value="governorate_president">نقيب محافظة</option>
-                            <option value="council_member">عضو مجلس إدارة محافظة</option>
+                            <option value="governorate_vice_first">نائب أول محافظة</option>
+                            <option value="governorate_vice_second">نائب ثاني محافظة</option>
+                            <option value="governorate_secretary">أمين عام محافظة</option>
+                            <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
+                            <option value="governorate_treasurer">أمين صندوق محافظة</option>
+                            <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
+                            <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
                         </select>
                     </div>
 
-                    <!-- حقل اللجنة (يظهر إذا كان مرتبط بلجنة) -->
+                    <!-- حقل اللجنة (يظهر لرئيس لجنة أو عضو لجنة) -->
                     <div class="form-group" id="committeeField" style="display: none;">
-                        <label><i class="fas fa-users"></i> اسم اللجنة *</label>
-                        <input type="text" id="committeeName" placeholder="اسم اللجنة">
+                        <label><i class="fas fa-users"></i> اختر اللجنة *</label>
+                        <select id="committeeSelect" class="governorate-select">
+                            <option value="">جاري تحميل اللجان...</option>
+                        </select>
                     </div>
 
-                    <!-- حقل الفرع/المحافظة (يظهر إذا كان مرتبط بفرع) -->
-                    <div class="form-group" id="branchField" style="display: none;">
-                        <label><i class="fas fa-building"></i> اسم الفرع/المحافظة *</label>
-                        <input type="text" id="branchName" placeholder="اسم الفرع أو المحافظة">
-                    </div>
-
-                    <!-- المحافظة -->
-                    <div class="form-group">
-                        <label><i class="fas fa-map-marker-alt"></i> المحافظة *</label>
-                        <select id="governorate" class="governorate-select" required>
+                    <!-- حقل المحافظة (يظهر للفروع والوكالات والمجالس) -->
+                    <div class="form-group" id="governorateField" style="display: none;">
+                        <label><i class="fas fa-map-marker-alt"></i> اختر المحافظة *</label>
+                        <select id="governorateSelect" class="governorate-select">
                             <option value="">اختر المحافظة</option>
                             <option value="القاهرة">القاهرة</option>
                             <option value="الجيزة">الجيزة</option>
@@ -705,7 +711,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, push, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -750,6 +756,36 @@
             }
         }
 
+        // تحميل قائمة اللجان من قاعدة البيانات
+        async function loadCommittees() {
+            try {
+                const committeesRef = ref(database, 'committees');
+                const snapshot = await get(committeesRef);
+                const committeeSelect = document.getElementById('committeeSelect');
+                
+                if (snapshot.exists()) {
+                    const committees = snapshot.val();
+                    committeeSelect.innerHTML = '<option value="">اختر اللجنة</option>';
+                    
+                    Object.entries(committees).forEach(([id, committee]) => {
+                        if (committee.status === 'active') {
+                            committeeSelect.innerHTML += `<option value="${id}">${committee.name}</option>`;
+                        }
+                    });
+                } else {
+                    committeeSelect.innerHTML = '<option value="">لا توجد لجان متاحة</option>';
+                }
+            } catch (error) {
+                console.error('Error loading committees:', error);
+            }
+        }
+
+        // تحميل قائمة المحافظات من قاعدة البيانات
+        async function loadGovernorates() {
+            // المحافظات ثابتة حالياً، لكن ممكن تجيبها من قاعدة البيانات لو عايز
+            // حالياً هي موجودة في الـ HTML
+        }
+
         // بعد 4 ثواني، أخفي شاشة البداية وأظهر شاشة تسجيل الدخول
         setTimeout(() => {
             document.getElementById('splashScreen').style.display = 'none';
@@ -758,6 +794,8 @@
 
         // تحميل الإعدادات عند بدء التشغيل
         loadSystemSettings();
+        loadCommittees();
+        loadGovernorates();
 
         function showMessage(text, type) {
             const msgBox = document.getElementById('messageBox');
@@ -787,29 +825,29 @@
         window.togglePositionFields = function() {
             const position = document.getElementById('position').value;
             const committeeField = document.getElementById('committeeField');
-            const branchField = document.getElementById('branchField');
+            const governorateField = document.getElementById('governorateField');
             
             // الصفات المرتبطة باللجان
             const committeePositions = ['committee_head', 'committee_member', 'committees_manager'];
             
-            // الصفات المرتبطة بالفروع/المحافظات
-            const branchPositions = ['governorate_agent', 'governorate_assistant', 'governorate_president', 'council_member', 'branches_manager'];
+            // الصفات المرتبطة بالمحافظات (وكالات ومجالس)
+            const governoratePositions = [
+                'governorate_agent', 'governorate_assistant',
+                'governorate_president', 'governorate_vice_first', 'governorate_vice_second',
+                'governorate_secretary', 'governorate_secretary_assistant',
+                'governorate_treasurer', 'governorate_treasurer_assistant',
+                'governorate_council_member', 'branches_manager'
+            ];
             
             if (committeePositions.includes(position)) {
                 committeeField.style.display = 'block';
-                branchField.style.display = 'none';
-                document.getElementById('committeeName').required = true;
-                document.getElementById('branchName').required = false;
-            } else if (branchPositions.includes(position)) {
+                governorateField.style.display = 'none';
+            } else if (governoratePositions.includes(position)) {
                 committeeField.style.display = 'none';
-                branchField.style.display = 'block';
-                document.getElementById('committeeName').required = false;
-                document.getElementById('branchName').required = true;
+                governorateField.style.display = 'block';
             } else {
                 committeeField.style.display = 'none';
-                branchField.style.display = 'none';
-                document.getElementById('committeeName').required = false;
-                document.getElementById('branchName').required = false;
+                governorateField.style.display = 'none';
             }
         };
 
@@ -880,18 +918,33 @@
                 const phone = document.getElementById('phone').value;
                 const nationalId = document.getElementById('nationalId').value;
                 const position = document.getElementById('position').value;
-                const governorate = document.getElementById('governorate').value;
                 
-                let committeeName = '';
-                let branchName = '';
+                let committeeId = null;
+                let governorate = null;
                 
                 const committeePositions = ['committee_head', 'committee_member', 'committees_manager'];
-                const branchPositions = ['governorate_agent', 'governorate_assistant', 'governorate_president', 'council_member', 'branches_manager'];
+                const governoratePositions = [
+                    'governorate_agent', 'governorate_assistant',
+                    'governorate_president', 'governorate_vice_first', 'governorate_vice_second',
+                    'governorate_secretary', 'governorate_secretary_assistant',
+                    'governorate_treasurer', 'governorate_treasurer_assistant',
+                    'governorate_council_member', 'branches_manager'
+                ];
                 
                 if (committeePositions.includes(position)) {
-                    committeeName = document.getElementById('committeeName').value;
-                } else if (branchPositions.includes(position)) {
-                    branchName = document.getElementById('branchName').value;
+                    committeeId = document.getElementById('committeeSelect').value;
+                    if (!committeeId) {
+                        showMessage('يرجى اختيار اللجنة', 'error');
+                        showLoading(false);
+                        return;
+                    }
+                } else if (governoratePositions.includes(position)) {
+                    governorate = document.getElementById('governorateSelect').value;
+                    if (!governorate) {
+                        showMessage('يرجى اختيار المحافظة', 'error');
+                        showLoading(false);
+                        return;
+                    }
                 }
 
                 const profileImage = document.getElementById('profileImage').files[0];
@@ -932,7 +985,13 @@
                     'governorate_agent': 'وكيل محافظة',
                     'governorate_assistant': 'مساعد وكيل محافظة',
                     'governorate_president': 'نقيب محافظة',
-                    'council_member': 'عضو مجلس إدارة محافظة'
+                    'governorate_vice_first': 'نائب أول محافظة',
+                    'governorate_vice_second': 'نائب ثاني محافظة',
+                    'governorate_secretary': 'أمين عام محافظة',
+                    'governorate_secretary_assistant': 'مساعد أمين عام محافظة',
+                    'governorate_treasurer': 'أمين صندوق محافظة',
+                    'governorate_treasurer_assistant': 'مساعد أمين صندوق محافظة',
+                    'governorate_council_member': 'عضو مجلس إدارة محافظة'
                 };
 
                 const requestData = {
@@ -941,9 +1000,8 @@
                     nationalId,
                     position,
                     positionName: positionNames[position] || position,
-                    governorate,
-                    committeeName: committeeName || null,
-                    branchName: branchName || null,
+                    committeeId: committeeId,
+                    governorate: governorate,
                     profileImage: imageUrl,
                     appointmentDoc: docUrl,
                     status: 'pending',
