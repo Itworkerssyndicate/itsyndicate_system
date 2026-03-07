@@ -6,8 +6,8 @@
     <title>إدارة الفروع - ITWS Union</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/themes.css">
     <style>
-        /* نفس تنسيقات committees.html مع تعديلات بسيطة */
         * {
             margin: 0;
             padding: 0;
@@ -16,26 +16,45 @@
         }
 
         body {
-            background: #f5f5f5;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
+        /* الشريط الجانبي */
         .sidebar {
             position: fixed;
             right: 0;
             top: 0;
             width: 280px;
             height: 100%;
-            background: white;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            background: var(--bg-sidebar);
+            box-shadow: -5px 0 20px var(--shadow-color);
             z-index: 100;
             overflow-y: auto;
         }
 
         .sidebar-header {
             padding: 30px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-header);
             color: white;
             text-align: center;
+        }
+
+        .sidebar-header .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--primary-color);
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
         }
 
         .sidebar-menu {
@@ -46,7 +65,7 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            color: #666;
+            color: var(--text-secondary);
             text-decoration: none;
             border-radius: 10px;
             margin-bottom: 5px;
@@ -59,33 +78,49 @@
         }
 
         .menu-item:hover, .menu-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             color: white;
         }
 
+        .menu-item .badge {
+            background: var(--danger-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: auto;
+        }
+
+        .ai-menu-item {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            color: white !important;
+            margin-top: 20px;
+        }
+
+        /* المحتوى الرئيسي */
         .main-content {
             margin-right: 280px;
             padding: 20px;
         }
 
         .top-bar {
-            background: white;
+            background: var(--bg-card);
             padding: 15px 25px;
             border-radius: 15px;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
         }
 
         .page-title h2 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 24px;
         }
 
         .page-title p {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
@@ -95,7 +130,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -107,13 +142,18 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-hover);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 8px 18px;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
@@ -124,6 +164,45 @@
             transition: all 0.3s;
         }
 
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+        }
+
+        /* تبويبات الفروع */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .tab i {
+            margin-left: 8px;
+        }
+
+        .tab:hover {
+            background: var(--bg-primary);
+        }
+
+        .tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        /* شبكة الفروع */
         .branches-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -132,17 +211,30 @@
         }
 
         .branch-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
             transition: all 0.3s;
-            border-right: 4px solid #f093fb;
+            border-right: 4px solid var(--secondary-color);
+            border: 1px solid var(--border-light);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .branch-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px var(--shadow-hover);
         }
 
         .branch-header {
@@ -153,7 +245,7 @@
         }
 
         .branch-header h3 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px;
             display: flex;
             align-items: center;
@@ -161,7 +253,7 @@
         }
 
         .branch-header h3 i {
-            color: #f093fb;
+            color: var(--secondary-color);
         }
 
         .branch-status {
@@ -171,28 +263,39 @@
             font-weight: 600;
         }
 
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
         .branch-location {
             display: flex;
             align-items: center;
             gap: 5px;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 13px;
             margin-bottom: 15px;
         }
 
         .branch-location i {
-            color: #f093fb;
+            color: var(--secondary-color);
         }
 
+        /* المجلس الفرعي */
         .council-section {
-            background: #f8f9fa;
+            background: var(--bg-primary);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
         }
 
         .council-title {
-            color: #333;
+            color: var(--text-primary);
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 10px;
@@ -209,22 +312,23 @@
 
         .council-item {
             font-size: 12px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .council-item strong {
-            color: #333;
+            color: var(--text-primary);
             display: block;
             font-size: 11px;
             margin-bottom: 2px;
         }
 
+        /* إحصائيات الفرع */
         .branch-stats {
             display: flex;
             justify-content: space-around;
             margin-bottom: 15px;
             padding: 10px;
-            background: #f8f9fa;
+            background: var(--bg-primary);
             border-radius: 10px;
         }
 
@@ -236,14 +340,15 @@
             display: block;
             font-size: 20px;
             font-weight: 700;
-            color: #f093fb;
+            color: var(--secondary-color);
         }
 
         .stat .label {
             font-size: 11px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
+        /* أزرار التحكم */
         .branch-actions {
             display: flex;
             gap: 10px;
@@ -252,7 +357,7 @@
 
         .branch-actions button {
             flex: 1;
-            min-width: 70px;
+            min-width: 60px;
             padding: 8px;
             border: none;
             border-radius: 8px;
@@ -266,6 +371,42 @@
             transition: all 0.3s;
         }
 
+        .btn-view {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-edit {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .btn-manage {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .btn-council {
+            background: #f3e5f5;
+            color: #8e24aa;
+        }
+
+        .btn-send {
+            background: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .btn-report {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .btn-delete {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        /* نافذة منبثقة */
         .modal {
             display: none;
             position: fixed;
@@ -277,14 +418,16 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(5px);
         }
 
         .modal.active {
             display: flex;
+            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 30px;
             width: 90%;
@@ -299,15 +442,20 @@
             justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f5f5f5;
+            border-bottom: 2px solid var(--border-light);
         }
 
         .modal-header h3 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
         }
 
         .form-group {
@@ -317,33 +465,93 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: var(--text-secondary);
             font-weight: 600;
-            font-size: 14px;
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Cairo', sans-serif;
         }
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: #f093fb;
+            border-color: var(--primary-color);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(240,147,251,0.1);
         }
 
+        /* قسم المجلس في النموذج */
         .council-form {
-            background: #f8f9fa;
-            padding: 15px;
+            background: var(--bg-primary);
+            padding: 20px;
             border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .council-form h4 {
+            color: var(--text-primary);
             margin-bottom: 15px;
         }
 
+        /* حضور وانصراف */
+        .attendance-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+        }
+
+        .attendance-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-present {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-absent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-checked {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .btn-check-in {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-check-out {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* أيقونة AI */
         .ai-toggle {
             position: fixed;
             bottom: 20px;
@@ -360,20 +568,15 @@
             cursor: pointer;
             box-shadow: 0 5px 20px rgba(255,107,107,0.3);
             z-index: 999;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
         }
 
-        .ai-chat-window {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 350px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
+        .ai-toggle:hover {
+            transform: scale(1.1);
         }
 
+        /* رسائل النظام */
         .message-box {
             position: fixed;
             top: 20px;
@@ -383,16 +586,17 @@
             border-radius: 10px;
             color: white;
             font-weight: 600;
-            z-index: 2000;
+            z-index: 9999;
             display: none;
+            animation: slideDown 0.3s ease;
         }
 
         .message-box.success {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            background: var(--success-color);
         }
 
         .message-box.error {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--danger-color);
         }
 
         .loading-spinner {
@@ -401,19 +605,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255,255,255,0.9);
+            background: rgba(0,0,0,0.5);
             display: none;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            z-index: 3000;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
         }
 
         .spinner {
             width: 50px;
             height: 50px;
             border: 5px solid #f3f3f3;
-            border-top: 5px solid #f093fb;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -424,33 +629,43 @@
             100% { transform: rotate(360deg); }
         }
 
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f5f5f5;
-            padding-bottom: 10px;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
         }
 
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .tab.active {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+        /* استجابة للجوال */
+        @media (max-width: 768px) {
+            .sidebar {
+                right: -280px;
+            }
+            .sidebar.active {
+                right: 0;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+            .branches-grid {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .council-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -486,22 +701,32 @@
                 طلبات التسجيل
                 <span class="badge" id="pendingRequests">0</span>
             </a>
-            <a href="reports.html" class="menu-item">
-                <i class="fas fa-chart-bar"></i>
-                التقارير
-            </a>
             <a href="tracking.html" class="menu-item">
                 <i class="fas fa-exchange-alt"></i>
                 نظام التتبع
+                <span class="badge" id="trackingCount">0</span>
             </a>
-            <a href="suggestions.html" class="menu-item">
-                <i class="fas fa-lightbulb"></i>
-                الاقتراحات
+            <a href="messages.html" class="menu-item">
+                <i class="fas fa-envelope"></i>
+                الرسائل
+                <span class="badge" id="messagesCount">0</span>
+            </a>
+            <a href="attendance.html" class="menu-item">
+                <i class="fas fa-clock"></i>
+                الحضور
+            </a>
+            <a href="evaluations.html" class="menu-item">
+                <i class="fas fa-star"></i>
+                التقييمات
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user-circle"></i>
+                الملف الشخصي
             </a>
             
             <div style="height: 20px;"></div>
             
-            <a href="#" class="menu-item" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%); color: white;" onclick="toggleAIChat()">
+            <a href="#" class="menu-item ai-menu-item" onclick="toggleAIChat()">
                 <i class="fas fa-robot"></i>
                 ITWS AI مساعد
             </a>
@@ -520,72 +745,81 @@
         <!-- الشريط العلوي -->
         <div class="top-bar">
             <div class="page-title">
-                <h2>إدارة الفروع</h2>
+                <h2><i class="fas fa-building"></i> إدارة الفروع</h2>
                 <p id="currentDateTime"></p>
             </div>
             <div class="action-buttons">
                 <button class="btn-primary" onclick="showCreateBranchModal()">
                     <i class="fas fa-plus"></i>
-                    إنشاء فرع جديد
+                    إنشاء فرع
                 </button>
                 <button class="btn-secondary" onclick="showCouncilModal()">
                     <i class="fas fa-user-tie"></i>
-                    تشكيل مجلس فرعي
+                    تشكيل مجلس
                 </button>
+            </div>
+        </div>
+
+        <!-- حالة الحضور للمستخدم الحالي -->
+        <div class="attendance-section" id="attendanceSection">
+            <h4><i class="fas fa-clock"></i> حالة الحضور اليوم</h4>
+            <div class="attendance-status" id="attendanceStatus">
+                <!-- يتم تعبئتها ديناميكياً -->
             </div>
         </div>
 
         <!-- تبويبات الفروع -->
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('all')">جميع الفروع</div>
-            <div class="tab" onclick="switchTab('my')">فروعي</div>
-            <div class="tab" onclick="switchTab('council')">المجالس الفرعية</div>
-            <div class="tab" onclick="switchTab('reports')">التقارير</div>
+            <div class="tab active" onclick="switchTab('all')">
+                <i class="fas fa-list"></i>
+                جميع الفروع
+            </div>
+            <div class="tab" onclick="switchTab('my')">
+                <i class="fas fa-user-tie"></i>
+                فرعي
+            </div>
+            <div class="tab" onclick="switchTab('council')">
+                <i class="fas fa-users-cog"></i>
+                المجالس الفرعية
+            </div>
+            <div class="tab" onclick="switchTab('requests')">
+                <i class="fas fa-inbox"></i>
+                الطلبات الواردة
+                <span class="badge" id="requestsBadge">0</span>
+            </div>
         </div>
 
         <!-- محتوى جميع الفروع -->
-        <div id="allBranchesTab" class="tab-content active">
+        <div id="allBranchesTab" class="tab-content" style="display: block;">
             <div class="branches-grid" id="branchesGrid">
                 <!-- يتم تعبئتها ديناميكياً -->
-            </div>
-        </div>
-
-        <!-- محتوى فروعي -->
-        <div id="myBranchesTab" class="tab-content">
-            <div class="branches-grid" id="myBranchesGrid">
-                <!-- يتم تعبئتها ديناميكياً -->
-            </div>
-        </div>
-
-        <!-- محتوى المجالس الفرعية -->
-        <div id="councilTab" class="tab-content">
-            <div class="branches-grid" id="councilsGrid">
-                <!-- يتم تعبئتها ديناميكياً -->
-            </div>
-        </div>
-
-        <!-- محتوى التقارير -->
-        <div id="reportsTab" class="tab-content">
-            <div class="section-card">
-                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3>تقارير الفروع</h3>
-                    <button class="btn-primary" onclick="generateBranchReport()">
-                        <i class="fas fa-file-pdf"></i>
-                        تقرير شامل
-                    </button>
-                </div>
-                <div id="branchReportsList" style="max-height: 400px; overflow-y: auto;">
-                    <!-- يتم تعبئتها ديناميكياً -->
+                <div class="loading-spinner" style="display: flex; position: relative; background: transparent;">
+                    <div class="spinner"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- محتوى فرعي -->
+        <div id="myBranchesTab" class="tab-content" style="display: none;">
+            <div class="branches-grid" id="myBranchesGrid"></div>
+        </div>
+
+        <!-- محتوى المجالس -->
+        <div id="councilBranchesTab" class="tab-content" style="display: none;">
+            <div class="branches-grid" id="councilsGrid"></div>
+        </div>
+
+        <!-- محتوى الطلبات -->
+        <div id="requestsBranchesTab" class="tab-content" style="display: none;">
+            <div class="requests-list" id="branchRequestsList"></div>
         </div>
     </div>
 
-    <!-- نافذة إنشاء فرع جديد -->
+    <!-- نافذة إنشاء فرع -->
     <div class="modal" id="createBranchModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-building"></i> إنشاء فرع جديد</h3>
+                <h3><i class="fas fa-plus-circle"></i> إنشاء فرع جديد</h3>
                 <button class="close-modal" onclick="closeCreateBranchModal()">&times;</button>
             </div>
             <form id="createBranchForm">
@@ -593,7 +827,7 @@
                     <label>اسم الفرع</label>
                     <input type="text" id="branchName" required placeholder="أدخل اسم الفرع">
                 </div>
-                
+
                 <div class="form-group">
                     <label>المحافظة</label>
                     <select id="branchGovernorate" required>
@@ -626,29 +860,29 @@
                         <option value="البحر الأحمر">البحر الأحمر</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>العنوان التفصيلي</label>
-                    <textarea id="branchAddress" rows="2" placeholder="أدخل العنوان"></textarea>
+                    <label>العنوان</label>
+                    <input type="text" id="branchAddress" placeholder="أدخل عنوان الفرع">
                 </div>
-                
+
                 <div class="form-group">
                     <label>مدير الفرع</label>
                     <select id="branchManager" required>
                         <option value="">اختر مدير الفرع</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label>رقم الهاتف</label>
                     <input type="tel" id="branchPhone" placeholder="رقم هاتف الفرع">
                 </div>
-                
+
                 <div class="form-group">
                     <label>البريد الإلكتروني</label>
-                    <input type="email" id="branchEmail" placeholder="البريد الإلكتروني للفرع">
+                    <input type="email" id="branchEmail" placeholder="البريد الإلكتروني">
                 </div>
-                
+
                 <button type="submit" class="btn-primary" style="width: 100%;">
                     <i class="fas fa-save"></i>
                     إنشاء الفرع
@@ -661,7 +895,7 @@
     <div class="modal" id="councilModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-user-tie"></i> تشكيل مجلس فرعي</h3>
+                <h3><i class="fas fa-users-cog"></i> تشكيل المجلس الفرعي</h3>
                 <button class="close-modal" onclick="closeCouncilModal()">&times;</button>
             </div>
             <form id="councilForm">
@@ -671,45 +905,45 @@
                         <option value="">اختر الفرع</option>
                     </select>
                 </div>
-                
+
                 <div class="council-form">
-                    <h4 style="margin-bottom: 15px; color: #333;">أعضاء المجلس</h4>
+                    <h4>أعضاء المجلس</h4>
                     
                     <div class="form-group">
-                        <label>النائب الأول (وكيل)</label>
+                        <label>وكيل الفرع (النائب الأول)</label>
                         <select id="vicePresident">
                             <option value="">اختر العضو</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>النائب الثاني</label>
                         <select id="secondVice">
                             <option value="">اختر العضو</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>أمين عام</label>
                         <select id="secretary">
                             <option value="">اختر العضو</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>مساعد أمين عام</label>
                         <select id="secretaryAssistant">
                             <option value="">اختر العضو</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>أمين صندوق</label>
                         <select id="treasurer">
                             <option value="">اختر العضو</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>مساعد أمين صندوق</label>
                         <select id="treasurerAssistant">
@@ -717,7 +951,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <button type="submit" class="btn-primary" style="width: 100%;">
                     <i class="fas fa-save"></i>
                     حفظ التشكيل
@@ -726,52 +960,59 @@
         </div>
     </div>
 
-    <!-- نافذة إرسال إلى لجنة -->
-    <div class="modal" id="sendToCommitteeModal">
+    <!-- نافذة إرسال طلب إلى لجنة -->
+    <div class="modal" id="sendRequestModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-paper-plane"></i> إرسال إلى لجنة</h3>
-                <button class="close-modal" onclick="closeSendToCommitteeModal()">&times;</button>
+                <h3><i class="fas fa-paper-plane"></i> إرسال طلب إلى لجنة</h3>
+                <button class="close-modal" onclick="closeSendRequestModal()">&times;</button>
             </div>
-            <form id="sendToCommitteeForm">
-                <input type="hidden" id="fromBranchId">
-                
+            <form id="sendRequestForm">
                 <div class="form-group">
                     <label>اللجنة المستلمة</label>
                     <select id="targetCommittee" required>
                         <option value="">اختر اللجنة</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>نوع الإرسال</label>
-                    <select id="sendType" required onchange="toggleCommitteeSendType()">
-                        <option value="report">تقرير</option>
+                    <label>نوع الطلب</label>
+                    <select id="requestType" required>
                         <option value="request">طلب</option>
+                        <option value="report">تقرير</option>
                         <option value="complaint">شكوى</option>
                         <option value="suggestion">اقتراح</option>
-                        <option value="feedback">رد على مراسلة</option>
+                        <option value="feedback">رد على طلب</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>العنوان</label>
-                    <input type="text" id="sendTitle" required placeholder="أدخل العنوان">
+                    <label>عنوان الطلب</label>
+                    <input type="text" id="requestTitle" required placeholder="أدخل عنوان الطلب">
                 </div>
-                
+
                 <div class="form-group">
-                    <label>المحتوى</label>
-                    <textarea id="sendContent" rows="5" required placeholder="أدخل المحتوى"></textarea>
+                    <label>محتوى الطلب</label>
+                    <textarea id="requestContent" rows="5" required placeholder="أدخل محتوى الطلب..."></textarea>
                 </div>
-                
+
+                <div class="form-group">
+                    <label>الأولوية</label>
+                    <select id="requestPriority">
+                        <option value="normal">عادية</option>
+                        <option value="high">عالية</option>
+                        <option value="urgent">عاجلة</option>
+                    </select>
+                </div>
+
                 <div class="form-group" id="referenceGroup" style="display: none;">
-                    <label>رقم المرجع (اختياري)</label>
-                    <input type="text" id="referenceNumber" placeholder="رقم المراسلة السابقة">
+                    <label>رقم المرجع (للرد على طلب)</label>
+                    <input type="text" id="referenceNumber" placeholder="أدخل رقم التتبع">
                 </div>
-                
+
                 <button type="submit" class="btn-primary" style="width: 100%;">
                     <i class="fas fa-paper-plane"></i>
-                    إرسال
+                    إرسال الطلب
                 </button>
             </form>
         </div>
@@ -781,36 +1022,16 @@
     <div class="modal" id="branchDetailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="branchDetailsTitle"><i class="fas fa-info-circle"></i> تفاصيل الفرع</h3>
+                <h3><i class="fas fa-info-circle"></i> تفاصيل الفرع</h3>
                 <button class="close-modal" onclick="closeBranchDetailsModal()">&times;</button>
             </div>
-            <div id="branchDetailsContent">
-                <!-- يتم تعبئتها ديناميكياً -->
-            </div>
+            <div id="branchDetailsContent"></div>
         </div>
     </div>
 
-    <!-- زر ITWS AI -->
+    <!-- أيقونة AI -->
     <div class="ai-toggle" onclick="toggleAIChat()">
         <i class="fas fa-robot"></i>
-    </div>
-
-    <!-- نافذة ITWS AI -->
-    <div class="ai-chat-window" id="aiChatWindow">
-        <div class="ai-chat-header">
-            <h4><i class="fas fa-robot"></i> ITWS AI - المساعد الذكي</h4>
-            <button class="close-chat" onclick="toggleAIChat()">&times;</button>
-        </div>
-        <div class="ai-chat-body" id="aiChatBody">
-            <div class="ai-message">
-                <div class="avatar"><i class="fas fa-robot"></i></div>
-                <div class="message">مرحباً! أنا ITWS AI، المساعد الذكي للنظام. كيف يمكنني مساعدتك في إدارة الفروع؟</div>
-            </div>
-        </div>
-        <div class="ai-chat-footer">
-            <input type="text" id="aiMessageInput" placeholder="اكتب رسالتك..." onkeypress="if(event.key === 'Enter') sendAIMessage()">
-            <button onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i></button>
-        </div>
     </div>
 
     <!-- رسائل النظام -->
@@ -823,11 +1044,12 @@
     </div>
 
     <script type="module">
-        // استيراد Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, get, set, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import NotificationSystem from './assets/js/notifications.js';
+        import ThemeManager from './assets/js/theme-manager.js';
+        import AttendanceSystem from './assets/js/attendance.js';
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
             authDomain: "itws-system.firebaseapp.com",
@@ -835,8 +1057,7 @@
             projectId: "itws-system",
             storageBucket: "itws-system.firebasestorage.app",
             messagingSenderId: "770452248691",
-            appId: "1:770452248691:web:0e94e65e01298b398bb206",
-            measurementId: "G-8V5WSYEX0B"
+            appId: "1:770452248691:web:0e94e65e01298b398bb206"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -848,6 +1069,11 @@
             window.location.href = 'index.html';
         }
 
+        // تهيئة الأنظمة
+        const notificationSystem = new NotificationSystem(currentUser);
+        const themeManager = new ThemeManager(currentUser);
+        const attendanceSystem = new AttendanceSystem(currentUser);
+
         // متغيرات عامة
         let branches = {};
         let committees = {};
@@ -856,15 +1082,10 @@
         // تحديث التاريخ والوقت
         function updateDateTime() {
             const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('ar-EG', options);
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('ar-EG', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
         }
         updateDateTime();
         setInterval(updateDateTime, 60000);
@@ -872,21 +1093,92 @@
         // عرض معلومات المستخدم
         function displayUserInfo() {
             const userInfo = document.getElementById('userInfo');
+            let title = '';
+            
+            switch(currentUser.role) {
+                case 'president':
+                    title = 'النقيب العام';
+                    break;
+                case 'vice_president':
+                    title = 'النائب الأول';
+                    break;
+                case 'branch_manager':
+                    title = 'مدير فرع';
+                    break;
+                case 'branch_member':
+                    title = 'عضو فرع';
+                    break;
+                default:
+                    title = currentUser.title || 'عضو';
+            }
+
             userInfo.innerHTML = `
-                <div class="user-avatar" style="width: 80px; height: 80px; background: white; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #667eea;">
-                    <i class="fas fa-user-circle"></i>
+                <div class="user-avatar" onclick="window.location.href='profile.html'">
+                    ${currentUser.profileImage ? 
+                        `<img src="${currentUser.profileImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">` : 
+                        '<i class="fas fa-user-circle"></i>'}
                 </div>
                 <h3>${currentUser.fullName || currentUser.username}</h3>
-                <p>${currentUser.title || currentUser.role}</p>
-                <div style="display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 12px; margin-top: 10px;">
-                    <i class="fas fa-circle" style="color: #4caf50; font-size: 8px;"></i>
-                    متصل الآن
+                <p>${title}</p>
+                <div class="online-badge">
+                    <i class="fas fa-circle"></i> متصل الآن
                 </div>
             `;
         }
         displayUserInfo();
 
-        // دوال المساعدة
+        // عرض حالة الحضور
+        function displayAttendanceStatus() {
+            const statusDiv = document.getElementById('attendanceStatus');
+            const today = new Date().toDateString();
+            
+            attendanceSystem.getTodayAttendance().then(attendance => {
+                if (attendance) {
+                    statusDiv.innerHTML = `
+                        <span class="status-badge status-checked">
+                            <i class="fas fa-check-circle"></i> تم تسجيل الحضور
+                        </span>
+                        <span>وقت الحضور: ${attendance.checkIn ? new Date(attendance.checkIn).toLocaleTimeString('ar-EG') : '--'}</span>
+                        ${attendance.checkOut ? 
+                            `<span>وقت الانصراف: ${new Date(attendance.checkOut).toLocaleTimeString('ar-EG')}</span>` :
+                            `<button class="btn-check-out" onclick="checkOut()">
+                                <i class="fas fa-sign-out-alt"></i> تسجيل انصراف
+                            </button>`
+                        }
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <button class="btn-check-in" onclick="checkIn()">
+                            <i class="fas fa-sign-in-alt"></i> تسجيل حضور
+                        </button>
+                    `;
+                }
+            });
+        }
+
+        // تسجيل حضور
+        window.checkIn = async function() {
+            const result = await attendanceSystem.checkIn();
+            if (result.success) {
+                showMessage('تم تسجيل الحضور بنجاح', 'success');
+                displayAttendanceStatus();
+            } else {
+                showMessage(result.error, 'error');
+            }
+        };
+
+        // تسجيل انصراف
+        window.checkOut = async function() {
+            const result = await attendanceSystem.checkOut();
+            if (result.success) {
+                showMessage('تم تسجيل الانصراف بنجاح', 'success');
+                displayAttendanceStatus();
+            } else {
+                showMessage(result.error, 'error');
+            }
+        };
+
+        // دوال مساعدة
         function showMessage(text, type) {
             const msgBox = document.getElementById('messageBox');
             msgBox.textContent = text;
@@ -905,36 +1197,30 @@
         async function loadData() {
             showLoading(true);
             try {
-                // تحميل الفروع
-                const branchesRef = ref(database, 'branches');
-                const branchesSnap = await get(branchesRef);
+                const [branchesSnap, committeesSnap, usersSnap] = await Promise.all([
+                    get(ref(database, 'branches')),
+                    get(ref(database, 'committees')),
+                    get(ref(database, 'users'))
+                ]);
+
                 if (branchesSnap.exists()) {
                     branches = branchesSnap.val();
                     document.getElementById('branchesCount').textContent = Object.keys(branches).length;
                 }
 
-                // تحميل اللجان
-                const committeesRef = ref(database, 'committees');
-                const committeesSnap = await get(committeesRef);
                 if (committeesSnap.exists()) {
                     committees = committeesSnap.val();
                     document.getElementById('committeesCount').textContent = Object.keys(committees).length;
                 }
 
-                // تحميل المستخدمين
-                const usersRef = ref(database, 'users');
-                const usersSnap = await get(usersRef);
                 if (usersSnap.exists()) {
                     users = usersSnap.val();
                     document.getElementById('membersCount').textContent = Object.keys(users).length;
                 }
 
-                // عرض الفروع
                 displayBranches();
-                
-                // تعبئة الخيارات
-                populateBranchSelects();
-                populateCommitteeSelect();
+                populateSelects();
+                displayAttendanceStatus();
 
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -946,64 +1232,52 @@
 
         // عرض الفروع
         function displayBranches() {
-            const branchesGrid = document.getElementById('branchesGrid');
-            const myBranchesGrid = document.getElementById('myBranchesGrid');
-            const councilsGrid = document.getElementById('councilsGrid');
+            const grid = document.getElementById('branchesGrid');
             
             if (!branches || Object.keys(branches).length === 0) {
-                branchesGrid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">لا توجد فروع حالياً</p>';
-                myBranchesGrid.innerHTML = '<p style="text-align: center; color: #999;">لا توجد فروع تابع لها</p>';
-                councilsGrid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">لا توجد مجالس فرعية</p>';
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px;">لا توجد فروع</p>';
                 return;
             }
 
-            let allBranchesHtml = '';
-            let myBranchesHtml = '';
-            let councilsHtml = '';
-
-            Object.entries(branches).forEach(([id, branch]) => {
+            grid.innerHTML = Object.entries(branches).map(([id, branch]) => {
                 const membersCount = branch.members ? Object.keys(branch.members).length : 0;
                 const reportsCount = branch.reports ? Object.keys(branch.reports).length : 0;
-                const activitiesCount = branch.activities ? Object.keys(branch.activities).length : 0;
-
-                // التحقق من وجود مجلس فرعي
+                
+                // التحقق من وجود مجلس
                 const hasCouncil = branch.subCouncil && Object.values(branch.subCouncil).some(v => v);
 
-                const branchCard = `
+                return `
                     <div class="branch-card">
                         <div class="branch-header">
                             <h3><i class="fas fa-building"></i> ${branch.name}</h3>
-                            <span class="branch-status status-active">نشط</span>
-                        </div>
-                        <div class="branch-location">
-                            <i class="fas fa-map-marker-alt"></i> ${branch.governorate}
+                            <span class="branch-status status-${branch.status || 'active'}">
+                                ${branch.status === 'active' ? 'نشط' : 'غير نشط'}
+                            </span>
                         </div>
                         
-                        ${branch.subCouncil && hasCouncil ? `
+                        <div class="branch-location">
+                            <i class="fas fa-map-marker-alt"></i> ${branch.governorate || 'غير محدد'}
+                        </div>
+
+                        ${hasCouncil ? `
                             <div class="council-section">
                                 <div class="council-title">
-                                    <i class="fas fa-user-tie"></i> المجلس الفرعي
+                                    <i class="fas fa-users-cog"></i> المجلس الفرعي
                                 </div>
                                 <div class="council-grid">
-                                    ${branch.subCouncil.vicePresident ? `
+                                    ${branch.subCouncil?.vicePresident ? `
                                         <div class="council-item">
                                             <strong>وكيل</strong>
                                             ${users[branch.subCouncil.vicePresident]?.fullName || 'غير محدد'}
                                         </div>
                                     ` : ''}
-                                    ${branch.subCouncil.secondVice ? `
-                                        <div class="council-item">
-                                            <strong>نائب ثاني</strong>
-                                            ${users[branch.subCouncil.secondVice]?.fullName || 'غير محدد'}
-                                        </div>
-                                    ` : ''}
-                                    ${branch.subCouncil.secretary ? `
+                                    ${branch.subCouncil?.secretary ? `
                                         <div class="council-item">
                                             <strong>أمين عام</strong>
                                             ${users[branch.subCouncil.secretary]?.fullName || 'غير محدد'}
                                         </div>
                                     ` : ''}
-                                    ${branch.subCouncil.treasurer ? `
+                                    ${branch.subCouncil?.treasurer ? `
                                         <div class="council-item">
                                             <strong>أمين صندوق</strong>
                                             ${users[branch.subCouncil.treasurer]?.fullName || 'غير محدد'}
@@ -1012,7 +1286,7 @@
                                 </div>
                             </div>
                         ` : ''}
-                        
+
                         <div class="branch-stats">
                             <div class="stat">
                                 <span class="number">${membersCount}</span>
@@ -1022,30 +1296,35 @@
                                 <span class="number">${reportsCount}</span>
                                 <span class="label">تقارير</span>
                             </div>
-                            <div class="stat">
-                                <span class="number">${activitiesCount}</span>
-                                <span class="label">أنشطة</span>
-                            </div>
                         </div>
-                        
+
                         <div class="branch-actions">
                             <button class="btn-view" onclick="viewBranch('${id}')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${currentUser.role === 'president' || currentUser.role === 'vice_president' ? `
+                            
+                            ${(currentUser.role === 'president' || currentUser.role === 'vice_president' || 
+                               (currentUser.role === 'branch_manager' && branch.managerId === currentUser.userId)) ? `
                                 <button class="btn-edit" onclick="editBranch('${id}')">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             ` : ''}
-                            <button class="btn-manage" onclick="manageBranch('${id}')">
-                                <i class="fas fa-tasks"></i>
-                            </button>
-                            <button class="btn-report" onclick="showSendToCommittee('${id}')">
+                            
+                            ${(currentUser.role === 'president' || currentUser.role === 'vice_president' || 
+                               (currentUser.role === 'branch_manager' && branch.managerId === currentUser.userId)) ? `
+                                <button class="btn-council" onclick="showCouncilForm('${id}')">
+                                    <i class="fas fa-users-cog"></i>
+                                </button>
+                            ` : ''}
+                            
+                            <button class="btn-send" onclick="showSendToCommittee('${id}')">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
-                            <button class="btn-council" onclick="showCouncilForm('${id}')" style="background: #f3e5f5; color: #8e24aa;">
-                                <i class="fas fa-user-tie"></i>
+                            
+                            <button class="btn-report" onclick="generateBranchReport('${id}')">
+                                <i class="fas fa-file-alt"></i>
                             </button>
+                            
                             ${currentUser.role === 'president' ? `
                                 <button class="btn-delete" onclick="deleteBranch('${id}')">
                                     <i class="fas fa-trash"></i>
@@ -1054,37 +1333,13 @@
                         </div>
                     </div>
                 `;
-
-                allBranchesHtml += branchCard;
-
-                // التحقق إذا كان المستخدم عضو في هذا الفرع
-                if (branch.members && branch.members[currentUser.userId]) {
-                    myBranchesHtml += branchCard;
-                }
-
-                // إذا كان للمجلس الفرعي
-                if (hasCouncil) {
-                    councilsHtml += branchCard;
-                }
-            });
-
-            branchesGrid.innerHTML = allBranchesHtml;
-            myBranchesGrid.innerHTML = myBranchesHtml || '<p style="text-align: center; color: #999; grid-column: 1/-1;">لا توجد فروع تابع لها</p>';
-            councilsGrid.innerHTML = councilsHtml || '<p style="text-align: center; color: #999; grid-column: 1/-1;">لا توجد مجالس فرعية</p>';
+            }).join('');
         }
 
-        // تعبئة خيارات الفروع
-        function populateBranchSelects() {
-            const branchSelect = document.getElementById('councilBranch');
+        // تعبئة الخيارات
+        function populateSelects() {
+            // تعبئة خيارات مديري الفروع
             const managerSelect = document.getElementById('branchManager');
-            
-            if (branchSelect) {
-                branchSelect.innerHTML = '<option value="">اختر الفرع</option>';
-                Object.entries(branches).forEach(([id, branch]) => {
-                    branchSelect.innerHTML += `<option value="${id}">${branch.name} - ${branch.governorate}</option>`;
-                });
-            }
-
             if (managerSelect) {
                 managerSelect.innerHTML = '<option value="">اختر مدير الفرع</option>';
                 Object.entries(users).forEach(([id, user]) => {
@@ -1093,39 +1348,48 @@
                     }
                 });
             }
-        }
 
-        // تعبئة خيارات اللجان
-        function populateCommitteeSelect() {
+            // تعبئة خيارات الفروع للمجلس
+            const branchSelect = document.getElementById('councilBranch');
+            if (branchSelect) {
+                branchSelect.innerHTML = '<option value="">اختر الفرع</option>';
+                Object.entries(branches).forEach(([id, branch]) => {
+                    branchSelect.innerHTML += `<option value="${id}">${branch.name} - ${branch.governorate}</option>`;
+                });
+            }
+
+            // تعبئة خيارات اللجان
             const committeeSelect = document.getElementById('targetCommittee');
-            if (!committeeSelect) return;
-            
-            committeeSelect.innerHTML = '<option value="">اختر اللجنة</option>';
-            Object.entries(committees).forEach(([id, committee]) => {
-                committeeSelect.innerHTML += `<option value="${id}">${committee.name}</option>`;
-            });
+            if (committeeSelect) {
+                committeeSelect.innerHTML = '<option value="">اختر اللجنة</option>';
+                Object.entries(committees).forEach(([id, committee]) => {
+                    committeeSelect.innerHTML += `<option value="${id}">${committee.name}</option>`;
+                });
+            }
         }
 
         // تحميل أعضاء الفرع للمجلس
         window.loadBranchMembers = async function() {
             const branchId = document.getElementById('councilBranch').value;
-            if (!branchId) return;
+            if (!branchId || !branches[branchId]) return;
 
             const branch = branches[branchId];
-            if (!branch || !branch.members) return;
-
             const memberSelects = ['vicePresident', 'secondVice', 'secretary', 'secretaryAssistant', 'treasurer', 'treasurerAssistant'];
             
             memberSelects.forEach(selectId => {
                 const select = document.getElementById(selectId);
-                select.innerHTML = '<option value="">اختر العضو</option>';
-                
-                Object.entries(branch.members).forEach(([memberId, memberData]) => {
-                    const user = users[memberId];
-                    if (user) {
-                        select.innerHTML += `<option value="${memberId}">${user.fullName || user.username}</option>`;
+                if (select) {
+                    select.innerHTML = '<option value="">اختر العضو</option>';
+                    
+                    if (branch.members) {
+                        Object.entries(branch.members).forEach(([memberId, memberData]) => {
+                            const user = users[memberId];
+                            if (user) {
+                                select.innerHTML += `<option value="${memberId}">${user.fullName || user.username}</option>`;
+                            }
+                        });
                     }
-                });
+                }
             });
         };
 
@@ -1173,22 +1437,21 @@
                     },
                     createdAt: new Date().toISOString(),
                     createdBy: currentUser.userId,
-                    status: 'active'
+                    status: 'active',
+                    trackingNumber: await generateTrackingNumber('BRN')
                 };
 
-                // حفظ في Firebase
                 const branchesRef = ref(database, 'branches');
                 const newBranchRef = push(branchesRef);
                 await set(newBranchRef, branchData);
 
-                // تسجيل النشاط
-                await push(ref(database, 'activities'), {
+                // إرسال إشعار للأعضاء
+                await notificationSystem.broadcastNotification({
                     type: 'branch',
                     title: 'فرع جديد',
-                    description: `تم إنشاء فرع ${branchData.name} في ${branchData.governorate}`,
-                    icon: 'fa-building',
-                    timestamp: new Date().toISOString()
-                });
+                    message: `تم إنشاء فرع ${branchData.name}`,
+                    link: 'branches.html'
+                }, Object.keys(users));
 
                 showMessage('تم إنشاء الفرع بنجاح', 'success');
                 closeCreateBranchModal();
@@ -1209,7 +1472,6 @@
                 return;
             }
             document.getElementById('councilModal').classList.add('active');
-            populateBranchSelects();
         };
 
         window.closeCouncilModal = function() {
@@ -1249,6 +1511,20 @@
                     }
                 }
 
+                // إرسال إشعار للأعضاء الجدد في المجلس
+                const branch = branches[branchId];
+                for (const [position, userId] of Object.entries(councilData)) {
+                    if (userId) {
+                        await notificationSystem.createNotification({
+                            userId,
+                            type: 'council',
+                            title: 'عضوية مجلس فرعي',
+                            message: `تم تعيينك ${position} في ${branch.name}`,
+                            link: `branches.html?id=${branchId}`
+                        });
+                    }
+                }
+
                 showMessage('تم تشكيل المجلس بنجاح', 'success');
                 closeCouncilModal();
                 loadData();
@@ -1261,85 +1537,78 @@
             }
         });
 
-        // إرسال إلى لجنة
+        // إرسال طلب إلى لجنة
         window.showSendToCommittee = function(branchId) {
-            document.getElementById('fromBranchId').value = branchId;
-            document.getElementById('sendToCommitteeModal').classList.add('active');
+            sessionStorage.setItem('fromBranchId', branchId);
+            document.getElementById('sendRequestModal').classList.add('active');
         };
 
-        window.closeSendToCommitteeModal = function() {
-            document.getElementById('sendToCommitteeModal').classList.remove('active');
-            document.getElementById('sendToCommitteeForm').reset();
+        window.closeSendRequestModal = function() {
+            document.getElementById('sendRequestModal').classList.remove('active');
         };
 
-        window.toggleCommitteeSendType = function() {
-            const type = document.getElementById('sendType').value;
+        document.getElementById('requestType').addEventListener('change', function(e) {
             const referenceGroup = document.getElementById('referenceGroup');
-            referenceGroup.style.display = type === 'feedback' ? 'block' : 'none';
-        };
+            referenceGroup.style.display = e.target.value === 'feedback' ? 'block' : 'none';
+        });
 
-        document.getElementById('sendToCommitteeForm').addEventListener('submit', async function(e) {
+        document.getElementById('sendRequestForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             showLoading(true);
 
             try {
-                const fromBranchId = document.getElementById('fromBranchId').value;
-                const toCommitteeId = document.getElementById('targetCommittee').value;
-                const type = document.getElementById('sendType').value;
-                const title = document.getElementById('sendTitle').value;
-                const content = document.getElementById('sendContent').value;
-                const reference = document.getElementById('referenceNumber').value;
+                const fromBranchId = sessionStorage.getItem('fromBranchId');
+                const branch = branches[fromBranchId];
+                const committeeId = document.getElementById('targetCommittee').value;
+                const committee = committees[committeeId];
 
-                const trackingData = {
-                    id: `track_${Date.now()}`,
-                    type: type,
+                const trackingNumber = await generateTrackingNumber('REQ');
+                
+                const requestData = {
+                    trackingNumber,
+                    type: document.getElementById('requestType').value,
                     fromType: 'branch',
                     fromId: fromBranchId,
-                    fromName: branches[fromBranchId]?.name,
+                    fromName: branch.name,
                     toType: 'committee',
-                    toId: toCommitteeId,
-                    toName: committees[toCommitteeId]?.name,
-                    title: title,
-                    content: content,
-                    reference: reference || null,
+                    toId: committeeId,
+                    toName: committee.name,
+                    title: document.getElementById('requestTitle').value,
+                    content: document.getElementById('requestContent').value,
+                    priority: document.getElementById('requestPriority').value,
+                    reference: document.getElementById('referenceNumber').value || null,
                     status: 'pending',
                     history: [{
                         status: 'sent',
                         timestamp: new Date().toISOString(),
-                        by: currentUser.userId
+                        by: currentUser.userId,
+                        note: 'تم إرسال الطلب'
                     }],
                     createdAt: new Date().toISOString(),
                     createdBy: currentUser.userId
                 };
 
-                // حفظ في نظام التتبع
-                await push(ref(database, 'tracking'), trackingData);
+                const trackingRef = ref(database, 'tracking');
+                await push(trackingRef, requestData);
 
-                // إضافة إلى سجل الفرع
-                await push(ref(database, `branches/${fromBranchId}/sent_items`), {
-                    trackingId: trackingData.id,
-                    to: committees[toCommitteeId]?.name,
-                    type: type,
-                    title: title,
-                    sentAt: new Date().toISOString()
-                });
+                // إشعار مدير اللجنة
+                if (committee.managerId) {
+                    await notificationSystem.createNotification({
+                        userId: committee.managerId,
+                        type: 'request',
+                        title: 'طلب جديد من فرع',
+                        message: `لديك طلب جديد من ${branch.name}`,
+                        link: 'tracking.html',
+                        priority: requestData.priority,
+                        metadata: { trackingNumber }
+                    });
+                }
 
-                // إضافة إلى سجل اللجنة
-                await push(ref(database, `committees/${toCommitteeId}/received_items`), {
-                    trackingId: trackingData.id,
-                    from: branches[fromBranchId]?.name,
-                    type: type,
-                    title: title,
-                    receivedAt: new Date().toISOString(),
-                    status: 'pending'
-                });
-
-                showMessage('تم الإرسال بنجاح', 'success');
-                closeSendToCommitteeModal();
+                showMessage('تم إرسال الطلب بنجاح', 'success');
+                closeSendRequestModal();
 
             } catch (error) {
-                console.error('Error sending to committee:', error);
+                console.error('Error sending request:', error);
                 showMessage('حدث خطأ في الإرسال', 'error');
             } finally {
                 showLoading(false);
@@ -1351,84 +1620,47 @@
             const branch = branches[branchId];
             if (!branch) return;
 
-            const content = document.getElementById('branchDetailsContent');
-            
-            // تجهيز قائمة الأعضاء
             const membersList = branch.members ? Object.entries(branch.members).map(([id, member]) => `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #eee;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-                            ${(users[id]?.fullName || 'عضو').charAt(0)}
-                        </div>
-                        <div>
-                            <strong>${users[id]?.fullName || 'عضو'}</strong>
-                            <div style="font-size: 12px; color: #666;">${member.role || 'عضو'}</div>
-                        </div>
+                <div class="member-item">
+                    <div class="member-avatar">${(users[id]?.fullName || '?').charAt(0)}</div>
+                    <div class="member-info">
+                        <h4>${users[id]?.fullName || 'عضو'}</h4>
+                        <p>${member.role || 'عضو'}</p>
                     </div>
-                    <span style="background: #f3e5f5; color: #8e24aa; padding: 4px 10px; border-radius: 20px; font-size: 11px;">
-                        ${member.position || 'عضو'}
-                    </span>
                 </div>
-            `).join('') : '<p style="text-align: center; color: #999;">لا يوجد أعضاء</p>';
+            `).join('') : '<p>لا يوجد أعضاء</p>';
 
-            // تجهيز المجلس الفرعي
             const councilHtml = branch.subCouncil ? `
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                    <h4 style="margin-bottom: 10px; color: #333;">المجلس الفرعي</h4>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                        ${branch.subCouncil.vicePresident ? `
-                            <div><strong>وكيل:</strong> ${users[branch.subCouncil.vicePresident]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                        ${branch.subCouncil.secondVice ? `
-                            <div><strong>نائب ثاني:</strong> ${users[branch.subCouncil.secondVice]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                        ${branch.subCouncil.secretary ? `
-                            <div><strong>أمين عام:</strong> ${users[branch.subCouncil.secretary]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                        ${branch.subCouncil.secretaryAssistant ? `
-                            <div><strong>مساعد أمين عام:</strong> ${users[branch.subCouncil.secretaryAssistant]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                        ${branch.subCouncil.treasurer ? `
-                            <div><strong>أمين صندوق:</strong> ${users[branch.subCouncil.treasurer]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                        ${branch.subCouncil.treasurerAssistant ? `
-                            <div><strong>مساعد أمين صندوق:</strong> ${users[branch.subCouncil.treasurerAssistant]?.fullName || 'غير محدد'}</div>
-                        ` : ''}
-                    </div>
+                <div class="council-section">
+                    <h4>المجلس الفرعي</h4>
+                    ${branch.subCouncil.vicePresident ? `<p><strong>وكيل:</strong> ${users[branch.subCouncil.vicePresident]?.fullName || 'غير محدد'}</p>` : ''}
+                    ${branch.subCouncil.secondVice ? `<p><strong>نائب ثاني:</strong> ${users[branch.subCouncil.secondVice]?.fullName || 'غير محدد'}</p>` : ''}
+                    ${branch.subCouncil.secretary ? `<p><strong>أمين عام:</strong> ${users[branch.subCouncil.secretary]?.fullName || 'غير محدد'}</p>` : ''}
+                    ${branch.subCouncil.treasurer ? `<p><strong>أمين صندوق:</strong> ${users[branch.subCouncil.treasurer]?.fullName || 'غير محدد'}</p>` : ''}
                 </div>
             ` : '';
 
+            const content = document.getElementById('branchDetailsContent');
             content.innerHTML = `
                 <div style="margin-bottom: 20px;">
-                    <h4 style="color: #333; margin-bottom: 5px;">${branch.name}</h4>
-                    <div style="color: #666; margin-bottom: 10px;">
-                        <i class="fas fa-map-marker-alt"></i> ${branch.governorate}
-                    </div>
-                    ${branch.address ? `<p style="color: #666; font-size: 14px;">${branch.address}</p>` : ''}
+                    <h4>${branch.name}</h4>
+                    <p><strong>المحافظة:</strong> ${branch.governorate}</p>
+                    <p><strong>العنوان:</strong> ${branch.address || 'غير محدد'}</p>
+                    <p><strong>رقم التتبع:</strong> ${branch.trackingNumber || 'غير محدد'}</p>
                 </div>
-                
                 ${councilHtml}
-                
-                <div style="margin-bottom: 20px;">
-                    <h5 style="color: #333; margin-bottom: 10px;">
-                        <i class="fas fa-users"></i> الأعضاء (${Object.keys(branch.members || {}).length})
-                    </h5>
-                    <div style="max-height: 300px; overflow-y: auto;">
-                        ${membersList}
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-primary" style="flex: 1;" onclick="manageBranch('${branchId}')">
+                <h5>الأعضاء (${Object.keys(branch.members || {}).length})</h5>
+                <div class="members-list">${membersList}</div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn-primary" onclick="manageBranch('${branchId}')">
                         <i class="fas fa-tasks"></i> إدارة
                     </button>
-                    <button class="btn-secondary" style="flex: 1;" onclick="showSendToCommittee('${branchId}')">
-                        <i class="fas fa-paper-plane"></i> مراسلة لجنة
+                    <button class="btn-secondary" onclick="showSendToCommittee('${branchId}')">
+                        <i class="fas fa-paper-plane"></i> إرسال طلب
                     </button>
                 </div>
             `;
 
-            document.getElementById('branchDetailsTitle').innerHTML = `<i class="fas fa-info-circle"></i> تفاصيل ${branch.name}`;
             document.getElementById('branchDetailsModal').classList.add('active');
         };
 
@@ -1446,6 +1678,13 @@
         window.editBranch = function(branchId) {
             sessionStorage.setItem('editBranch', branchId);
             window.location.href = `edit-branch.html?id=${branchId}`;
+        };
+
+        // عرض نموذج المجلس لفرع معين
+        window.showCouncilForm = function(branchId) {
+            document.getElementById('councilBranch').value = branchId;
+            loadBranchMembers();
+            document.getElementById('councilModal').classList.add('active');
         };
 
         // حذف الفرع
@@ -1470,136 +1709,102 @@
             }
         };
 
-        // توليد تقرير الفروع
-        window.generateBranchReport = async function() {
-            showLoading(true);
-            try {
-                const report = {
-                    generatedAt: new Date().toISOString(),
-                    generatedBy: currentUser.fullName,
-                    branches: Object.values(branches).map(b => ({
-                        name: b.name,
-                        governorate: b.governorate,
-                        membersCount: Object.keys(b.members || {}).length,
-                        reportsCount: Object.keys(b.reports || {}).length,
-                        activitiesCount: Object.keys(b.activities || {}).length,
-                        hasCouncil: b.subCouncil && Object.values(b.subCouncil).some(v => v)
-                    })),
-                    summary: {
-                        totalBranches: Object.keys(branches).length,
-                        totalMembers: Object.values(branches).reduce((acc, b) => acc + Object.keys(b.members || {}).length, 0),
-                        branchesWithCouncil: Object.values(branches).filter(b => b.subCouncil && Object.values(b.subCouncil).some(v => v)).length
-                    }
-                };
+        // توليد تقرير فرع
+        window.generateBranchReport = async function(branchId) {
+            const branch = branches[branchId];
+            if (!branch) return;
 
-                // حفظ التقرير
-                await push(ref(database, 'reports'), {
-                    type: 'branches',
-                    content: report,
-                    createdAt: new Date().toISOString(),
-                    createdBy: currentUser.userId
-                });
+            const membersCount = branch.members ? Object.keys(branch.members).length : 0;
+            const councilCount = branch.subCouncil ? Object.values(branch.subCouncil).filter(v => v).length : 0;
 
-                // عرض التقرير
-                const reportWindow = window.open('', '_blank');
-                reportWindow.document.write(`
-                    <html dir="rtl">
-                        <head><title>تقرير الفروع</title>
-                        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-                        <style>
-                            body { font-family: 'Cairo', sans-serif; padding: 20px; }
-                            h1 { color: #333; }
-                            .summary { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-                            .branch-card { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
-                        </style>
-                        </head>
-                        <body>
-                            <h1>تقرير شامل عن الفروع</h1>
-                            <div class="summary">
-                                <h3>ملخص</h3>
-                                <p>إجمالي الفروع: ${report.summary.totalBranches}</p>
-                                <p>إجمالي الأعضاء: ${report.summary.totalMembers}</p>
-                                <p>فروع بها مجالس: ${report.summary.branchesWithCouncil}</p>
-                            </div>
-                            ${report.branches.map(b => `
-                                <div class="branch-card">
-                                    <h3>${b.name} - ${b.governorate}</h3>
-                                    <p>الأعضاء: ${b.membersCount} | التقارير: ${b.reportsCount} | الأنشطة: ${b.activitiesCount}</p>
-                                    <p>${b.hasCouncil ? '✅ يوجد مجلس فرعي' : '❌ لا يوجد مجلس فرعي'}</p>
-                                </div>
-                            `).join('')}
-                        </body>
-                    </html>
-                `);
+            const report = {
+                branchName: branch.name,
+                governorate: branch.governorate,
+                membersCount,
+                councilCount,
+                reportsCount: branch.reports ? Object.keys(branch.reports).length : 0,
+                createdAt: new Date(branch.createdAt).toLocaleDateString('ar-EG'),
+                status: branch.status,
+                trackingNumber: branch.trackingNumber,
+                generatedAt: new Date().toLocaleString('ar-EG')
+            };
 
-                showMessage('تم إنشاء التقرير بنجاح', 'success');
-
-            } catch (error) {
-                console.error('Error generating report:', error);
-                showMessage('حدث خطأ في إنشاء التقرير', 'error');
-            } finally {
-                showLoading(false);
-            }
+            // فتح نافذة الطباعة
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>تقرير ${branch.name}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Cairo', sans-serif; padding: 20px; }
+                        .report-header { text-align: center; margin-bottom: 30px; }
+                        .report-title { color: var(--secondary-color); }
+                        .info-table { width: 100%; border-collapse: collapse; }
+                        .info-table td { padding: 10px; border: 1px solid #ddd; }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-header">
+                        <h1 class="report-title">نقابة تكنولوجيا المعلومات والبرمجيات</h1>
+                        <h2>تقرير الفرع: ${branch.name}</h2>
+                    </div>
+                    <table class="info-table">
+                        <tr><td>رقم التتبع</td><td>${report.trackingNumber || 'غير محدد'}</td></tr>
+                        <tr><td>المحافظة</td><td>${report.governorate}</td></tr>
+                        <tr><td>عدد الأعضاء</td><td>${report.membersCount}</td></tr>
+                        <tr><td>أعضاء المجلس</td><td>${report.councilCount}</td></tr>
+                        <tr><td>عدد التقارير</td><td>${report.reportsCount}</td></tr>
+                        <tr><td>تاريخ الإنشاء</td><td>${report.createdAt}</td></tr>
+                        <tr><td>الحالة</td><td>${report.status === 'active' ? 'نشط' : 'غير نشط'}</td></tr>
+                        <tr><td>تاريخ التقرير</td><td>${report.generatedAt}</td></tr>
+                    </table>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
         };
+
+        // توليد رقم تتبع
+        async function generateTrackingNumber(prefix) {
+            const year = new Date().getFullYear();
+            const counterRef = ref(database, `counters/${prefix}_${year}`);
+            const snapshot = await get(counterRef);
+            const currentCount = snapshot.exists() ? snapshot.val() : 0;
+            const newCount = currentCount + 1;
+            await set(counterRef, newCount);
+            
+            const paddedNumber = newCount.toString().padStart(4, '0');
+            return `${prefix}-${paddedNumber}-${year}`;
+        }
 
         // تبديل التبويبات
         window.switchTab = function(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
             
             event.target.classList.add('active');
-            document.getElementById(`${tab}BranchesTab`).classList.add('active');
+            
+            switch(tab) {
+                case 'all':
+                    document.getElementById('allBranchesTab').style.display = 'block';
+                    break;
+                case 'my':
+                    document.getElementById('myBranchesTab').style.display = 'block';
+                    break;
+                case 'council':
+                    document.getElementById('councilBranchesTab').style.display = 'block';
+                    break;
+                case 'requests':
+                    document.getElementById('requestsBranchesTab').style.display = 'block';
+                    break;
+            }
         };
 
-        // دوال ITWS AI
+        // دوال AI
         window.toggleAIChat = function() {
-            const chatWindow = document.getElementById('aiChatWindow');
-            chatWindow.style.display = chatWindow.style.display === 'none' ? 'block' : 'none';
-        };
-
-        window.sendAIMessage = async function() {
-            const input = document.getElementById('aiMessageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const chatBody = document.getElementById('aiChatBody');
-            
-            chatBody.innerHTML += `
-                <div class="user-message">
-                    <div class="avatar"><i class="fas fa-user"></i></div>
-                    <div class="message">${message}</div>
-                </div>
-            `;
-            
-            input.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-            
-            setTimeout(() => {
-                let response = '';
-                
-                if (message.includes('فرع') || message.includes('فرع جديد')) {
-                    response = 'يمكنك إنشاء فرع جديد بالضغط على زر "إنشاء فرع جديد". هل تريد مساعدة في إعداد بيانات الفرع؟';
-                } else if (message.includes('مجلس') || message.includes('تشكيل')) {
-                    response = 'لتشكيل مجلس فرعي، اختر "تشكيل مجلس فرعي" ثم اختر الفرع وأعضاء المجلس. هل تريد شرحاً أكثر؟';
-                } else if (message.includes('تقرير')) {
-                    response = 'يمكنك إنشاء تقارير شاملة عن الفروع من تبويب "التقارير". هل تريد تقريراً عن فرع معين؟';
-                } else if (message.includes('مراسلة') || message.includes('إرسال')) {
-                    response = 'لإرسال مراسلة إلى لجنة، اختر الفرع ثم اضغط على زر المراسلة. هل تريد معرفة المزيد عن نظام التتبع؟';
-                } else if (currentUser.role === 'president' && (message.includes('عدل') || message.includes('ضيف'))) {
-                    response = 'بصفتك النقيب العام، يمكنني تعديل النظام وإضافة شاشات جديدة. ماذا تريد تحديداً؟';
-                } else {
-                    response = 'أنا ITWS AI، المساعد الذكي. كيف يمكنني مساعدتك في إدارة الفروع اليوم؟';
-                }
-                
-                chatBody.innerHTML += `
-                    <div class="ai-message">
-                        <div class="avatar"><i class="fas fa-robot"></i></div>
-                        <div class="message">${response}</div>
-                    </div>
-                `;
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 1000);
+            showMessage('🤖 ITWS AI: كيف يمكنني مساعدتك في إدارة الفروع؟', 'info');
         };
 
         // تسجيل الخروج
@@ -1614,12 +1819,10 @@
 
         // تحديث حالة المتصل
         async function updateOnlineStatus(status) {
-            if (currentUser) {
-                await update(ref(database, `users/${currentUser.userId}`), {
-                    online: status,
-                    lastSeen: new Date().toISOString()
-                });
-            }
+            await update(ref(database, `users/${currentUser.userId}`), {
+                online: status,
+                lastSeen: new Date().toISOString()
+            });
         }
 
         window.addEventListener('load', () => {
@@ -1631,6 +1834,7 @@
             updateOnlineStatus(false);
         });
 
+        // تحديث مباشر
         onValue(ref(database, 'branches'), () => loadData());
 
     </script>
