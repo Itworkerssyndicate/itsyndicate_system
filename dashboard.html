@@ -6,6 +6,7 @@
     <title>لوحة التحكم - ITWS Union</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/themes.css">
     <style>
         * {
             margin: 0;
@@ -15,7 +16,10 @@
         }
 
         body {
-            background: #f5f5f5;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         /* الشريط الجانبي */
@@ -25,8 +29,8 @@
             top: 0;
             width: 280px;
             height: 100%;
-            background: white;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            background: var(--bg-sidebar);
+            box-shadow: -5px 0 20px var(--shadow-color);
             z-index: 100;
             overflow-y: auto;
             transition: all 0.3s;
@@ -34,7 +38,7 @@
 
         .sidebar-header {
             padding: 30px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-header);
             color: white;
             text-align: center;
         }
@@ -49,8 +53,14 @@
             align-items: center;
             justify-content: center;
             font-size: 40px;
-            color: #667eea;
+            color: var(--primary-color);
             border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header .user-avatar:hover {
+            transform: scale(1.05);
         }
 
         .sidebar-header h3 {
@@ -87,7 +97,7 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            color: #666;
+            color: var(--text-secondary);
             text-decoration: none;
             border-radius: 10px;
             margin-bottom: 5px;
@@ -101,17 +111,24 @@
         }
 
         .menu-item:hover, .menu-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             color: white;
         }
 
         .menu-item .badge {
-            background: #ff6b6b;
+            background: var(--danger-color);
             color: white;
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 12px;
             margin-right: auto;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .ai-menu-item {
@@ -120,35 +137,31 @@
             margin-top: 20px;
         }
 
-        .ai-menu-item i {
-            color: white;
-        }
-
         /* المحتوى الرئيسي */
         .main-content {
             margin-right: 280px;
             padding: 20px;
+            transition: all 0.3s;
         }
 
-        /* الشريط العلوي */
         .top-bar {
-            background: white;
+            background: var(--bg-card);
             padding: 15px 25px;
             border-radius: 15px;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
         }
 
         .page-title h2 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 24px;
         }
 
         .page-title p {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
@@ -162,7 +175,7 @@
             position: relative;
             width: 40px;
             height: 40px;
-            background: #f5f5f5;
+            background: var(--bg-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -172,14 +185,15 @@
         }
 
         .notification-icon:hover {
-            background: #e0e0e0;
+            background: var(--primary-color);
+            color: white;
         }
 
         .notification-badge {
             position: absolute;
             top: -5px;
             left: -5px;
-            background: #ff6b6b;
+            background: var(--danger-color);
             color: white;
             width: 20px;
             height: 20px;
@@ -188,13 +202,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: pulse 2s infinite;
         }
 
         .online-users {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #f5f5f5;
+            background: var(--bg-primary);
             padding: 8px 15px;
             border-radius: 30px;
         }
@@ -202,6 +217,24 @@
         .online-users i {
             color: #4caf50;
             font-size: 10px;
+        }
+
+        .theme-selector-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-selector-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(180deg);
         }
 
         /* البطاقات الإحصائية */
@@ -213,29 +246,42 @@
         }
 
         .stat-card {
-            background: white;
+            background: var(--bg-card);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
             transition: all 0.3s;
+            animation: fadeInUp 0.5s ease;
+            border: 1px solid var(--border-light);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px var(--shadow-hover);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .stat-info h3 {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 5px;
         }
 
         .stat-info .number {
-            color: #333;
+            color: var(--text-primary);
             font-size: 32px;
             font-weight: 700;
         }
@@ -243,7 +289,7 @@
         .stat-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -261,10 +307,11 @@
         }
 
         .section-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 1px solid var(--border-light);
         }
 
         .section-header {
@@ -273,16 +320,16 @@
             justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f5f5f5;
+            border-bottom: 2px solid var(--border-light);
         }
 
         .section-header h3 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px;
         }
 
         .section-header i {
-            color: #667eea;
+            color: var(--primary-color);
             font-size: 24px;
         }
 
@@ -295,24 +342,25 @@
             display: flex;
             align-items: center;
             padding: 12px;
-            border-bottom: 1px solid #f5f5f5;
+            border-bottom: 1px solid var(--border-light);
             transition: all 0.3s;
         }
 
         .activity-item:hover {
-            background: #f8f9fa;
+            background: var(--bg-primary);
+            transform: translateX(-5px);
         }
 
         .activity-icon {
             width: 40px;
             height: 40px;
-            background: #f0f2f5;
+            background: var(--bg-primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-left: 15px;
-            color: #667eea;
+            color: var(--primary-color);
         }
 
         .activity-content {
@@ -320,18 +368,18 @@
         }
 
         .activity-content h4 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 14px;
             margin-bottom: 3px;
         }
 
         .activity-content p {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 12px;
         }
 
         .activity-time {
-            color: #999;
+            color: var(--text-muted);
             font-size: 11px;
         }
 
@@ -352,135 +400,125 @@
             color: #155724;
         }
 
-        .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* نافذة ITWS AI */
-        .ai-chat-window {
+        /* نافذة اختيار الثيم */
+        .theme-modal {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 350px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
             display: none;
-        }
-
-        .ai-chat-header {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 15px 15px 0 0;
-            display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
-        .ai-chat-header h4 {
+        .theme-modal.active {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .ai-chat-header h4 i {
-            font-size: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .close-chat {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .ai-chat-body {
-            height: 300px;
-            padding: 15px;
+        .theme-modal-content {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
-        .ai-message {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .ai-message .avatar {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-            border-radius: 50%;
+        .theme-modal-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-light);
         }
 
-        .ai-message .message {
-            background: #f0f2f5;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 80%;
+        .theme-modal-header h3 {
+            color: var(--text-primary);
+            font-size: 24px;
         }
 
-        .user-message {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-direction: row-reverse;
-        }
-
-        .user-message .avatar {
-            width: 35px;
-            height: 35px;
-            background: #667eea;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .user-message .message {
-            background: #667eea;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
-        .ai-chat-footer {
-            padding: 15px;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-        }
-
-        .ai-chat-footer input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            outline: none;
-        }
-
-        .ai-chat-footer button {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        .close-modal {
+            background: none;
             border: none;
-            border-radius: 50%;
-            color: white;
+            color: var(--text-secondary);
+            font-size: 24px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
+        .close-modal:hover {
+            color: var(--danger-color);
+            transform: scale(1.2);
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-box {
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .theme-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .theme-box.active {
+            border-color: var(--primary-color);
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .theme-preview.light {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .theme-preview.dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        .theme-preview.navy {
+            background: linear-gradient(135deg, #0a1929 0%, #1e3a8a 100%);
+        }
+
+        .theme-preview.forest {
+            background: linear-gradient(135deg, #064e3b 0%, #10b981 100%);
+        }
+
+        .theme-preview.sunset {
+            background: linear-gradient(135deg, #7f1d1d 0%, #f97316 100%);
+        }
+
+        /* أيقونة AI */
         .ai-toggle {
             position: fixed;
             bottom: 20px;
@@ -498,33 +536,72 @@
             box-shadow: 0 5px 20px rgba(255,107,107,0.3);
             z-index: 999;
             transition: all 0.3s;
+            animation: pulse 2s infinite;
         }
 
         .ai-toggle:hover {
             transform: scale(1.1);
         }
 
-        .ai-toggle .pulse {
-            position: absolute;
+        /* رسائل النظام */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .message-box.success {
+            background: var(--success-color);
+        }
+
+        .message-box.error {
+            background: var(--danger-color);
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255,107,107,0.5);
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
+        .loading-spinner p {
+            color: white;
+            font-size: 16px;
         }
 
-        /* Responsive */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* استجابة للجوال */
         @media (max-width: 768px) {
             .sidebar {
                 right: -280px;
@@ -573,18 +650,36 @@
                 طلبات التسجيل
                 <span class="badge" id="pendingRequests">0</span>
             </a>
+            <a href="tracking.html" class="menu-item">
+                <i class="fas fa-exchange-alt"></i>
+                نظام التتبع
+                <span class="badge" id="trackingCount">0</span>
+            </a>
             <a href="reports.html" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 التقارير
+            </a>
+            <a href="evaluations.html" class="menu-item">
+                <i class="fas fa-star"></i>
+                التقييمات
+            </a>
+            <a href="attendance.html" class="menu-item">
+                <i class="fas fa-clock"></i>
+                الحضور والانصراف
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="fas fa-envelope"></i>
+                الرسائل
+                <span class="badge" id="messagesCount">0</span>
             </a>
             <a href="tickets.html" class="menu-item">
                 <i class="fas fa-ticket-alt"></i>
                 التذاكر
                 <span class="badge" id="ticketsCount">0</span>
             </a>
-            <a href="suggestions.html" class="menu-item">
-                <i class="fas fa-lightbulb"></i>
-                الاقتراحات
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user-circle"></i>
+                الملف الشخصي
             </a>
             
             <div style="height: 20px;"></div>
@@ -592,7 +687,6 @@
             <a href="#" class="menu-item ai-menu-item" onclick="toggleAIChat()">
                 <i class="fas fa-robot"></i>
                 ITWS AI مساعد
-                <span class="badge" style="background: white; color: #ff6b6b;">AI</span>
             </a>
             
             <div style="height: 20px;"></div>
@@ -609,7 +703,7 @@
         <!-- الشريط العلوي -->
         <div class="top-bar">
             <div class="page-title">
-                <h2>مرحباً بك في النظام</h2>
+                <h2 id="welcomeMessage">مرحباً بك في النظام</h2>
                 <p id="currentDateTime"></p>
             </div>
             <div class="top-actions">
@@ -620,6 +714,9 @@
                 <div class="online-users" id="onlineUsers">
                     <i class="fas fa-circle"></i>
                     <span id="onlineCount">0</span> متصل
+                </div>
+                <div class="theme-selector-btn" onclick="showThemeSelector()">
+                    <i class="fas fa-palette"></i>
                 </div>
             </div>
         </div>
@@ -654,16 +751,15 @@
             </div>
         </div>
 
-        <!-- نظام التتبع (Tracking System) -->
+        <!-- نظام التتبع -->
         <div class="section-card" style="margin-top: 20px;">
             <div class="section-header">
-                <h3><i class="fas fa-exchange-alt"></i> نظام التتبع - التواصل بين اللجان والفروع</h3>
-                <i class="fas fa-ellipsis-h"></i>
+                <h3><i class="fas fa-exchange-alt"></i> آخر المراسلات</h3>
+                <a href="tracking.html" style="color: var(--primary-color);">عرض الكل</a>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <!-- من اللجان إلى الفروع -->
                 <div>
-                    <h4 style="margin-bottom: 15px; color: #667eea;">
+                    <h4 style="margin-bottom: 15px; color: var(--primary-color);">
                         <i class="fas fa-arrow-right"></i>
                         من اللجان إلى الفروع
                     </h4>
@@ -671,9 +767,8 @@
                         <!-- يتم تعبئتها ديناميكياً -->
                     </div>
                 </div>
-                <!-- من الفروع إلى اللجان -->
                 <div>
-                    <h4 style="margin-bottom: 15px; color: #ff6b6b;">
+                    <h4 style="margin-bottom: 15px; color: var(--secondary-color);">
                         <i class="fas fa-arrow-left"></i>
                         من الفروع إلى اللجان
                     </h4>
@@ -685,47 +780,38 @@
         </div>
     </div>
 
-    <!-- زر ITWS AI -->
+    <!-- نافذة اختيار الثيم -->
+    <div class="theme-modal" id="themeModal">
+        <div class="theme-modal-content">
+            <div class="theme-modal-header">
+                <h3><i class="fas fa-palette"></i> اختر الثيم المناسب لك</h3>
+                <button class="close-modal" onclick="closeThemeSelector()">&times;</button>
+            </div>
+            <div class="themes-grid" id="themesGrid">
+                <!-- يتم تعبئتها ديناميكياً -->
+            </div>
+        </div>
+    </div>
+
+    <!-- أيقونة AI -->
     <div class="ai-toggle" onclick="toggleAIChat()">
-        <div class="pulse"></div>
         <i class="fas fa-robot"></i>
     </div>
 
-    <!-- نافذة محادثة ITWS AI -->
-    <div class="ai-chat-window" id="aiChatWindow">
-        <div class="ai-chat-header">
-            <h4>
-                <i class="fas fa-robot"></i>
-                ITWS AI - المساعد الذكي
-            </h4>
-            <button class="close-chat" onclick="toggleAIChat()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="ai-chat-body" id="aiChatBody">
-            <div class="ai-message">
-                <div class="avatar">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="message">
-                    مرحباً! أنا ITWS AI، المساعد الذكي للنظام. كيف يمكنني مساعدتك اليوم؟
-                </div>
-            </div>
-        </div>
-        <div class="ai-chat-footer">
-            <input type="text" id="aiMessageInput" placeholder="اكتب رسالتك..." onkeypress="if(event.key === 'Enter') sendAIMessage()">
-            <button onclick="sendAIMessage()">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
+    <!-- رسائل النظام -->
+    <div id="messageBox" class="message-box"></div>
+
+    <!-- شاشة التحميل -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
     </div>
 
     <script type="module">
-        // استيراد Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, get, onValue, push, set, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import ThemeManager from './assets/js/theme-manager.js';
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
             authDomain: "itws-system.firebaseapp.com",
@@ -733,11 +819,9 @@
             projectId: "itws-system",
             storageBucket: "itws-system.firebasestorage.app",
             messagingSenderId: "770452248691",
-            appId: "1:770452248691:web:0e94e65e01298b398bb206",
-            measurementId: "G-8V5WSYEX0B"
+            appId: "1:770452248691:web:0e94e65e01298b398bb206"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
@@ -746,6 +830,9 @@
         if (!currentUser) {
             window.location.href = 'index.html';
         }
+
+        // تهيئة مدير الثيمات
+        const themeManager = new ThemeManager(currentUser);
 
         // تحديث التاريخ والوقت
         function updateDateTime() {
@@ -766,12 +853,34 @@
         // عرض معلومات المستخدم
         function displayUserInfo() {
             const userInfo = document.getElementById('userInfo');
+            let title = '';
+            
+            switch(currentUser.role) {
+                case 'president':
+                    title = 'النقيب العام';
+                    break;
+                case 'vice_president':
+                    title = 'النائب الأول';
+                    break;
+                case 'committee_manager':
+                    title = 'مدير لجنة';
+                    break;
+                case 'branch_manager':
+                    title = 'مدير فرع';
+                    break;
+                default:
+                    title = currentUser.title || 'عضو';
+            }
+
             userInfo.innerHTML = `
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle"></i>
+                <div class="user-avatar" onclick="window.location.href='profile.html'">
+                    ${currentUser.profileImage ? 
+                        `<img src="${currentUser.profileImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">` : 
+                        `<i class="fas fa-user-circle"></i>`
+                    }
                 </div>
                 <h3>${currentUser.fullName || currentUser.username}</h3>
-                <p>${currentUser.title || currentUser.role}</p>
+                <p>${title}</p>
                 <div class="online-badge">
                     <i class="fas fa-circle"></i>
                     متصل الآن
@@ -780,93 +889,199 @@
         }
         displayUserInfo();
 
-        // تحديث الإحصائيات
-        async function loadStats() {
-            // عدد اللجان
-            const committeesRef = ref(database, 'committees');
-            const committeesSnap = await get(committeesRef);
-            const committeesCount = committeesSnap.exists() ? Object.keys(committeesSnap.val()).length : 0;
-            document.getElementById('committeesCount').textContent = committeesCount;
-
-            // عدد الفروع
-            const branchesRef = ref(database, 'branches');
-            const branchesSnap = await get(branchesRef);
-            const branchesCount = branchesSnap.exists() ? Object.keys(branchesSnap.val()).length : 0;
-            document.getElementById('branchesCount').textContent = branchesCount;
-
-            // عدد الأعضاء
-            const usersRef = ref(database, 'users');
-            const usersSnap = await get(usersRef);
-            const membersCount = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
-            document.getElementById('membersCount').textContent = membersCount;
-
-            // عدد الطلبات المعلقة
-            const requestsRef = ref(database, 'pending_requests');
-            const requestsSnap = await get(requestsRef);
-            const pendingRequests = requestsSnap.exists() ? 
-                Object.values(requestsSnap.val()).filter(r => r.status === 'pending').length : 0;
-            document.getElementById('pendingRequests').textContent = pendingRequests;
-
-            // عرض البطاقات الإحصائية
-            const statsGrid = document.getElementById('statsGrid');
-            statsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <h3>إجمالي الأعضاء</h3>
-                        <div class="number">${membersCount}</div>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <h3>اللجان</h3>
-                        <div class="number">${committeesCount}</div>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <h3>الفروع</h3>
-                        <div class="number">${branchesCount}</div>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <h3>طلبات معلقة</h3>
-                        <div class="number">${pendingRequests}</div>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                </div>
-            `;
+        // رسالة ترحيب حسب الوقت
+        function setWelcomeMessage() {
+            const hour = new Date().getHours();
+            let message = '';
+            
+            if (hour < 12) message = 'صباح الخير';
+            else if (hour < 17) message = 'مساء الخير';
+            else message = 'مساء النور';
+            
+            document.getElementById('welcomeMessage').textContent = `${message}، ${currentUser.fullName || currentUser.username}`;
         }
-        loadStats();
+        setWelcomeMessage();
+
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message-box ${type}`;
+            msgBox.style.display = 'block';
+            setTimeout(() => {
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
+
+        // تحميل الإحصائيات حسب دور المستخدم
+        async function loadStats() {
+            showLoading(true);
+            try {
+                let stats = {};
+                
+                // إحصائيات مشتركة للجميع
+                const [committeesSnap, branchesSnap, usersSnap, requestsSnap, trackingSnap] = await Promise.all([
+                    get(ref(database, 'committees')),
+                    get(ref(database, 'branches')),
+                    get(ref(database, 'users')),
+                    get(ref(database, 'pending_requests')),
+                    get(ref(database, 'tracking'))
+                ]);
+
+                const committeesCount = committeesSnap.exists() ? Object.keys(committeesSnap.val()).length : 0;
+                const branchesCount = branchesSnap.exists() ? Object.keys(branchesSnap.val()).length : 0;
+                const membersCount = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
+                const pendingRequests = requestsSnap.exists() ? 
+                    Object.values(requestsSnap.val()).filter(r => r.status === 'pending').length : 0;
+                const trackingCount = trackingSnap.exists() ? Object.keys(trackingSnap.val()).length : 0;
+
+                // تحديث الأرقام في القائمة
+                document.getElementById('committeesCount').textContent = committeesCount;
+                document.getElementById('branchesCount').textContent = branchesCount;
+                document.getElementById('membersCount').textContent = membersCount;
+                document.getElementById('pendingRequests').textContent = pendingRequests;
+                document.getElementById('trackingCount').textContent = trackingCount;
+
+                // عرض البطاقات حسب الدور
+                const statsGrid = document.getElementById('statsGrid');
+                
+                if (currentUser.role === 'president') {
+                    // النقيب يرى كل الإحصائيات
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>إجمالي الأعضاء</h3>
+                                <div class="number">${membersCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>اللجان</h3>
+                                <div class="number">${committeesCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users-cog"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>الفروع</h3>
+                                <div class="number">${branchesCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-building"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>طلبات معلقة</h3>
+                                <div class="number">${pendingRequests}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                        </div>
+                    `;
+                } else if (currentUser.role === 'vice_president') {
+                    // النائب يرى إحصائيات عامة
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>إجمالي الأعضاء</h3>
+                                <div class="number">${membersCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>اللجان</h3>
+                                <div class="number">${committeesCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users-cog"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>الفروع</h3>
+                                <div class="number">${branchesCount}</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-building"></i></div>
+                        </div>
+                    `;
+                } else if (currentUser.role === 'committee_manager') {
+                    // مدير لجنة يرى إحصائيات لجنته فقط
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>أعضاء لجنتك</h3>
+                                <div class="number">15</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>تقارير معلقة</h3>
+                                <div class="number">3</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                        </div>
+                    `;
+                } else if (currentUser.role === 'branch_manager') {
+                    // مدير فرع يرى إحصائيات فرعه فقط
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>أعضاء فرعك</h3>
+                                <div class="number">25</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>أنشطة هذا الشهر</h3>
+                                <div class="number">8</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                        </div>
+                    `;
+                } else {
+                    // عضو عادي يرى إحصائيات بسيطة
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>تقاريري</h3>
+                                <div class="number">5</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>أيام الحضور</h3>
+                                <div class="number">12</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            } finally {
+                showLoading(false);
+            }
+        }
 
         // تحميل آخر الأنشطة
         function loadRecentActivities() {
-            const activitiesRef = ref(database, 'activities');
-            onValue(activitiesRef, (snapshot) => {
+            onValue(ref(database, 'activities'), (snapshot) => {
                 const activities = snapshot.val();
-                const activitiesList = document.getElementById('recentActivities');
+                const list = document.getElementById('recentActivities');
                 
                 if (activities) {
                     const recent = Object.entries(activities)
                         .sort((a, b) => new Date(b[1].timestamp) - new Date(a[1].timestamp))
                         .slice(0, 5);
                     
-                    activitiesList.innerHTML = recent.map(([id, activity]) => `
+                    list.innerHTML = recent.map(([id, activity]) => `
                         <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas ${activity.icon || 'fa-info-circle'}"></i>
-                            </div>
+                            <div class="activity-icon"><i class="fas ${activity.icon || 'fa-info-circle'}"></i></div>
                             <div class="activity-content">
                                 <h4>${activity.title}</h4>
                                 <p>${activity.description}</p>
@@ -875,29 +1090,25 @@
                         </div>
                     `).join('');
                 } else {
-                    activitiesList.innerHTML = '<p style="text-align: center; color: #999;">لا توجد أنشطة حالياً</p>';
+                    list.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">لا توجد أنشطة</p>';
                 }
             });
         }
-        loadRecentActivities();
 
         // تحميل الطلبات الواردة
         function loadIncomingRequests() {
-            const requestsRef = ref(database, 'pending_requests');
-            onValue(requestsRef, (snapshot) => {
+            onValue(ref(database, 'pending_requests'), (snapshot) => {
                 const requests = snapshot.val();
-                const requestsList = document.getElementById('incomingRequests');
+                const list = document.getElementById('incomingRequests');
                 
-                if (requests) {
+                if (requests && (currentUser.role === 'president' || currentUser.role === 'vice_president')) {
                     const pending = Object.entries(requests)
                         .filter(([_, r]) => r.status === 'pending')
                         .slice(0, 5);
                     
-                    requestsList.innerHTML = pending.map(([id, request]) => `
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
+                    list.innerHTML = pending.map(([id, request]) => `
+                        <div class="activity-item" onclick="window.location.href='requests.html'">
+                            <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
                             <div class="activity-content">
                                 <h4>طلب عضوية جديد</h4>
                                 <p>${request.fullName}</p>
@@ -907,86 +1118,112 @@
                         </div>
                     `).join('');
                 } else {
-                    requestsList.innerHTML = '<p style="text-align: center; color: #999;">لا توجد طلبات جديدة</p>';
+                    list.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">لا توجد طلبات</p>';
                 }
             });
         }
-        loadIncomingRequests();
 
-        // تحميل التتبع بين اللجان والفروع
+        // تحميل آخر المراسلات
         function loadTracking() {
-            const trackingRef = ref(database, 'tracking');
-            onValue(trackingRef, (snapshot) => {
+            onValue(ref(database, 'tracking'), (snapshot) => {
                 const tracking = snapshot.val();
                 
-                // من لجنة إلى فرع
                 const committeeToBranch = document.getElementById('committeeToBranch');
-                // من فرع إلى لجنة
                 const branchToCommittee = document.getElementById('branchToCommittee');
                 
                 if (tracking) {
                     const c2b = Object.entries(tracking)
                         .filter(([_, t]) => t.fromType === 'committee' && t.toType === 'branch')
-                        .sort((a, b) => new Date(b[1].timestamp) - new Date(a[1].timestamp))
-                        .slice(0, 5);
+                        .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
+                        .slice(0, 3);
                     
                     const b2c = Object.entries(tracking)
                         .filter(([_, t]) => t.fromType === 'branch' && t.toType === 'committee')
-                        .sort((a, b) => new Date(b[1].timestamp) - new Date(a[1].timestamp))
-                        .slice(0, 5);
+                        .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
+                        .slice(0, 3);
                     
                     committeeToBranch.innerHTML = c2b.map(([id, track]) => `
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: #e3f2fd; color: #1976d2;">
+                        <div class="activity-item" onclick="window.location.href='tracking.html?id=${id}'">
+                            <div class="activity-icon" style="background: var(--bg-primary); color: var(--primary-color);">
                                 <i class="fas fa-arrow-right"></i>
                             </div>
                             <div class="activity-content">
                                 <h4>${track.title}</h4>
                                 <p>من: ${track.fromName} | إلى: ${track.toName}</p>
                                 <span class="status-badge status-${track.status}">${track.status}</span>
-                                <div class="activity-time">${new Date(track.timestamp).toLocaleString('ar-EG')}</div>
                             </div>
                         </div>
-                    `).join('') || '<p style="text-align: center; color: #999;">لا توجد تحويلات</p>';
+                    `).join('') || '<p style="text-align: center; color: var(--text-muted);">لا توجد مراسلات</p>';
                     
                     branchToCommittee.innerHTML = b2c.map(([id, track]) => `
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: #ffebee; color: #c62828;">
+                        <div class="activity-item" onclick="window.location.href='tracking.html?id=${id}'">
+                            <div class="activity-icon" style="background: var(--bg-primary); color: var(--secondary-color);">
                                 <i class="fas fa-arrow-left"></i>
                             </div>
                             <div class="activity-content">
                                 <h4>${track.title}</h4>
                                 <p>من: ${track.fromName} | إلى: ${track.toName}</p>
                                 <span class="status-badge status-${track.status}">${track.status}</span>
-                                <div class="activity-time">${new Date(track.timestamp).toLocaleString('ar-EG')}</div>
                             </div>
                         </div>
-                    `).join('') || '<p style="text-align: center; color: #999;">لا توجد تحويلات</p>';
+                    `).join('') || '<p style="text-align: center; color: var(--text-muted);">لا توجد مراسلات</p>';
                 }
             });
         }
-        loadTracking();
 
         // تحديث عدد المتصلين
         function updateOnlineUsers() {
-            const usersRef = ref(database, 'users');
-            onValue(usersRef, (snapshot) => {
+            onValue(ref(database, 'users'), (snapshot) => {
                 const users = snapshot.val();
                 if (users) {
                     const online = Object.values(users).filter(u => u.online === true).length;
                     document.getElementById('onlineCount').textContent = online;
-                    
-                    // للمديرين فقط
-                    if (currentUser.role === 'president' || currentUser.role === 'vice_president') {
-                        document.getElementById('onlineUsers').innerHTML = `
-                            <i class="fas fa-circle" style="color: #4caf50;"></i>
-                            <span>${online}</span> متصل
-                        `;
-                    }
                 }
             });
         }
-        updateOnlineUsers();
+
+        // تحديث عدد الإشعارات
+        function updateNotifications() {
+            if (currentUser) {
+                onValue(ref(database, `notifications/${currentUser.userId}`), (snapshot) => {
+                    const notifications = snapshot.val();
+                    if (notifications) {
+                        const unread = Object.values(notifications).filter(n => !n.read).length;
+                        document.getElementById('notificationCount').textContent = unread;
+                    }
+                });
+            }
+        }
+
+        // دوال الثيم
+        window.showThemeSelector = function() {
+            const modal = document.getElementById('themeModal');
+            const grid = document.getElementById('themesGrid');
+            
+            grid.innerHTML = themeManager.availableThemes.map(theme => `
+                <div class="theme-box ${themeManager.currentTheme === theme.id ? 'active' : ''}" 
+                     onclick="themeManager.saveUserTheme('${theme.id}')">
+                    <div class="theme-preview ${theme.preview}"></div>
+                    <h4>${theme.icon} ${theme.name}</h4>
+                </div>
+            `).join('');
+            
+            modal.classList.add('active');
+        };
+
+        window.closeThemeSelector = function() {
+            document.getElementById('themeModal').classList.remove('active');
+        };
+
+        // دوال الإشعارات
+        window.showNotifications = function() {
+            window.location.href = 'messages.html';
+        };
+
+        // دوال AI
+        window.toggleAIChat = function() {
+            showMessage('🤖 ITWS AI: كيف يمكنني مساعدتك؟', 'info');
+        };
 
         // تحديث حالة المتصل
         async function updateOnlineStatus(status) {
@@ -998,94 +1235,27 @@
             }
         }
 
-        // عند تحميل الصفحة
-        window.addEventListener('load', () => {
-            updateOnlineStatus(true);
-        });
-
-        // عند إغلاق الصفحة
-        window.addEventListener('beforeunload', () => {
-            updateOnlineStatus(false);
-        });
-
-        // دوال عامة
-        window.toggleAIChat = function() {
-            const chatWindow = document.getElementById('aiChatWindow');
-            chatWindow.style.display = chatWindow.style.display === 'none' ? 'block' : 'none';
-        };
-
-        window.sendAIMessage = async function() {
-            const input = document.getElementById('aiMessageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const chatBody = document.getElementById('aiChatBody');
-            
-            // إضافة رسالة المستخدم
-            chatBody.innerHTML += `
-                <div class="user-message">
-                    <div class="avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="message">${message}</div>
-                </div>
-            `;
-            
-            input.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-            
-            // معالجة الرسالة مع ITWS AI
-            setTimeout(() => {
-                chatBody.innerHTML += `
-                    <div class="ai-message">
-                        <div class="avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message">
-                            شكراً لرسالتك. أنا هنا لمساعدتك. ماذا تريد أن تفعل؟
-                        </div>
-                    </div>
-                `;
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 1000);
-        };
-
-        window.showNotifications = function() {
-            alert('سيتم عرض الإشعارات قريباً');
-        };
-
+        // تسجيل الخروج
         window.logout = async function() {
             await updateOnlineStatus(false);
             sessionStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         };
 
-        <!-- أضف هذا في نهاية الصفحة قبل إغلاق </body> -->
-<script type="module">
-    import ITWSAI from './assets/js/itws-ai.js';
-    import ChatInterface from './assets/js/chat-interface.js';
-    
-    // المستخدم الحالي
-    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    
-    // تهيئة AI
-    const ai = new ITWSAI(currentUser);
-    
-    // تفعيل AI
-    ai.initialize().then(result => {
-        console.log('AI جاهز:', result);
-        
-        // تفعيل واجهة المحادثة
-        const chat = new ChatInterface(ai);
-    });
-    
-    // دالة عالمية للاستخدام
-    window.processAICommand = async function(command) {
-        const result = await ai.processCommand(command);
-        console.log('النتيجة:', result);
-        return result;
-    };
+        // تحميل البيانات عند فتح الصفحة
+        window.addEventListener('load', () => {
+            updateOnlineStatus(true);
+            loadStats();
+            loadRecentActivities();
+            loadIncomingRequests();
+            loadTracking();
+            updateOnlineUsers();
+            updateNotifications();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            updateOnlineStatus(false);
+        });
     </script>
 </body>
 </html>
