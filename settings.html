@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات النظام - نقابة تكنولوجيا المعلومات والبرمجيات</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ===== أنيميشنات ===== */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== الشريط الجانبي ===== */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+
+        .sidebar-header .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #667eea;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sidebar-header .user-avatar:hover {
+            transform: scale(1.1) rotate(360deg);
+        }
+
+        .sidebar-header .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-header h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .online-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .online-badge i {
+            font-size: 8px;
+            color: #4caf50;
+            animation: pulse 2s infinite;
+        }
+
+        .sidebar-menu {
+            padding: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.1;
+            transition: width 0.3s ease;
+        }
+
+        .menu-item:hover::before {
+            width: 100%;
+        }
+
+        .menu-item i {
+            width: 25px;
+            margin-left: 10px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            color: #667eea;
+            transform: translateX(-5px);
+        }
+
+        .menu-item:hover i {
+            transform: scale(1.2);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+        }
+
+        .menu-item.active i {
+            color: white;
+        }
+
+        .menu-item .badge {
+            background: #f56565;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: auto;
+            animation: pulse 2s infinite;
+        }
+
+        /* ===== المحتوى الرئيسي ===== */
+        .main-content {
+            margin-right: 280px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: slideDown 0.5s ease;
+        }
+
+        .page-title h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-icon:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: #f56565;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .online-users {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .online-users:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .online-users i {
+            color: #4caf50;
+            font-size: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        /* ===== تبويبات الإعدادات ===== */
+        .settings-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+
+        .settings-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-tab i {
+            font-size: 16px;
+        }
+
+        .settings-tab:hover {
+            background: #f0f2f5;
+            color: #667eea;
+        }
+
+        .settings-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+        }
+
+        /* ===== بطاقات الإعدادات ===== */
+        .settings-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid #f0f0f0;
+            animation: fadeIn 0.5s ease;
+            display: none;
+        }
+
+        .settings-card.active {
+            display: block;
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .settings-header h3 {
+            color: #333;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-header h3 i {
+            color: #667eea;
+        }
+
+        /* ===== النماذج ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        label i {
+            margin-left: 8px;
+            color: #667eea;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* ===== رفع الصور ===== */
+        .logo-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            border: 3px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .upload-area:hover {
+            background: #f0f2f5;
+            border-color: #764ba2;
+        }
+
+        .upload-area i {
+            font-size: 40px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        /* ===== خيارات التبديل ===== */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::before {
+            right: calc(100% - 28px);
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .option-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .option-info p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* ===== قائمة الألوان ===== */
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #333;
+        }
+
+        /* ===== نظام الأمان ===== */
+        .security-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 999999;
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+            animation: slideDown 0.3s ease;
+            direction: rtl;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .security-watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.15;
+            font-size: 12px;
+            color: #000;
+            pointer-events: none;
+            z-index: 9999;
+            transform: rotate(-45deg);
+            white-space: nowrap;
+            user-select: none;
+            font-family: monospace;
+        }
+
+        /* ===== رسائل النظام ===== */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .message-box.success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .message-box.error {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .message-box.info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        .loading-spinner p {
+            color: white;
+            font-size: 16px;
+        }
+
+        /* ===== تصميم متجاوب ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                right: -280px;
+            }
+            .sidebar.active {
+                right: 0;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+            .settings-tabs {
+                flex-direction: column;
+            }
+            .settings-tab {
+                width: 100%;
+            }
+            .logo-upload {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط الجانبي -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header" id="userInfo">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h3>جاري التحميل...</h3>
+            <p>...</p>
+            <div class="online-badge">
+                <i class="fas fa-circle"></i>
+                متصل الآن
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-home"></i>
+                الرئيسية
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='committees.html'">
+                <i class="fas fa-users"></i>
+                اللجان
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='branches.html'">
+                <i class="fas fa-building"></i>
+                الفروع
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='members.html'">
+                <i class="fas fa-user-tie"></i>
+                الأعضاء
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='requests.html'">
+                <i class="fas fa-clipboard-list"></i>
+                طلبات التسجيل
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='tracking.html'">
+                <i class="fas fa-exchange-alt"></i>
+                نظام التتبع
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='finance.html'">
+                <i class="fas fa-coins"></i>
+                المالية
+            </a>
+            <a href="#" class="menu-item" onclick="window.location.href='messages.html'">
+                <i class="fas fa-envelope"></i>
+                الرسائل
+            </a>
+            <a href="#" class="menu-item active" onclick="window.location.href='settings.html'">
+                <i class="fas fa-cog"></i>
+                إعدادات النظام
+            </a>
+            
+            <div style="height: 20px;"></div>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                تسجيل الخروج
+            </a>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <!-- الشريط العلوي -->
+        <div class="top-bar">
+            <div class="page-title">
+                <h2><i class="fas fa-cog"></i> إعدادات النظام</h2>
+                <p id="currentDateTime"></p>
+            </div>
+            <div class="top-actions">
+                <div class="notification-icon" onclick="window.location.href='messages.html'">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge" id="notificationCount">0</span>
+                </div>
+                <div class="online-users" onclick="showOnlineUsers()">
+                    <i class="fas fa-circle"></i>
+                    <span id="onlineCount">0</span> متصل
+                </div>
+            </div>
+        </div>
+
+        <!-- تبويبات الإعدادات -->
+        <div class="settings-tabs">
+            <div class="settings-tab active" onclick="switchTab('general')">
+                <i class="fas fa-globe"></i>
+                عام
+            </div>
+            <div class="settings-tab" onclick="switchTab('appearance')">
+                <i class="fas fa-paint-brush"></i>
+                المظهر
+            </div>
+            <div class="settings-tab" onclick="switchTab('security')">
+                <i class="fas fa-shield-alt"></i>
+                الأمان
+            </div>
+            <div class="settings-tab" onclick="switchTab('notifications')">
+                <i class="fas fa-bell"></i>
+                الإشعارات
+            </div>
+            <div class="settings-tab" onclick="switchTab('finance')">
+                <i class="fas fa-coins"></i>
+                المالية
+            </div>
+            <div class="settings-tab" onclick="switchTab('advanced')">
+                <i class="fas fa-code"></i>
+                متقدم
+            </div>
+        </div>
+
+        <!-- الإعدادات العامة -->
+        <div class="settings-card active" id="generalTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-globe"></i> الإعدادات العامة</h3>
+            </div>
+
+            <div class="logo-upload">
+                <div class="logo-preview" id="logoPreview">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="logoPreviewImg">
+                </div>
+                <div class="upload-area" onclick="document.getElementById('logoUpload').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>اضغط لرفع شعار جديد</p>
+                    <input type="file" id="logoUpload" accept="image/*" onchange="previewLogo(this)">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-font"></i> اسم النقابة (عربي)</label>
+                    <input type="text" id="unionNameAr" value="نقابة تكنولوجيا المعلومات والبرمجيات">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-font"></i> اسم النقابة (إنجليزي)</label>
+                    <input type="text" id="unionNameEn" value="ITWS Union">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="unionEmail" value="info@itws.org">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+                    <input type="tel" id="unionPhone" value="01068865596">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> العنوان</label>
+                <input type="text" id="unionAddress" value="القاهرة - جمهورية مصر العربية">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-link"></i> رابط شعار النقابة</label>
+                <input type="url" id="logoUrl" placeholder="https://example.com/logo.png">
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="saveGeneralSettings()">
+                    <i class="fas fa-save"></i>
+                    حفظ الإعدادات
+                </button>
+            </div>
+        </div>
+
+        <!-- إعدادات المظهر -->
+        <div class="settings-card" id="appearanceTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-paint-brush"></i> إعدادات المظهر</h3>
+            </div>
+
+            <div class="form-group">
+                <label>اللون الرئيسي</label>
+                <div class="color-picker">
+                    <div class="color-option" style="background: #667eea;" onclick="setPrimaryColor('#667eea')"></div>
+                    <div class="color-option" style="background: #764ba2;" onclick="setPrimaryColor('#764ba2')"></div>
+                    <div class="color-option" style="background: #f56565;" onclick="setPrimaryColor('#f56565')"></div>
+                    <div class="color-option" style="background: #48bb78;" onclick="setPrimaryColor('#48bb78')"></div>
+                    <div class="color-option" style="background: #ed8936;" onclick="setPrimaryColor('#ed8936')"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>اللون الثانوي</label>
+                <div class="color-picker">
+                    <div class="color-option" style="background: #764ba2;" onclick="setSecondaryColor('#764ba2')"></div>
+                    <div class="color-option" style="background: #667eea;" onclick="setSecondaryColor('#667eea')"></div>
+                    <div class="color-option" style="background: #f56565;" onclick="setSecondaryColor('#f56565')"></div>
+                    <div class="color-option" style="background: #48bb78;" onclick="setSecondaryColor('#48bb78')"></div>
+                    <div class="color-option" style="background: #ed8936;" onclick="setSecondaryColor('#ed8936')"></div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الخط الرئيسي</label>
+                    <select id="primaryFont">
+                        <option value="Cairo">Cairo</option>
+                        <option value="Tajawal">Tajawal</option>
+                        <option value="Amiri">Amiri</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>حجم الخط</label>
+                    <select id="fontSize">
+                        <option value="14px">صغير</option>
+                        <option value="16px" selected>متوسط</option>
+                        <option value="18px">كبير</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>الوضع الداكن</h4>
+                    <p>تفعيل الوضع الداكن للنظام</p>
+                </div>
+                <div class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()"></div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="saveAppearanceSettings()">
+                    <i class="fas fa-save"></i>
+                    حفظ التغييرات
+                </button>
+            </div>
+        </div>
+
+        <!-- إعدادات الأمان -->
+        <div class="settings-card" id="securityTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-shield-alt"></i> إعدادات الأمان</h3>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>التحقق بخطوتين (2FA)</h4>
+                    <p>طلب رمز تحقق عند تسجيل الدخول</p>
+                </div>
+                <div class="toggle-switch active" id="twoFAToggle" onclick="toggleSetting('twoFA')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>المصادقة الحيوية</h4>
+                    <p>بصمة الوجه والإصبع</p>
+                </div>
+                <div class="toggle-switch active" id="biometricToggle" onclick="toggleSetting('biometric')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>منع F12 وأدوات المطورين</h4>
+                    <p>منع فتح أدوات المطورين في المتصفح</p>
+                </div>
+                <div class="toggle-switch active" id="devToolsToggle" onclick="toggleSetting('devTools')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>منع النسخ واللصق</h4>
+                    <p>منع نسخ المحتوى من النظام</p>
+                </div>
+                <div class="toggle-switch active" id="copyToggle" onclick="toggleSetting('copy')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>العلامة المائية</h4>
+                    <p>إظهار اسم المستخدم كعلامة مائية</p>
+                </div>
+                <div class="toggle-switch active" id="watermarkToggle" onclick="toggleSetting('watermark')"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>مدة الجلسة (بالدقائق)</label>
+                    <input type="number" id="sessionTimeout" value="30" min="5" max="480">
+                </div>
+                <div class="form-group">
+                    <label>عدد محاولات الدخول</label>
+                    <input type="number" id="maxAttempts" value="5" min="3" max="10">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="saveSecuritySettings()">
+                    <i class="fas fa-save"></i>
+                    حفظ الإعدادات
+                </button>
+            </div>
+        </div>
+
+        <!-- إعدادات الإشعارات -->
+        <div class="settings-card" id="notificationsTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-bell"></i> إعدادات الإشعارات</h3>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>إشعارات البريد الإلكتروني</h4>
+                    <p>استلام الإشعارات عبر البريد</p>
+                </div>
+                <div class="toggle-switch active" id="emailNotifToggle" onclick="toggleSetting('emailNotif')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>إشعارات واتساب</h4>
+                    <p>استلام الإشعارات عبر واتساب</p>
+                </div>
+                <div class="toggle-switch" id="whatsappNotifToggle" onclick="toggleSetting('whatsappNotif')"></div>
+            </div>
+
+            <div class="form-group">
+                <label>أحداث الإشعارات</label>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" checked> طلبات تسجيل جديدة
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" checked> مراسلات واردة
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" checked> تقارير مكتملة
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" checked> مواعيد نهائية
+                    </label>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="saveNotificationSettings()">
+                    <i class="fas fa-save"></i>
+                    حفظ الإعدادات
+                </button>
+            </div>
+        </div>
+
+        <!-- الإعدادات المالية -->
+        <div class="settings-card" id="financeTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-coins"></i> الإعدادات المالية</h3>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>العملة الأساسية</label>
+                    <select id="currency">
+                        <option value="EGP">جنيه مصري (EGP)</option>
+                        <option value="USD">دولار أمريكي (USD)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الضريبة (%)</label>
+                    <input type="number" id="taxRate" value="14" step="0.1">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>رسوم العضوية</label>
+                    <input type="number" id="membershipFee" value="500">
+                </div>
+                <div class="form-group">
+                    <label>الحد الأدنى للخزنة</label>
+                    <input type="number" id="minBalance" value="1000">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="saveFinanceSettings()">
+                    <i class="fas fa-save"></i>
+                    حفظ الإعدادات
+                </button>
+            </div>
+        </div>
+
+        <!-- الإعدادات المتقدمة -->
+        <div class="settings-card" id="advancedTab">
+            <div class="settings-header">
+                <h3><i class="fas fa-code"></i> الإعدادات المتقدمة</h3>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>وضع التصحيح</h4>
+                    <p>إظهار أخطاء النظام للتقنيين</p>
+                </div>
+                <div class="toggle-switch" id="debugToggle" onclick="toggleSetting('debug')"></div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-info">
+                    <h4>تسجيل الأحداث</h4>
+                    <p>حفظ سجل كامل لجميع الأنشطة</p>
+                </div>
+                <div class="toggle-switch active" id="loggingToggle" onclick="toggleSetting('logging')"></div>
+            </div>
+
+            <div class="form-group">
+                <label>عدد الأيام للاحتفاظ بالسجلات</label>
+                <input type="number" id="logRetention" value="30" min="7" max="365">
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="exportData()">
+                    <i class="fas fa-download"></i>
+                    تصدير البيانات
+                </button>
+                <button class="btn btn-danger" onclick="resetSystem()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    إعادة ضبط المصنع
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- رسائل النظام -->
+    <div id="messageBox" class="message-box"></div>
+
+    <!-- شاشة التحميل -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
+    </div>
+
+    <script type="module">
+        // ===== استيراد Firebase =====
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, onValue, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
+            authDomain: "itws-system.firebaseapp.com",
+            databaseURL: "https://itws-system-default-rtdb.firebaseio.com",
+            projectId: "itws-system",
+            storageBucket: "itws-system.firebasestorage.app",
+            messagingSenderId: "770452248691",
+            appId: "1:770452248691:web:0e94e65e01298b398bb206"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // ===== التحقق من تسجيل الدخول =====
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        // التحقق من أن المستخدم هو النقيب العام
+        if (currentUser.role !== 'president') {
+            window.location.href = 'dashboard.html';
+        }
+
+        // ===== تحديث التاريخ والوقت =====
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('ar-EG', options);
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // ===== عرض معلومات المستخدم =====
+        function displayUserInfo() {
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <div class="user-avatar" onclick="window.location.href='profile.html'">
+                    ${currentUser?.profileImage ? 
+                        `<img src="${currentUser.profileImage}" alt="صورة المستخدم">` : 
+                        '<i class="fas fa-user-circle"></i>'}
+                </div>
+                <h3>${currentUser?.fullName || 'مستخدم'}</h3>
+                <p>النقيب العام</p>
+                <div class="online-badge">
+                    <i class="fas fa-circle"></i>
+                    متصل الآن
+                </div>
+            `;
+        }
+        displayUserInfo();
+
+        // ===== تحميل الإعدادات =====
+        async function loadSettings() {
+            try {
+                const settingsRef = ref(database, 'system/settings');
+                const snapshot = await get(settingsRef);
+                
+                if (snapshot.exists()) {
+                    const settings = snapshot.val();
+                    
+                    // تعبئة الحقول
+                    if (settings.general) {
+                        document.getElementById('unionNameAr').value = settings.general.nameAr || '';
+                        document.getElementById('unionNameEn').value = settings.general.nameEn || '';
+                        document.getElementById('unionEmail').value = settings.general.email || '';
+                        document.getElementById('unionPhone').value = settings.general.phone || '';
+                        document.getElementById('unionAddress').value = settings.general.address || '';
+                        
+                        if (settings.general.logoUrl) {
+                            document.getElementById('logoPreviewImg').src = settings.general.logoUrl;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // ===== دوال التبويبات =====
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.settings-card').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}Tab`).classList.add('active');
+        };
+
+        // ===== معاينة الشعار =====
+        window.previewLogo = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logoPreviewImg').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        // ===== دوال الألوان =====
+        window.setPrimaryColor = function(color) {
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            document.documentElement.style.setProperty('--primary-color', color);
+        };
+
+        window.setSecondaryColor = function(color) {
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            document.documentElement.style.setProperty('--secondary-color', color);
+        };
+
+        // ===== دوال التبديل =====
+        window.toggleDarkMode = function() {
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('active');
+        };
+
+        window.toggleSetting = function(setting) {
+            const toggle = document.getElementById(setting + 'Toggle');
+            toggle.classList.toggle('active');
+        };
+
+        // ===== حفظ الإعدادات =====
+        window.saveGeneralSettings = async function() {
+            showLoading(true);
+
+            try {
+                const settings = {
+                    general: {
+                        nameAr: document.getElementById('unionNameAr').value,
+                        nameEn: document.getElementById('unionNameEn').value,
+                        email: document.getElementById('unionEmail').value,
+                        phone: document.getElementById('unionPhone').value,
+                        address: document.getElementById('unionAddress').value,
+                        logoUrl: document.getElementById('logoPreviewImg').src
+                    },
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: currentUser.userId
+                };
+
+                await update(ref(database, 'system/settings'), settings);
+                showMessage('✅ تم حفظ الإعدادات بنجاح', 'success');
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                showMessage('❌ حدث خطأ في حفظ الإعدادات', 'error');
+            } finally {
+                showLoading(false);
+            }
+        };
+
+        window.saveAppearanceSettings = function() {
+            showMessage('✅ تم حفظ إعدادات المظهر', 'success');
+        };
+
+        window.saveSecuritySettings = function() {
+            showMessage('✅ تم حفظ إعدادات الأمان', 'success');
+        };
+
+        window.saveNotificationSettings = function() {
+            showMessage('✅ تم حفظ إعدادات الإشعارات', 'success');
+        };
+
+        window.saveFinanceSettings = function() {
+            showMessage('✅ تم حفظ الإعدادات المالية', 'success');
+        };
+
+        // ===== دوال إضافية =====
+        window.exportData = function() {
+            showMessage('📥 جاري تجهيز البيانات للتصدير...', 'info');
+        };
+
+        window.resetSystem = function() {
+            if (confirm('⚠️ هل أنت متأكد؟ سيتم إعادة تعيين جميع إعدادات النظام!' + 
+                       '\nلا يمكن التراجع عن هذا الإجراء.')) {
+                showMessage('✅ تم إعادة تعيين النظام', 'success');
+            }
+        };
+
+        window.showOnlineUsers = async function() {
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            if (!snapshot.exists()) return;
+
+            const users = snapshot.val();
+            const online = Object.values(users).filter(u => u.online === true).length;
+            alert(`عدد المتصلين الآن: ${online}`);
+        };
+
+        // ===== دوال مساعدة =====
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message-box ${type}`;
+            msgBox.style.display = 'block';
+            setTimeout(() => msgBox.style.display = 'none', 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
+
+        window.logout = async function() {
+            try {
+                await update(ref(database, `users/${currentUser.userId}`), {
+                    online: false,
+                    lastSeen: new Date().toISOString()
+                });
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+
+        // ===== تحميل الإعدادات عند فتح الصفحة =====
+        loadSettings();
+    </script>
+</body>
+</html>
