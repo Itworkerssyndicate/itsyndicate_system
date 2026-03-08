@@ -11,6 +11,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Chart.js للرسوم البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -24,10 +27,16 @@
             min-height: 100vh;
         }
 
-        /* ===== أنيميشنات مشتركة ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* ===== أنيميشنات ===== */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideUp {
@@ -41,26 +50,9 @@
             }
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideRight {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes pulse {
@@ -127,14 +119,14 @@
             overflow: hidden;
         }
 
+        .sidebar-header .user-avatar:hover {
+            transform: scale(1.1) rotate(360deg);
+        }
+
         .sidebar-header .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .sidebar-header .user-avatar:hover {
-            transform: scale(1.1) rotate(360deg);
         }
 
         .sidebar-header h3 {
@@ -344,11 +336,28 @@
             transition: all 0.3s ease;
             animation: slideUp 0.5s ease;
             border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, transparent 70%);
+            transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-card:hover::before {
+            transform: scale(1.1);
         }
 
         .stat-info h3 {
@@ -395,6 +404,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             border: 1px solid #f0f0f0;
             transition: all 0.3s ease;
+            animation: slideUp 0.5s ease;
         }
 
         .section-card:hover {
@@ -500,6 +510,42 @@
         .status-rejected {
             background: #f8d7da;
             color: #721c24;
+        }
+
+        /* ===== الرسم البياني ===== */
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            animation: slideUp 0.5s ease;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            color: #333;
+            font-size: 18px;
+        }
+
+        .chart-header select {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+        }
+
+        .chart {
+            height: 300px;
+            position: relative;
         }
 
         /* ===== نظام الأمان ===== */
@@ -631,46 +677,46 @@
         </div>
 
         <div class="sidebar-menu">
-            <a href="#" class="menu-item active" onclick="showPage('dashboard')">
+            <a href="#" class="menu-item active" onclick="window.location.href='dashboard.html'">
                 <i class="fas fa-home"></i>
                 الرئيسية
             </a>
-            <a href="#" class="menu-item" onclick="showPage('committees')">
+            <a href="#" class="menu-item" onclick="window.location.href='committees.html'">
                 <i class="fas fa-users"></i>
                 اللجان
                 <span class="badge" id="committeesBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('branches')">
+            <a href="#" class="menu-item" onclick="window.location.href='branches.html'">
                 <i class="fas fa-building"></i>
                 الفروع
                 <span class="badge" id="branchesBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('members')">
+            <a href="#" class="menu-item" onclick="window.location.href='members.html'">
                 <i class="fas fa-user-tie"></i>
                 الأعضاء
                 <span class="badge" id="membersBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('requests')">
+            <a href="#" class="menu-item" onclick="window.location.href='requests.html'">
                 <i class="fas fa-clipboard-list"></i>
                 طلبات التسجيل
                 <span class="badge" id="requestsBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('tracking')">
+            <a href="#" class="menu-item" onclick="window.location.href='tracking.html'">
                 <i class="fas fa-exchange-alt"></i>
                 نظام التتبع
                 <span class="badge" id="trackingBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('finance')">
+            <a href="#" class="menu-item" onclick="window.location.href='finance.html'">
                 <i class="fas fa-coins"></i>
                 المالية
                 <span class="badge" id="financeBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('messages')">
+            <a href="#" class="menu-item" onclick="window.location.href='messages.html'">
                 <i class="fas fa-envelope"></i>
                 الرسائل
                 <span class="badge" id="messagesBadge" style="display: none;">0</span>
             </a>
-            <a href="#" class="menu-item" onclick="showPage('profile')">
+            <a href="#" class="menu-item" onclick="window.location.href='profile.html'">
                 <i class="fas fa-user-circle"></i>
                 الملف الشخصي
             </a>
@@ -744,6 +790,21 @@
             </div>
         </div>
 
+        <!-- الرسم البياني -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-line"></i> إحصائيات النشاط</h3>
+                <select id="chartPeriod" onchange="updateChart()">
+                    <option value="week">آخر أسبوع</option>
+                    <option value="month" selected>آخر شهر</option>
+                    <option value="year">آخر سنة</option>
+                </select>
+            </div>
+            <div class="chart">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+
         <!-- الأقسام الرئيسية -->
         <div class="sections-grid">
             <!-- آخر الأنشطة -->
@@ -768,7 +829,7 @@
             <div class="section-card">
                 <div class="section-header">
                     <h3><i class="fas fa-inbox"></i> الطلبات الواردة</h3>
-                    <i class="fas fa-ellipsis-h"></i>
+                    <a href="requests.html" style="color: #667eea; font-size: 13px;">عرض الكل</a>
                 </div>
                 <div class="activity-list" id="incomingRequests">
                     <div class="activity-item">
@@ -787,7 +848,7 @@
         <div class="section-card" style="margin-top: 20px;">
             <div class="section-header">
                 <h3><i class="fas fa-exchange-alt"></i> آخر المراسلات</h3>
-                <i class="fas fa-ellipsis-h"></i>
+                <a href="tracking.html" style="color: #667eea; font-size: 13px;">عرض الكل</a>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
@@ -836,6 +897,69 @@
     </div>
 
     <script type="module">
+        // ===== نظام الأمان المتقدم =====
+        (function() {
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showSecurityAlert('🚫 القائمة محجوزة للنظام');
+                return false;
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    showSecurityAlert('🚫 هذه الميزة غير متاحة');
+                    return false;
+                }
+            });
+
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                showSecurityAlert('📋 النسخ غير مسموح');
+            });
+
+            document.addEventListener('paste', function(e) {
+                e.preventDefault();
+                showSecurityAlert('📋 اللصق غير مسموح');
+            });
+
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+            });
+
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            setInterval(function() {
+                const widthThreshold = window.outerWidth - window.innerWidth > 160;
+                const heightThreshold = window.outerHeight - window.innerHeight > 160;
+                
+                if (widthThreshold || heightThreshold) {
+                    document.body.innerHTML = `
+                        <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8d7da; color:#721c24; font-family:'Cairo'; padding:20px;">
+                            <i class="fas fa-shield-alt" style="font-size:80px; margin-bottom:20px;"></i>
+                            <h1 style="font-size:32px;">🚫 تم إغلاق النظام</h1>
+                            <p style="font-size:18px;">لأسباب أمنية، تم إنهاء الجلسة</p>
+                            <button onclick="location.reload()" style="margin-top:20px; padding:10px 30px; background:#721c24; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer;">إعادة تحميل الصفحة</button>
+                        </div>
+                    `;
+                }
+            }, 1000);
+
+            function showSecurityAlert(message) {
+                const alert = document.createElement('div');
+                alert.className = 'security-alert';
+                alert.textContent = message;
+                document.body.appendChild(alert);
+                setTimeout(() => alert.remove(), 3000);
+            }
+        })();
+
         // ===== استيراد Firebase =====
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -855,13 +979,9 @@
 
         // ===== التحقق من تسجيل الدخول =====
         const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-        console.log('Current user:', currentUser); // للتأكد من البيانات
-
+        
         if (!currentUser) {
-            console.log('No user found, redirecting to index...');
             window.location.href = 'index.html';
-        } else {
-            console.log('User logged in:', currentUser.fullName);
         }
 
         // ===== تحديث التاريخ والوقت =====
@@ -880,15 +1000,10 @@
         updateDateTime();
         setInterval(updateDateTime, 60000);
 
-        // ===== رسالة ترحيب حسب الوقت =====
+        // ===== رسالة ترحيب =====
         function setWelcomeMessage() {
             const hour = new Date().getHours();
-            let message = '';
-            
-            if (hour < 12) message = 'صباح الخير';
-            else if (hour < 17) message = 'مساء الخير';
-            else message = 'مساء النور';
-            
+            let message = hour < 12 ? 'صباح الخير' : hour < 17 ? 'مساء الخير' : 'مساء النور';
             document.getElementById('welcomeMessage').textContent = `${message}، ${currentUser?.fullName || 'مستخدم'}`;
         }
         setWelcomeMessage();
@@ -911,6 +1026,9 @@
                 case 'secretary_assistant_manager':
                     title = 'مساعد الأمين العام - مدير الفروع';
                     break;
+                case 'treasurer':
+                    title = 'أمين صندوق';
+                    break;
                 default:
                     title = currentUser?.positionName || 'عضو';
             }
@@ -929,10 +1047,7 @@
                 </div>
             `;
         }
-        
-        if (currentUser) {
-            displayUserInfo();
-        }
+        displayUserInfo();
 
         // ===== إضافة علامة مائية =====
         function addWatermark() {
@@ -941,10 +1056,7 @@
             watermark.textContent = (currentUser?.fullName || 'زائر') + ' - ' + new Date().toLocaleDateString('ar-EG');
             document.body.appendChild(watermark);
         }
-        
-        if (currentUser) {
-            addWatermark();
-        }
+        addWatermark();
 
         // ===== تحديث العلامة المائية =====
         setInterval(function() {
@@ -954,25 +1066,21 @@
             }
         }, 60000);
 
-        // ===== تحميل الإحصائيات من Firebase =====
+        // ===== تحميل الإحصائيات =====
         async function loadStats() {
             try {
-                // جلب عدد الأعضاء
                 const usersSnapshot = await get(ref(database, 'users'));
                 const membersCount = usersSnapshot.exists() ? Object.keys(usersSnapshot.val()).length : 0;
                 document.getElementById('totalMembers').textContent = membersCount;
 
-                // جلب عدد اللجان
                 const committeesSnapshot = await get(ref(database, 'committees'));
                 const committeesCount = committeesSnapshot.exists() ? Object.keys(committeesSnapshot.val()).length : 0;
                 document.getElementById('totalCommittees').textContent = committeesCount;
 
-                // جلب عدد الفروع
                 const branchesSnapshot = await get(ref(database, 'branches'));
                 const branchesCount = branchesSnapshot.exists() ? Object.keys(branchesSnapshot.val()).length : 0;
                 document.getElementById('totalBranches').textContent = branchesCount;
 
-                // جلب عدد الطلبات المعلقة
                 const requestsSnapshot = await get(ref(database, 'pending_requests'));
                 let pendingRequests = 0;
                 if (requestsSnapshot.exists()) {
@@ -981,23 +1089,19 @@
                 }
                 document.getElementById('pendingRequests').textContent = pendingRequests;
 
-                // تحديث الشارات
-                if (pendingRequests > 0) {
+                if (pendingRequests > 0 && currentUser?.role === 'president') {
                     document.getElementById('requestsBadge').style.display = 'inline-block';
                     document.getElementById('requestsBadge').textContent = pendingRequests;
                 }
 
             } catch (error) {
                 console.error('Error loading stats:', error);
-                showMessage('حدث خطأ في تحميل الإحصائيات', 'error');
             }
         }
 
         // ===== تحميل آخر الأنشطة =====
         function loadRecentActivities() {
-            const activitiesRef = ref(database, 'activities');
-            
-            onValue(activitiesRef, (snapshot) => {
+            onValue(ref(database, 'activities'), (snapshot) => {
                 const activities = snapshot.val();
                 const container = document.getElementById('recentActivities');
                 
@@ -1015,7 +1119,6 @@
                     return;
                 }
 
-                // ترتيب الأنشطة من الأحدث للأقدم
                 const recent = Object.entries(activities)
                     .sort((a, b) => new Date(b[1].timestamp) - new Date(a[1].timestamp))
                     .slice(0, 5);
@@ -1035,9 +1138,7 @@
 
         // ===== تحميل الطلبات الواردة =====
         function loadIncomingRequests() {
-            if (!currentUser) return;
-            
-            if (currentUser.role !== 'president' && currentUser.role !== 'vice_president_first') {
+            if (!currentUser || (currentUser.role !== 'president' && currentUser.role !== 'vice_president_first')) {
                 document.getElementById('incomingRequests').innerHTML = `
                     <div class="activity-item">
                         <div class="activity-icon"><i class="fas fa-lock"></i></div>
@@ -1051,9 +1152,7 @@
                 return;
             }
 
-            const requestsRef = ref(database, 'pending_requests');
-            
-            onValue(requestsRef, (snapshot) => {
+            onValue(ref(database, 'pending_requests'), (snapshot) => {
                 const requests = snapshot.val();
                 const container = document.getElementById('incomingRequests');
                 
@@ -1106,9 +1205,7 @@
 
         // ===== تحميل المراسلات =====
         function loadTracking() {
-            const trackingRef = ref(database, 'tracking');
-            
-            onValue(trackingRef, (snapshot) => {
+            onValue(ref(database, 'tracking'), (snapshot) => {
                 const tracking = snapshot.val();
                 
                 if (!tracking) {
@@ -1135,7 +1232,6 @@
                     return;
                 }
 
-                // من لجنة إلى فرع
                 const c2b = Object.entries(tracking)
                     .filter(([_, t]) => t.fromType === 'committee' && t.toType === 'branch')
                     .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
@@ -1162,7 +1258,6 @@
                     </div>
                 `;
 
-                // من فرع إلى لجنة
                 const b2c = Object.entries(tracking)
                     .filter(([_, t]) => t.fromType === 'branch' && t.toType === 'committee')
                     .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
@@ -1193,9 +1288,7 @@
 
         // ===== تحديث عدد المتصلين =====
         function updateOnlineUsers() {
-            const usersRef = ref(database, 'users');
-            
-            onValue(usersRef, (snapshot) => {
+            onValue(ref(database, 'users'), (snapshot) => {
                 const users = snapshot.val();
                 if (!users) return;
 
@@ -1208,9 +1301,7 @@
         function updateNotifications() {
             if (!currentUser) return;
 
-            const notificationsRef = ref(database, `notifications/${currentUser.userId}`);
-            
-            onValue(notificationsRef, (snapshot) => {
+            onValue(ref(database, `notifications/${currentUser.userId}`), (snapshot) => {
                 const notifications = snapshot.val();
                 if (!notifications) {
                     document.getElementById('notificationCount').style.display = 'none';
@@ -1226,6 +1317,83 @@
                 }
             });
         }
+
+        // ===== إعداد الرسم البياني =====
+        let activityChart = null;
+
+        function initChart() {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            
+            activityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+                    datasets: [{
+                        label: 'الطلبات الجديدة',
+                        data: [12, 19, 15, 25],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102,126,234,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'الطلبات المكتملة',
+                        data: [8, 15, 12, 20],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16,185,129,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.updateChart = function() {
+            const period = document.getElementById('chartPeriod').value;
+            
+            if (period === 'week') {
+                activityChart.data.labels = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                activityChart.data.datasets[0].data = [3, 7, 5, 8, 12, 4, 6];
+                activityChart.data.datasets[1].data = [2, 5, 4, 6, 10, 3, 5];
+            } else if (period === 'month') {
+                activityChart.data.labels = ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'];
+                activityChart.data.datasets[0].data = [12, 19, 15, 25];
+                activityChart.data.datasets[1].data = [8, 15, 12, 20];
+            } else {
+                activityChart.data.labels = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                activityChart.data.datasets[0].data = [45, 52, 38, 45, 49, 53, 60, 55, 48, 52, 58, 65];
+                activityChart.data.datasets[1].data = [30, 35, 25, 32, 38, 42, 45, 40, 35, 38, 42, 50];
+            }
+            
+            activityChart.update();
+        };
 
         // ===== دوال مساعدة =====
         function formatTime(timestamp) {
@@ -1264,15 +1432,8 @@
             msgBox.textContent = text;
             msgBox.className = `message-box ${type}`;
             msgBox.style.display = 'block';
-            setTimeout(() => {
-                msgBox.style.display = 'none';
-            }, 3000);
+            setTimeout(() => msgBox.style.display = 'none', 3000);
         }
-
-        // ===== دوال التنقل =====
-        window.showPage = function(page) {
-            window.location.href = `${page}.html`;
-        };
 
         window.showNotifications = function() {
             window.location.href = 'messages.html';
@@ -1298,15 +1459,14 @@
             }
         };
 
-        // ===== تشغيل كل الوظائف بعد التأكد من وجود المستخدم =====
-        if (currentUser) {
-            loadStats();
-            loadRecentActivities();
-            loadIncomingRequests();
-            loadTracking();
-            updateOnlineUsers();
-            updateNotifications();
-        }
+        // ===== تشغيل كل الوظائف =====
+        loadStats();
+        loadRecentActivities();
+        loadIncomingRequests();
+        loadTracking();
+        updateOnlineUsers();
+        updateNotifications();
+        initChart();
     </script>
 </body>
 </html>
