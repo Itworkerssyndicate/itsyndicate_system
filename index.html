@@ -24,7 +24,7 @@
             overflow: hidden;
         }
 
-        /* شاشة البداية (Splash Screen) */
+        /* ===== شاشة البداية ===== */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -79,6 +79,12 @@
             overflow: hidden;
         }
 
+        .splash-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -96,6 +102,23 @@
             font-size: 18px;
             opacity: 0.9;
             margin-bottom: 30px;
+        }
+
+        .itws-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-top: 20px;
+        }
+
+        .itws-badge i {
+            color: #ffd700;
         }
 
         .loading-bar {
@@ -129,7 +152,7 @@
             font-size: 14px;
         }
 
-        /* شاشة تسجيل الدخول */
+        /* ===== شاشة تسجيل الدخول ===== */
         .login-wrapper {
             height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -222,11 +245,18 @@
             margin: 0 auto 20px;
             box-shadow: 0 10px 20px rgba(102,126,234,0.3);
             overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .logo-small i {
-            font-size: 40px;
-            color: #667eea;
+        .logo-small:hover {
+            transform: scale(1.1) rotate(360deg);
+        }
+
+        .logo-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         h1 {
@@ -252,6 +282,11 @@
             gap: 8px;
             margin-top: 10px;
             border: 1px solid rgba(255,255,255,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .itws-ai-badge i {
+            color: #ffd700;
         }
 
         .form-group {
@@ -284,7 +319,7 @@
             font-size: 18px;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
@@ -294,7 +329,7 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #667eea;
             outline: none;
             box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
@@ -313,6 +348,24 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover:before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
@@ -340,6 +393,307 @@
             text-decoration: underline;
         }
 
+        /* ===== نظام الأمان - منع الكليك اليمين ===== */
+        .security-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 999999;
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+            animation: slideDown 0.3s ease;
+            direction: rtl;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .security-watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.15;
+            font-size: 12px;
+            color: #000;
+            pointer-events: none;
+            z-index: 9999;
+            transform: rotate(-45deg);
+            white-space: nowrap;
+            user-select: none;
+            font-family: monospace;
+        }
+
+        /* ===== أيقونة ITWS AI ===== */
+        .itws-ai-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+            z-index: 9999;
+            transition: all 0.3s;
+            border: 2px solid white;
+            animation: aiPulse 2s infinite;
+        }
+
+        .itws-ai-button:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+        }
+
+        .itws-ai-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .itws-ai-button:hover .itws-ai-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== نافذة ITWS AI ===== */
+        .itws-ai-chat {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            direction: rtl;
+            font-family: 'Cairo', sans-serif;
+            border: 2px solid #667eea;
+        }
+
+        .itws-ai-chat.open {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        .itws-ai-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .itws-ai-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .itws-ai-user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+
+        .itws-ai-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .itws-ai-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .itws-ai-message, .user-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 15px;
+            animation: slideRight 0.3s ease;
+        }
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+        .ai-avatar, .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .ai-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .user-avatar {
+            background: #ff6b6b;
+        }
+
+        .ai-content, .user-content {
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            font-size: 13px;
+        }
+
+        .ai-content {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-top-right-radius: 0;
+        }
+
+        .user-content {
+            background: #667eea;
+            color: white;
+            border-top-left-radius: 0;
+        }
+
+        .itws-ai-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background: white;
+            display: flex;
+            gap: 8px;
+        }
+
+        .itws-ai-footer input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            outline: none;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .itws-ai-footer input:focus {
+            border-color: #667eea;
+        }
+
+        .itws-ai-footer button {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+
+        .itws-ai-suggestions {
+            padding: 8px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .itws-ai-suggestion {
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid #667eea;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+            color: #667eea;
+            transition: all 0.2s;
+        }
+
+        .itws-ai-suggestion:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* ===== ملفات الرفع ===== */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .file-upload-label i {
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover i {
+            transform: scale(1.2);
+        }
+
+        /* ===== رسائل النظام ===== */
         .message-box {
             position: fixed;
             top: 20px;
@@ -362,15 +716,8 @@
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -20px);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
+        .message-box.info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .loading-spinner {
@@ -408,40 +755,43 @@
             100% { transform: rotate(360deg); }
         }
 
-        .file-upload {
-            position: relative;
-            display: inline-block;
-            width: 100%;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
         }
 
-        .file-upload input[type="file"] {
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .file-upload-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px;
-            background: #f8f9fa;
-            border: 2px dashed #667eea;
-            border-radius: 10px;
-            color: #667eea;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
-        .file-upload-label:hover {
-            background: #667eea;
-            color: white;
+        @keyframes aiPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .governorate-select {
@@ -451,24 +801,29 @@
     </style>
 </head>
 <body>
-    <!-- شاشة البداية -->
+    <!-- ===== شاشة البداية ===== -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
-            <div class="splash-logo">
-                <i class="fas fa-users-cog"></i>
+            <div class="splash-logo" id="splashLogo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="splashLogoImg">
             </div>
             <h1 class="splash-title">نقابة تكنولوجيا المعلومات</h1>
             <div class="splash-subtitle">والبرمجيات - منصة إدارة النقابة</div>
+            <div class="itws-badge">
+                <i class="fas fa-robot"></i>
+                <span>مدعوم بـ ITWS AI - المساعد الذكي</span>
+                <i class="fas fa-bolt"></i>
+            </div>
             <div class="loading-bar">
                 <div class="loading-progress"></div>
             </div>
         </div>
         <div class="splash-footer">
-            جميع الحقوق محفوظة © 2024
+            جميع الحقوق محفوظة © 2024 | تصميم وبرمجة ITWS AI
         </div>
     </div>
 
-    <!-- شاشة تسجيل الدخول -->
+    <!-- ===== شاشة تسجيل الدخول ===== -->
     <div class="login-wrapper" id="loginWrapper" style="display: none;">
         <div class="animated-bg">
             <span></span><span></span><span></span><span></span><span></span>
@@ -482,11 +837,11 @@
                 <p>جاري التحميل...</p>
             </div>
 
-            <!-- بطاقة تسجيل الدخول -->
+            <!-- ===== بطاقة تسجيل الدخول ===== -->
             <div class="card" id="loginCard">
                 <div class="header">
-                    <div class="logo-small">
-                        <i class="fas fa-users-cog"></i>
+                    <div class="logo-small" id="loginLogo">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="loginLogoImg">
                     </div>
                     <h1>نقابة تكنولوجيا المعلومات والبرمجيات</h1>
                     <p class="subtitle">منصة إدارة النقابة المصممة باستخدام</p>
@@ -502,7 +857,7 @@
                         <label><i class="fas fa-user"></i> اسم المستخدم</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required>
+                            <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required autocomplete="off">
                         </div>
                     </div>
 
@@ -526,17 +881,18 @@
                 </div>
             </div>
 
-            <!-- بطاقة التسجيل -->
+            <!-- ===== بطاقة التسجيل ===== -->
             <div class="card" id="registerCard" style="display: none;">
                 <div class="header">
                     <div class="logo-small">
-                        <i class="fas fa-user-plus"></i>
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة">
                     </div>
                     <h1>تسجيل بيانات مسؤول بالنقابة</h1>
                     <p class="subtitle">املأ البيانات للتسجيل في النظام</p>
                 </div>
 
                 <form id="registerForm">
+                    <!-- البيانات الأساسية -->
                     <div class="form-group">
                         <label><i class="fas fa-user"></i> الاسم الكامل *</label>
                         <div class="input-wrapper">
@@ -561,32 +917,50 @@
                         </div>
                     </div>
 
+                    <!-- الصفة والمنصب -->
                     <div class="form-group">
                         <label><i class="fas fa-briefcase"></i> الصفة *</label>
                         <select id="position" required onchange="togglePositionFields()">
                             <option value="">اختر الصفة</option>
-                            <option value="president">نقيب عام</option>
-                            <option value="vice_president_first">نائب أول</option>
-                            <option value="vice_president_second_manager">نائب ثاني - مدير اللجان</option>
-                            <option value="secretary_general">أمين عام</option>
-                            <option value="secretary_assistant_manager">مساعد الأمين العام - مدير الفروع</option>
-                            <option value="treasurer">أمين صندوق</option>
-                            <option value="treasurer_assistant">مساعد أمين صندوق</option>
-                            <option value="committee_head">رئيس لجنة</option>
-                            <option value="committee_member">عضو لجنة</option>
-                            <option value="governorate_president">نقيب محافظة</option>
-                            <option value="governorate_vice_first">نائب أول محافظة</option>
-                            <option value="governorate_vice_second">نائب ثاني محافظة</option>
-                            <option value="governorate_secretary">أمين عام محافظة</option>
-                            <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
-                            <option value="governorate_treasurer">أمين صندوق محافظة</option>
-                            <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
-                            <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
-                            <option value="governorate_agent">وكيل محافظة</option>
-                            <option value="governorate_assistant">مساعد وكيل محافظة</option>
+                            
+                            <!-- قيادة النقابة -->
+                            <optgroup label="قيادة النقابة">
+                                <option value="president">نقيب عام</option>
+                                <option value="vice_president_first">نائب أول</option>
+                                <option value="vice_president_second_manager">نائب ثاني - مدير اللجان</option>
+                                <option value="secretary_general">أمين عام</option>
+                                <option value="secretary_assistant_manager">مساعد الأمين العام - مدير الفروع</option>
+                                <option value="treasurer">أمين صندوق</option>
+                                <option value="treasurer_assistant">مساعد أمين صندوق</option>
+                            </optgroup>
+                            
+                            <!-- اللجان -->
+                            <optgroup label="اللجان">
+                                <option value="committee_head">رئيس لجنة</option>
+                                <option value="committee_member">عضو لجنة</option>
+                            </optgroup>
+                            
+                            <!-- مجالس المحافظات -->
+                            <optgroup label="مجالس المحافظات">
+                                <option value="governorate_president">نقيب محافظة</option>
+                                <option value="governorate_vice_first">نائب أول محافظة</option>
+                                <option value="governorate_vice_second">نائب ثاني محافظة</option>
+                                <option value="governorate_secretary">أمين عام محافظة</option>
+                                <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
+                                <option value="governorate_treasurer">أمين صندوق محافظة</option>
+                                <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
+                                <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
+                            </optgroup>
+                            
+                            <!-- وكلاء المحافظات -->
+                            <optgroup label="وكلاء المحافظات">
+                                <option value="governorate_agent">وكيل محافظة</option>
+                                <option value="governorate_assistant">مساعد وكيل محافظة</option>
+                            </optgroup>
                         </select>
                     </div>
 
+                    <!-- حقل اللجنة -->
                     <div class="form-group" id="committeeField" style="display: none;">
                         <label><i class="fas fa-users"></i> اختر اللجنة *</label>
                         <select id="committeeSelect" class="governorate-select">
@@ -594,9 +968,12 @@
                             <option value="committee1">لجنة التدريب والتطوير</option>
                             <option value="committee2">لجنة العلاقات العامة</option>
                             <option value="committee3">لجنة الشؤون المالية</option>
+                            <option value="committee4">لجنة تكنولوجيا المعلومات</option>
+                            <option value="committee5">لجنة القبول والعضوية</option>
                         </select>
                     </div>
 
+                    <!-- حقل المحافظة -->
                     <div class="form-group" id="governorateField" style="display: none;">
                         <label><i class="fas fa-map-marker-alt"></i> اختر المحافظة *</label>
                         <select id="governorateSelect" class="governorate-select">
@@ -607,9 +984,30 @@
                             <option value="الدقهلية">الدقهلية</option>
                             <option value="الشرقية">الشرقية</option>
                             <option value="القليوبية">القليوبية</option>
+                            <option value="المنوفية">المنوفية</option>
+                            <option value="الغربية">الغربية</option>
+                            <option value="كفر الشيخ">كفر الشيخ</option>
+                            <option value="البحيرة">البحيرة</option>
+                            <option value="الإسماعيلية">الإسماعيلية</option>
+                            <option value="بورسعيد">بورسعيد</option>
+                            <option value="السويس">السويس</option>
+                            <option value="شمال سيناء">شمال سيناء</option>
+                            <option value="جنوب سيناء">جنوب سيناء</option>
+                            <option value="بني سويف">بني سويف</option>
+                            <option value="الفيوم">الفيوم</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="أسيوط">أسيوط</option>
+                            <option value="سوهاج">سوهاج</option>
+                            <option value="قنا">قنا</option>
+                            <option value="الأقصر">الأقصر</option>
+                            <option value="أسوان">أسوان</option>
+                            <option value="الوادي الجديد">الوادي الجديد</option>
+                            <option value="مطروح">مطروح</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
                         </select>
                     </div>
 
+                    <!-- الصورة الشخصية -->
                     <div class="form-group">
                         <label><i class="fas fa-camera"></i> الصورة الشخصية *</label>
                         <div class="file-upload">
@@ -617,6 +1015,18 @@
                             <div class="file-upload-label">
                                 <i class="fas fa-cloud-upload-alt"></i>
                                 اختر صورة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قرار التعيين (إجباري الآن) -->
+                    <div class="form-group">
+                        <label><i class="fas fa-file-pdf"></i> صورة قرار التعيين *</label>
+                        <div class="file-upload">
+                            <input type="file" id="appointmentDoc" accept="image/*,.pdf" required>
+                            <div class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                رفع القرار
                             </div>
                         </div>
                     </div>
@@ -635,27 +1045,163 @@
         </div>
     </div>
 
-    <!-- رسائل النظام -->
+    <!-- ===== أيقونة ITWS AI ===== -->
+    <div class="itws-ai-button" id="itwsAIButton" onclick="toggleAIChat()">
+        <i class="fas fa-robot"></i>
+        <span class="itws-ai-tooltip">ITWS AI - المساعد الذكي</span>
+    </div>
+
+    <!-- ===== نافذة ITWS AI ===== -->
+    <div class="itws-ai-chat" id="itwsAIChat">
+        <div class="itws-ai-header">
+            <h4>
+                <i class="fas fa-robot"></i>
+                ITWS AI - مساعد
+            </h4>
+            <div class="itws-ai-user-badge" id="aiUserBadge">زائر</div>
+            <button class="itws-ai-close" onclick="toggleAIChat()">×</button>
+        </div>
+        <div class="itws-ai-body" id="aiChatBody">
+            <div class="itws-ai-message">
+                <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                <div class="ai-content" id="aiWelcomeMessage">
+                    مرحباً! أنا ITWS AI المساعد الذكي. كيف يمكنني مساعدتك؟
+                </div>
+            </div>
+        </div>
+        <div class="itws-ai-suggestions" id="aiSuggestions">
+            <span class="itws-ai-suggestion" onclick="sendAIMessage('كيف أسجل دخول؟')">كيف أسجل دخول؟</span>
+            <span class="itws-ai-suggestion" onclick="sendAIMessage('نسيت كلمة المرور')">نسيت كلمة المرور</span>
+            <span class="itws-ai-suggestion" onclick="sendAIMessage('ليس لدي حساب')">ليس لدي حساب</span>
+            <span class="itws-ai-suggestion" onclick="sendAIMessage('مساعدة')">مساعدة</span>
+        </div>
+        <div class="itws-ai-footer">
+            <input type="text" id="aiMessageInput" placeholder="اكتب سؤالك..." onkeypress="if(event.key === 'Enter') sendAIMessage()">
+            <button onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- ===== رسائل النظام ===== -->
     <div id="messageBox" class="message-box"></div>
 
-    <!-- شاشة التحميل -->
+    <!-- ===== شاشة التحميل ===== -->
     <div id="loadingSpinner" class="loading-spinner">
         <div class="spinner"></div>
         <p>جاري التحميل...</p>
     </div>
 
     <script>
-        // تعريف الدوال العامة
+        // ===== نظام الأمان المتقدم =====
+        (function() {
+            // منع الكليك اليمين
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showSecurityAlert('🚫 القائمة محجوزة للنظام');
+                return false;
+            });
+
+            // منع F12 وأدوات المطورين
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    showSecurityAlert('🚫 هذه الميزة غير متاحة');
+                    return false;
+                }
+            });
+
+            // منع النسخ واللصق
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                showSecurityAlert('📋 النسخ غير مسموح');
+            });
+
+            document.addEventListener('paste', function(e) {
+                e.preventDefault();
+                showSecurityAlert('📋 اللصق غير مسموح');
+            });
+
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+            });
+
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // كشف أدوات المطورين
+            setInterval(function() {
+                const widthThreshold = window.outerWidth - window.innerWidth > 160;
+                const heightThreshold = window.outerHeight - window.innerHeight > 160;
+                
+                if (widthThreshold || heightThreshold) {
+                    document.body.innerHTML = `
+                        <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8d7da; color:#721c24; font-family:'Cairo'; padding:20px;">
+                            <i class="fas fa-shield-alt" style="font-size:80px; margin-bottom:20px;"></i>
+                            <h1 style="font-size:32px;">🚫 تم إغلاق النظام</h1>
+                            <p style="font-size:18px;">لأسباب أمنية، تم إنهاء الجلسة</p>
+                            <button onclick="location.reload()" style="margin-top:20px; padding:10px 30px; background:#721c24; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer;">إعادة تحميل الصفحة</button>
+                        </div>
+                    `;
+                }
+            }, 1000);
+
+            // إضافة علامة مائية
+            function addWatermark() {
+                const watermark = document.createElement('div');
+                watermark.className = 'security-watermark';
+                watermark.textContent = 'زائر - ' + new Date().toLocaleDateString('ar-EG');
+                document.body.appendChild(watermark);
+            }
+            addWatermark();
+
+            // دالة عرض رسالة أمان
+            window.showSecurityAlert = function(message) {
+                const alert = document.createElement('div');
+                alert.className = 'security-alert';
+                alert.textContent = message;
+                document.body.appendChild(alert);
+                setTimeout(function() {
+                    alert.remove();
+                }, 3000);
+            };
+        })();
+
+        // ===== متغيرات عامة =====
+        let currentUser = null;
+        let aiMessages = [
+            { role: 'ai', content: 'مرحباً! أنا ITWS AI المساعد الذكي. كيف يمكنني مساعدتك؟' }
+        ];
+
+        // ===== دوال التنقل =====
         window.showRegister = function() {
             document.getElementById('loginCard').style.display = 'none';
             document.getElementById('registerCard').style.display = 'block';
+            updateAIBadge('تسجيل جديد');
+            updateAISuggestions([
+                'ما هي البيانات المطلوبة؟',
+                'كم تستغرق الموافقة؟',
+                'ماذا بعد التسجيل؟',
+                'رسوم العضوية'
+            ]);
         };
 
         window.showLogin = function() {
             document.getElementById('registerCard').style.display = 'none';
             document.getElementById('loginCard').style.display = 'block';
+            updateAIBadge('تسجيل دخول');
+            updateAISuggestions([
+                'كيف أسجل دخول؟',
+                'نسيت كلمة المرور',
+                'مشكلة في الدخول',
+                'مساعدة'
+            ]);
         };
 
+        // ===== دوال حقول الصفة =====
         window.togglePositionFields = function() {
             const position = document.getElementById('position').value;
             const committeeField = document.getElementById('committeeField');
@@ -672,50 +1218,100 @@
             if (committeePositions.includes(position)) {
                 committeeField.style.display = 'block';
                 governorateField.style.display = 'none';
+                updateAISuggestions(['مهام رؤساء اللجان', 'صلاحيات أعضاء اللجان', 'اجتماعات اللجان']);
             } else if (governoratePositions.includes(position)) {
                 committeeField.style.display = 'none';
                 governorateField.style.display = 'block';
+                updateAISuggestions(['خدمات المحافظة', 'فروع المحافظة', 'أنشطة المحافظة']);
             } else {
                 committeeField.style.display = 'none';
                 governorateField.style.display = 'none';
+                updateAISuggestions([
+                    'كيف أسجل دخول؟',
+                    'نسيت كلمة المرور',
+                    'ليس لدي حساب',
+                    'مساعدة'
+                ]);
             }
         };
 
-        // بعد 3.5 ثواني، أخفي شاشة البداية
-        setTimeout(function() {
-            document.getElementById('splashScreen').style.display = 'none';
-            document.getElementById('loginWrapper').style.display = 'flex';
-        }, 3500);
-
-        // تسجيل الدخول
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // محاكاة تسجيل الدخول
-            if (username === 'المهندس / محمود جميل' && password === '30010250202679') {
-                showMessage('تم تسجيل الدخول بنجاح', 'success');
-                setTimeout(function() {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
+        // ===== دوال ITWS AI =====
+        window.toggleAIChat = function() {
+            const chat = document.getElementById('itwsAIChat');
+            if (chat.classList.contains('open')) {
+                chat.classList.remove('open');
             } else {
-                showMessage('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+                chat.classList.add('open');
+                document.getElementById('aiMessageInput').focus();
             }
-        });
+        };
 
-        // طلب تسجيل جديد
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
+        window.updateAIBadge = function(text) {
+            document.getElementById('aiUserBadge').textContent = text;
+        };
+
+        window.updateAISuggestions = function(suggestions) {
+            const container = document.getElementById('aiSuggestions');
+            container.innerHTML = suggestions.map(s => 
+                `<span class="itws-ai-suggestion" onclick="sendAIMessage('${s}')">${s}</span>`
+            ).join('');
+        };
+
+        window.sendAIMessage = function(message) {
+            const input = document.getElementById('aiMessageInput');
+            const msg = message || input.value.trim();
+            
+            if (!msg) return;
+
+            const chatBody = document.getElementById('aiChatBody');
+            
+            // إضافة رسالة المستخدم
+            chatBody.innerHTML += `
+                <div class="user-message">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-content">${escapeHtml(msg)}</div>
+                </div>
+            `;
+            
+            input.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // محاكاة رد AI
             setTimeout(function() {
-                showLogin();
-                document.getElementById('registerForm').reset();
-            }, 2000);
-        });
+                let response = '';
+                
+                if (msg.includes('دخول') || msg.includes('login')) {
+                    response = 'لتسجيل الدخول، أدخل اسم المستخدم وكلمة المرور الخاصة بك (الرقم القومي). إذا كنت مسؤولاً، يمكنك استخدام بياناتك الرسمية.';
+                } else if (msg.includes('نسيت') || msg.includes('password')) {
+                    response = 'إذا نسيت كلمة المرور، يرجى التواصل مع النقيب العام أو النائب الأول للمساعدة في استعادتها.';
+                } else if (msg.includes('حساب') || msg.includes('تسجيل')) {
+                    response = 'للتسجيل كمسؤول في النقابة، اضغط على "تسجيل بيانات مسؤول" واملأ جميع البيانات المطلوبة بما في ذلك الصورة الشخصية وصورة قرار التعيين.';
+                } else if (msg.includes('لجنة') || msg.includes('committee')) {
+                    response = 'اللجان في النقابة تشمل: لجنة التدريب، لجنة العلاقات العامة، لجنة الشؤون المالية، وغيرها. كل لجنة لها مهامها وصلاحياتها.';
+                } else if (msg.includes('محافظة') || msg.includes('governorate')) {
+                    response = 'لدينا فروع في جميع محافظات مصر. كل محافظة لها مجلسها الفرعي ووكلاؤها. يمكنك التواصل مع فرع محافظتك للاستفسار عن الخدمات المحلية.';
+                } else {
+                    response = 'شكراً لسؤالك. أنا هنا لمساعدتك في أي استفسار بخصوص النقابة. هل تريد معرفة المزيد عن خدماتنا أو إجراءات التسجيل؟';
+                }
+                
+                chatBody.innerHTML += `
+                    <div class="itws-ai-message">
+                        <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                        <div class="ai-content">${escapeHtml(response)}</div>
+                    </div>
+                `;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1000);
+        };
 
-        // دوال مساعدة
+        // دالة escapeHtml
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== دوال عرض الرسائل =====
         function showMessage(text, type) {
             const msgBox = document.getElementById('messageBox');
             msgBox.textContent = text;
@@ -725,6 +1321,91 @@
                 msgBox.style.display = 'none';
             }, 3000);
         }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
+
+        // ===== بعد تحميل الصفحة =====
+        setTimeout(function() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('loginWrapper').style.display = 'flex';
+            
+            // تحديث رسالة AI حسب الصفحة
+            setTimeout(function() {
+                const aiContent = document.querySelector('.ai-content');
+                if (aiContent) {
+                    aiContent.innerHTML = 'مرحباً! أنا ITWS AI المساعد الذكي. كيف يمكنني مساعدتك في تسجيل الدخول أو استعادة كلمة المرور؟';
+                }
+            }, 500);
+        }, 3500);
+
+        // ===== تسجيل الدخول =====
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            showLoading(true);
+
+            setTimeout(function() {
+                if (username === 'المهندس / محمود جميل' && password === '30010250202679') {
+                    showMessage('تم تسجيل الدخول بنجاح', 'success');
+                    setTimeout(function() {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showMessage('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+                    showLoading(false);
+                }
+            }, 1000);
+        });
+
+        // ===== طلب تسجيل جديد =====
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const profileImage = document.getElementById('profileImage').files[0];
+            const appointmentDoc = document.getElementById('appointmentDoc').files[0];
+
+            if (!profileImage || !appointmentDoc) {
+                showMessage('يرجى رفع الصورة الشخصية وصورة قرار التعيين', 'error');
+                return;
+            }
+
+            showLoading(true);
+
+            setTimeout(function() {
+                showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
+                showLoading(false);
+                setTimeout(function() {
+                    showLogin();
+                    document.getElementById('registerForm').reset();
+                }, 2000);
+            }, 1500);
+        });
+
+        // ===== معاينة الصور قبل الرفع =====
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                showMessage('تم اختيار الصورة الشخصية', 'info');
+            }
+        });
+
+        document.getElementById('appointmentDoc').addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                showMessage('تم اختيار ملف قرار التعيين', 'info');
+            }
+        });
+
+        // ===== تحديث العلامة المائية =====
+        setInterval(function() {
+            const watermark = document.querySelector('.security-watermark');
+            if (watermark) {
+                watermark.textContent = 'زائر - ' + new Date().toLocaleDateString('ar-EG') + ' - ' + new Date().toLocaleTimeString('ar-EG');
+            }
+        }, 60000);
     </script>
 </body>
 </html>
