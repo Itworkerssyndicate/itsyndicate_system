@@ -838,7 +838,7 @@
     <script type="module">
         // ===== استيراد Firebase =====
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, get, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
@@ -855,8 +855,13 @@
 
         // ===== التحقق من تسجيل الدخول =====
         const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        console.log('Current user:', currentUser); // للتأكد من البيانات
+
         if (!currentUser) {
+            console.log('No user found, redirecting to index...');
             window.location.href = 'index.html';
+        } else {
+            console.log('User logged in:', currentUser.fullName);
         }
 
         // ===== تحديث التاريخ والوقت =====
@@ -884,7 +889,7 @@
             else if (hour < 17) message = 'مساء الخير';
             else message = 'مساء النور';
             
-            document.getElementById('welcomeMessage').textContent = `${message}، ${currentUser.fullName}`;
+            document.getElementById('welcomeMessage').textContent = `${message}، ${currentUser?.fullName || 'مستخدم'}`;
         }
         setWelcomeMessage();
 
@@ -893,7 +898,7 @@
             const userInfo = document.getElementById('userInfo');
             let title = '';
             
-            switch(currentUser.role) {
+            switch(currentUser?.role) {
                 case 'president':
                     title = 'النقيب العام';
                     break;
@@ -907,16 +912,16 @@
                     title = 'مساعد الأمين العام - مدير الفروع';
                     break;
                 default:
-                    title = currentUser.positionName || 'عضو';
+                    title = currentUser?.positionName || 'عضو';
             }
 
             userInfo.innerHTML = `
                 <div class="user-avatar" onclick="window.location.href='profile.html'">
-                    ${currentUser.profileImage ? 
+                    ${currentUser?.profileImage ? 
                         `<img src="${currentUser.profileImage}" alt="صورة المستخدم">` : 
                         '<i class="fas fa-user-circle"></i>'}
                 </div>
-                <h3>${currentUser.fullName}</h3>
+                <h3>${currentUser?.fullName || 'مستخدم'}</h3>
                 <p>${title}</p>
                 <div class="online-badge">
                     <i class="fas fa-circle"></i>
@@ -924,21 +929,27 @@
                 </div>
             `;
         }
-        displayUserInfo();
+        
+        if (currentUser) {
+            displayUserInfo();
+        }
 
         // ===== إضافة علامة مائية =====
         function addWatermark() {
             const watermark = document.createElement('div');
             watermark.className = 'security-watermark';
-            watermark.textContent = currentUser.fullName + ' - ' + new Date().toLocaleDateString('ar-EG');
+            watermark.textContent = (currentUser?.fullName || 'زائر') + ' - ' + new Date().toLocaleDateString('ar-EG');
             document.body.appendChild(watermark);
         }
-        addWatermark();
+        
+        if (currentUser) {
+            addWatermark();
+        }
 
         // ===== تحديث العلامة المائية =====
         setInterval(function() {
             const watermark = document.querySelector('.security-watermark');
-            if (watermark) {
+            if (watermark && currentUser) {
                 watermark.textContent = currentUser.fullName + ' - ' + new Date().toLocaleDateString('ar-EG') + ' - ' + new Date().toLocaleTimeString('ar-EG');
             }
         }, 60000);
@@ -1024,6 +1035,8 @@
 
         // ===== تحميل الطلبات الواردة =====
         function loadIncomingRequests() {
+            if (!currentUser) return;
+            
             if (currentUser.role !== 'president' && currentUser.role !== 'vice_president_first') {
                 document.getElementById('incomingRequests').innerHTML = `
                     <div class="activity-item">
@@ -1266,6 +1279,12 @@
         };
 
         window.logout = async function() {
+            if (!currentUser) {
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+                return;
+            }
+
             try {
                 await update(ref(database, `users/${currentUser.userId}`), {
                     online: false,
@@ -1274,17 +1293,20 @@
                 sessionStorage.removeItem('currentUser');
                 window.location.href = 'index.html';
             } catch (error) {
+                console.error('Logout error:', error);
                 showMessage('حدث خطأ في تسجيل الخروج', 'error');
             }
         };
 
-        // ===== تحميل كل البيانات عند فتح الصفحة =====
-        loadStats();
-        loadRecentActivities();
-        loadIncomingRequests();
-        loadTracking();
-        updateOnlineUsers();
-        updateNotifications();
+        // ===== تشغيل كل الوظائف بعد التأكد من وجود المستخدم =====
+        if (currentUser) {
+            loadStats();
+            loadRecentActivities();
+            loadIncomingRequests();
+            loadTracking();
+            updateOnlineUsers();
+            updateNotifications();
+        }
     </script>
 </body>
 </html>
