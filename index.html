@@ -501,20 +501,20 @@
             overflow-y: auto;
         }
 
-        /* تنسيقات المساعد الذكي - مضافة بشكل صريح */
+        /* تنسيقات المساعد الذكي */
         .itws-ai-button {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(102,126,234,0.4);
             z-index: 9999;
@@ -763,15 +763,6 @@
             color: white;
         }
 
-        .itws-ai-capabilities {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
-            padding: 5px;
-            background: rgba(102,126,234,0.1);
-            border-radius: 8px;
-        }
-
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -851,6 +842,13 @@
                             <i class="fas fa-lock"></i>
                             <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
                         </div>
+                    </div>
+
+                    <div class="form-group" id="biometricSection" style="display: none;">
+                        <label><i class="fas fa-face-smile"></i> المصادقة الحيوية</label>
+                        <button type="button" class="btn" id="biometricBtn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <i class="fas fa-face-smile"></i> استخدام بصمة الوجه
+                        </button>
                     </div>
 
                     <button type="submit" class="btn">
@@ -1050,6 +1048,36 @@
             document.getElementById('registerCard').style.display = 'none';
             document.getElementById('loginCard').style.display = 'block';
         };
+    </script>
+
+    <!-- ITWS AI Assistant Scripts - يتم تحميلها مباشرة -->
+    <script>
+        // تعريف بسيط للمساعد في حال فشل التحميل
+        window.aiInterface = {
+            toggleChat: function() {
+                alert('ITWS AI: جاري تحميل المساعد... يرجى المحاولة مرة أخرى');
+            }
+        };
+    </script>
+
+    <!-- تحميل مكتبات المساعد -->
+    <script src="assets/js/itws-ai-assistant.js"></script>
+    <script src="assets/js/ai-interface.js"></script>
+
+    <script>
+        // تهيئة المساعد بعد تحميل المكتبات
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                if (typeof AIInterface !== 'undefined') {
+                    window.aiInterface = new AIInterface(null);
+                    console.log('✅ ITWS AI initialized successfully');
+                } else {
+                    console.error('❌ AIInterface not found');
+                }
+            } catch (error) {
+                console.error('❌ Failed to initialize ITWS AI:', error);
+            }
+        });
     </script>
 
     <!-- Firebase and Core Scripts -->
@@ -1395,22 +1423,6 @@
         }
 
         checkAndCreatePresident();
-    </script>
-
-    <!-- ITWS AI Assistant - يتم تحميله في النهاية -->
-    <script type="module">
-        // ============================================
-        // استيراد المساعد الذكي
-        // ============================================
-        import AIInterface from './assets/js/ai-interface.js';
-        
-        // تهيئة المساعد مع مستخدم زائر
-        try {
-            window.aiInterface = new AIInterface(null);
-            console.log('✅ ITWS AI initialized successfully');
-        } catch (error) {
-            console.error('❌ Failed to initialize ITWS AI:', error);
-        }
     </script>
 </body>
 </html>
