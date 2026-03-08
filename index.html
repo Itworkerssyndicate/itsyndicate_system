@@ -11,9 +11,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
     <style>
         * {
             margin: 0;
@@ -25,10 +22,9 @@
         body {
             min-height: 100vh;
             overflow: hidden;
-            position: relative;
         }
 
-        /* ===== شاشة البداية ===== */
+        /* شاشة البداية (Splash Screen) */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -40,7 +36,7 @@
             align-items: center;
             justify-content: center;
             z-index: 10000;
-            animation: fadeOut 1s ease 3.5s forwards;
+            animation: fadeOut 0.5s ease 3.5s forwards;
         }
 
         @keyframes fadeOut {
@@ -54,6 +50,17 @@
             text-align: center;
             color: white;
             animation: zoomIn 1s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .splash-logo {
@@ -78,6 +85,12 @@
             object-fit: contain;
         }
 
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .splash-title {
             font-size: 36px;
             font-weight: 800;
@@ -89,23 +102,6 @@
             font-size: 18px;
             opacity: 0.9;
             margin-bottom: 30px;
-        }
-
-        .itws-badge {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            padding: 8px 20px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.3);
-            margin-top: 20px;
-        }
-
-        .itws-badge i {
-            color: #ffd700;
         }
 
         .loading-bar {
@@ -139,7 +135,7 @@
             font-size: 14px;
         }
 
-        /* ===== شاشة تسجيل الدخول ===== */
+        /* شاشة تسجيل الدخول */
         .login-wrapper {
             height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -214,12 +210,7 @@
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+            display: block;
         }
 
         .header {
@@ -238,11 +229,6 @@
             margin: 0 auto 20px;
             box-shadow: 0 10px 20px rgba(102,126,234,0.3);
             overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .logo-small:hover {
-            transform: scale(1.1) rotate(360deg);
         }
 
         .logo-small img {
@@ -274,16 +260,10 @@
             gap: 8px;
             margin-top: 10px;
             border: 1px solid rgba(255,255,255,0.3);
-            animation: pulse 2s infinite;
-        }
-
-        .itws-ai-badge i {
-            color: #ffd700;
         }
 
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
 
         label {
@@ -310,28 +290,22 @@
             transform: translateY(-50%);
             color: #667eea;
             font-size: 18px;
-            transition: all 0.3s ease;
         }
 
-        input, select, textarea {
+        input, select {
             width: 100%;
             padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 14px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             font-family: 'Cairo', sans-serif;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             border-color: #667eea;
             outline: none;
             box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-        }
-
-        input:focus + i {
-            transform: translateY(-50%) scale(1.2);
-            color: #764ba2;
         }
 
         .btn {
@@ -344,7 +318,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
@@ -372,10 +346,6 @@
             box-shadow: 0 10px 20px rgba(102,126,234,0.3);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
         .toggle-link {
             text-align: center;
             margin-top: 20px;
@@ -388,7 +358,7 @@
             font-weight: 600;
             margin-right: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .toggle-link a:hover {
@@ -416,21 +386,6 @@
 
         .message-box.error {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .message-box.info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -20px);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
         }
 
         .loading-spinner {
@@ -468,6 +423,17 @@
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
         .file-upload {
             position: relative;
             display: inline-block;
@@ -496,7 +462,7 @@
             color: #667eea;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .file-upload-label:hover {
@@ -504,76 +470,27 @@
             color: white;
         }
 
-        .file-upload-label i {
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-label:hover i {
-            transform: scale(1.2);
-        }
-
-        .security-note {
-            font-size: 12px;
-            color: #666;
-            margin-top: 20px;
-            text-align: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .security-note i {
-            color: #667eea;
-            margin-left: 5px;
-        }
-
         .governorate-select {
             max-height: 200px;
             overflow-y: auto;
         }
-
-        /* أنيميشن إضافية */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .pulse {
-            animation: pulse 2s ease-in-out infinite;
-        }
     </style>
 </head>
 <body>
-    <!-- شاشة البداية -->
+    <!-- شاشة البداية (Splash Screen) -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
             <div class="splash-logo" id="splashLogo">
-                <img src="assets/images/default-logo.png" alt="شعار النقابة" id="splashLogoImg">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="splashLogoImg">
             </div>
             <h1 class="splash-title">نقابة تكنولوجيا المعلومات</h1>
             <div class="splash-subtitle">والبرمجيات - منصة إدارة النقابة</div>
-            <div class="itws-badge">
-                <i class="fas fa-robot"></i>
-                <span>مدعوم بـ ITWS AI - المساعد الذكي</span>
-                <i class="fas fa-bolt"></i>
-            </div>
             <div class="loading-bar">
                 <div class="loading-progress"></div>
             </div>
         </div>
         <div class="splash-footer">
-            جميع الحقوق محفوظة © 2024 | تصميم وبرمجة ITWS AI
+            جميع الحقوق محفوظة © 2024
         </div>
     </div>
 
@@ -595,7 +512,7 @@
             <div class="card" id="loginCard">
                 <div class="header">
                     <div class="logo-small" id="loginLogo">
-                        <img src="assets/images/default-logo.png" alt="شعار النقابة" id="loginLogoImg">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="loginLogoImg">
                     </div>
                     <h1>نقابة تكنولوجيا المعلومات والبرمجيات</h1>
                     <p class="subtitle">منصة إدارة النقابة المصممة باستخدام</p>
@@ -633,25 +550,19 @@
                     <span>ليس لديك حساب؟</span>
                     <a onclick="showRegister()">تسجيل بيانات مسؤول بالنقابة</a>
                 </div>
-
-                <div class="security-note">
-                    <i class="fas fa-shield-alt"></i>
-                    هذا النظام محمي بتقنيات أمان متقدمة ومدعوم بـ ITWS AI
-                </div>
             </div>
 
             <!-- بطاقة التسجيل -->
             <div class="card" id="registerCard" style="display: none;">
                 <div class="header">
                     <div class="logo-small">
-                        <img src="assets/images/default-logo.png" alt="شعار النقابة">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة">
                     </div>
                     <h1>تسجيل بيانات مسؤول بالنقابة</h1>
                     <p class="subtitle">املأ البيانات للتسجيل في النظام</p>
                 </div>
 
                 <form id="registerForm">
-                    <!-- البيانات الأساسية -->
                     <div class="form-group">
                         <label><i class="fas fa-user"></i> الاسم الكامل *</label>
                         <div class="input-wrapper">
@@ -676,58 +587,42 @@
                         </div>
                     </div>
 
-                    <!-- الصفة والمنصب -->
                     <div class="form-group">
                         <label><i class="fas fa-briefcase"></i> الصفة *</label>
                         <select id="position" required onchange="togglePositionFields()">
                             <option value="">اختر الصفة</option>
-                            
-                            <!-- قيادة النقابة -->
-                            <optgroup label="قيادة النقابة">
-                                <option value="president">نقيب عام</option>
-                                <option value="vice_president_first">نائب أول</option>
-                                <option value="vice_president_second_manager">نائب ثاني - مدير اللجان</option>
-                                <option value="secretary_general">أمين عام</option>
-                                <option value="secretary_assistant_manager">مساعد الأمين العام - مدير الفروع</option>
-                                <option value="treasurer">أمين صندوق</option>
-                                <option value="treasurer_assistant">مساعد أمين صندوق</option>
-                            </optgroup>
-                            
-                            <!-- اللجان -->
-                            <optgroup label="اللجان">
-                                <option value="committee_head">رئيس لجنة</option>
-                                <option value="committee_member">عضو لجنة</option>
-                            </optgroup>
-                            
-                            <!-- مجالس المحافظات -->
-                            <optgroup label="مجالس المحافظات">
-                                <option value="governorate_president">نقيب محافظة</option>
-                                <option value="governorate_vice_first">نائب أول محافظة</option>
-                                <option value="governorate_vice_second">نائب ثاني محافظة</option>
-                                <option value="governorate_secretary">أمين عام محافظة</option>
-                                <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
-                                <option value="governorate_treasurer">أمين صندوق محافظة</option>
-                                <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
-                                <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
-                            </optgroup>
-                            
-                            <!-- وكلاء المحافظات -->
-                            <optgroup label="وكلاء المحافظات">
-                                <option value="governorate_agent">وكيل محافظة</option>
-                                <option value="governorate_assistant">مساعد وكيل محافظة</option>
-                            </optgroup>
+                            <option value="president">نقيب عام</option>
+                            <option value="vice_president_first">نائب أول</option>
+                            <option value="vice_president_second_manager">نائب ثاني - مدير اللجان</option>
+                            <option value="secretary_general">أمين عام</option>
+                            <option value="secretary_assistant_manager">مساعد الأمين العام - مدير الفروع</option>
+                            <option value="treasurer">أمين صندوق</option>
+                            <option value="treasurer_assistant">مساعد أمين صندوق</option>
+                            <option value="committee_head">رئيس لجنة</option>
+                            <option value="committee_member">عضو لجنة</option>
+                            <option value="governorate_president">نقيب محافظة</option>
+                            <option value="governorate_vice_first">نائب أول محافظة</option>
+                            <option value="governorate_vice_second">نائب ثاني محافظة</option>
+                            <option value="governorate_secretary">أمين عام محافظة</option>
+                            <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
+                            <option value="governorate_treasurer">أمين صندوق محافظة</option>
+                            <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
+                            <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
+                            <option value="governorate_agent">وكيل محافظة</option>
+                            <option value="governorate_assistant">مساعد وكيل محافظة</option>
                         </select>
                     </div>
 
-                    <!-- حقل اللجنة (يظهر لرئيس لجنة أو عضو لجنة فقط) -->
                     <div class="form-group" id="committeeField" style="display: none;">
                         <label><i class="fas fa-users"></i> اختر اللجنة *</label>
                         <select id="committeeSelect" class="governorate-select">
-                            <option value="">جاري تحميل اللجان...</option>
+                            <option value="">اختر اللجنة</option>
+                            <option value="committee1">لجنة التدريب</option>
+                            <option value="committee2">لجنة العلاقات</option>
+                            <option value="committee3">لجنة المالية</option>
                         </select>
                     </div>
 
-                    <!-- حقل المحافظة (يظهر لصفات المحافظات والمجالس والوكلاء) -->
                     <div class="form-group" id="governorateField" style="display: none;">
                         <label><i class="fas fa-map-marker-alt"></i> اختر المحافظة *</label>
                         <select id="governorateSelect" class="governorate-select">
@@ -738,30 +633,9 @@
                             <option value="الدقهلية">الدقهلية</option>
                             <option value="الشرقية">الشرقية</option>
                             <option value="القليوبية">القليوبية</option>
-                            <option value="المنوفية">المنوفية</option>
-                            <option value="الغربية">الغربية</option>
-                            <option value="كفر الشيخ">كفر الشيخ</option>
-                            <option value="البحيرة">البحيرة</option>
-                            <option value="الإسماعيلية">الإسماعيلية</option>
-                            <option value="بورسعيد">بورسعيد</option>
-                            <option value="السويس">السويس</option>
-                            <option value="شمال سيناء">شمال سيناء</option>
-                            <option value="جنوب سيناء">جنوب سيناء</option>
-                            <option value="بني سويف">بني سويف</option>
-                            <option value="الفيوم">الفيوم</option>
-                            <option value="المنيا">المنيا</option>
-                            <option value="أسيوط">أسيوط</option>
-                            <option value="سوهاج">سوهاج</option>
-                            <option value="قنا">قنا</option>
-                            <option value="الأقصر">الأقصر</option>
-                            <option value="أسوان">أسوان</option>
-                            <option value="الوادي الجديد">الوادي الجديد</option>
-                            <option value="مطروح">مطروح</option>
-                            <option value="البحر الأحمر">البحر الأحمر</option>
                         </select>
                     </div>
 
-                    <!-- الصورة الشخصية -->
                     <div class="form-group">
                         <label><i class="fas fa-camera"></i> الصورة الشخصية *</label>
                         <div class="file-upload">
@@ -773,7 +647,6 @@
                         </div>
                     </div>
 
-                    <!-- قرار التعيين (اختياري) -->
                     <div class="form-group">
                         <label><i class="fas fa-file-pdf"></i> صورة قرار التعيين (اختياري)</label>
                         <div class="file-upload">
@@ -808,8 +681,8 @@
         <p>جاري التحميل...</p>
     </div>
 
-    <!-- تعريف الدوال العامة -->
     <script>
+        // تعريف الدوال العامة
         window.showRegister = function() {
             document.getElementById('loginCard').style.display = 'none';
             document.getElementById('registerCard').style.display = 'block';
@@ -819,36 +692,80 @@
             document.getElementById('registerCard').style.display = 'none';
             document.getElementById('loginCard').style.display = 'block';
         };
+
+        window.togglePositionFields = function() {
+            const position = document.getElementById('position').value;
+            const committeeField = document.getElementById('committeeField');
+            const governorateField = document.getElementById('governorateField');
+            
+            const committeePositions = ['committee_head', 'committee_member'];
+            const governoratePositions = [
+                'governorate_president', 'governorate_vice_first', 'governorate_vice_second',
+                'governorate_secretary', 'governorate_secretary_assistant',
+                'governorate_treasurer', 'governorate_treasurer_assistant',
+                'governorate_council_member', 'governorate_agent', 'governorate_assistant'
+            ];
+            
+            if (committeePositions.includes(position)) {
+                committeeField.style.display = 'block';
+                governorateField.style.display = 'none';
+            } else if (governoratePositions.includes(position)) {
+                committeeField.style.display = 'none';
+                governorateField.style.display = 'block';
+            } else {
+                committeeField.style.display = 'none';
+                governorateField.style.display = 'none';
+            }
+        };
+
+        // بعد 3.5 ثواني، أخفي شاشة البداية وأظهر شاشة تسجيل الدخول
+        setTimeout(function() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('loginWrapper').style.display = 'block';
+        }, 3500);
+
+        // تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // محاكاة تسجيل الدخول
+            if (username === 'المهندس / محمود جميل' && password === '30010250202679') {
+                showMessage('تم تسجيل الدخول بنجاح', 'success');
+                setTimeout(function() {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                showMessage('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+            }
+        });
+
+        // طلب تسجيل جديد
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
+            setTimeout(function() {
+                showLogin();
+                document.getElementById('registerForm').reset();
+            }, 2000);
+        });
+
+        // دوال مساعدة
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message-box ${type}`;
+            msgBox.style.display = 'block';
+            setTimeout(function() {
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
     </script>
-
-    <!-- تحميل أنظمة الأمان -->
-    <script src="assets/js/security/security-core.js"></script>
-    <script src="assets/js/security/biometric-auth.js"></script>
-    <script src="assets/js/security/twofa.js"></script>
-    <script src="assets/js/security/anomaly-detection.js"></script>
-    <script src="assets/js/security/encryption.js"></script>
-    <script src="assets/js/security/enhanced-security.js"></script>
-    <script src="assets/js/security/security-loader.js"></script>
-
-    <!-- تحميل أنظمة ITWS AI -->
-    <script src="assets/js/ai/itws-ai-core.js"></script>
-    <script src="assets/js/ai/itws-ai-interface.js"></script>
-    <script src="assets/js/ai/itws-ai-permissions.js"></script>
-    <script src="assets/js/ai/itws-ai-config.js"></script>
-    <script src="assets/js/ai/itws-ai-loader.js"></script>
-
-    <!-- تحميل الوحدات -->
-    <script src="assets/js/modules/theme-manager.js"></script>
-    <script src="assets/js/modules/notifications.js"></script>
-    <script src="assets/js/modules/attendance.js"></script>
-    <script src="assets/js/modules/printing.js"></script>
-    <script src="assets/js/modules/numbering.js"></script>
-    <script src="assets/js/modules/finance.js"></script>
-    <script src="assets/js/modules/tracking.js"></script>
-
-    <!-- Firebase -->
-    <script type="module" src="assets/js/core/firebase-config.js"></script>
-    <script type="module" src="assets/js/core/auth.js"></script>
-    <script type="module" src="assets/js/core/utils.js"></script>
 </body>
 </html>
