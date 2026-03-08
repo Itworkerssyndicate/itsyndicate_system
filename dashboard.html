@@ -74,11 +74,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-
         /* ===== الشريط الجانبي ===== */
         .sidebar {
             position: fixed;
@@ -129,6 +124,13 @@
             transition: all 0.3s ease;
             position: relative;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .sidebar-header .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .sidebar-header .user-avatar:hover {
@@ -754,9 +756,9 @@
                     <div class="activity-item">
                         <div class="activity-icon"><i class="fas fa-info-circle"></i></div>
                         <div class="activity-content">
-                            <h4>مرحباً بك</h4>
-                            <p>لا توجد أنشطة حديثة</p>
-                            <div class="activity-time">الآن</div>
+                            <h4>جاري التحميل...</h4>
+                            <p>يرجى الانتظار</p>
+                            <div class="activity-time">-</div>
                         </div>
                     </div>
                 </div>
@@ -772,8 +774,8 @@
                     <div class="activity-item">
                         <div class="activity-icon"><i class="fas fa-inbox"></i></div>
                         <div class="activity-content">
-                            <h4>لا توجد طلبات</h4>
-                            <p>جميع الطلبات تمت معالجتها</p>
+                            <h4>جاري التحميل...</h4>
+                            <p>يرجى الانتظار</p>
                             <div class="activity-time">-</div>
                         </div>
                     </div>
@@ -797,7 +799,7 @@
                         <div class="activity-item">
                             <div class="activity-icon"><i class="fas fa-arrow-right"></i></div>
                             <div class="activity-content">
-                                <h4>لا توجد مراسلات</h4>
+                                <h4>جاري التحميل...</h4>
                                 <p>-</p>
                                 <div class="activity-time">-</div>
                             </div>
@@ -813,7 +815,7 @@
                         <div class="activity-item">
                             <div class="activity-icon"><i class="fas fa-arrow-left"></i></div>
                             <div class="activity-content">
-                                <h4>لا توجد مراسلات</h4>
+                                <h4>جاري التحميل...</h4>
                                 <p>-</p>
                                 <div class="activity-time">-</div>
                             </div>
@@ -833,83 +835,29 @@
         <p>جاري التحميل...</p>
     </div>
 
-    <script>
-        // ===== نظام الأمان المتقدم (نفس اللي في index.html) =====
-        (function() {
-            // منع الكليك اليمين
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                showSecurityAlert('🚫 القائمة محجوزة للنظام');
-                return false;
-            });
+    <script type="module">
+        // ===== استيراد Firebase =====
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-            // منع F12 وأدوات المطورين
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                    (e.ctrlKey && e.key === 'U')) {
-                    e.preventDefault();
-                    showSecurityAlert('🚫 هذه الميزة غير متاحة');
-                    return false;
-                }
-            });
-
-            // منع النسخ واللصق
-            document.addEventListener('copy', function(e) {
-                e.preventDefault();
-                showSecurityAlert('📋 النسخ غير مسموح');
-            });
-
-            document.addEventListener('paste', function(e) {
-                e.preventDefault();
-                showSecurityAlert('📋 اللصق غير مسموح');
-            });
-
-            document.addEventListener('cut', function(e) {
-                e.preventDefault();
-            });
-
-            document.addEventListener('selectstart', function(e) {
-                e.preventDefault();
-                return false;
-            });
-
-            // كشف أدوات المطورين
-            setInterval(function() {
-                const widthThreshold = window.outerWidth - window.innerWidth > 160;
-                const heightThreshold = window.outerHeight - window.innerHeight > 160;
-                
-                if (widthThreshold || heightThreshold) {
-                    document.body.innerHTML = `
-                        <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8d7da; color:#721c24; font-family:'Cairo'; padding:20px;">
-                            <i class="fas fa-shield-alt" style="font-size:80px; margin-bottom:20px;"></i>
-                            <h1 style="font-size:32px;">🚫 تم إغلاق النظام</h1>
-                            <p style="font-size:18px;">لأسباب أمنية، تم إنهاء الجلسة</p>
-                            <button onclick="location.reload()" style="margin-top:20px; padding:10px 30px; background:#721c24; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer;">إعادة تحميل الصفحة</button>
-                        </div>
-                    `;
-                }
-            }, 1000);
-
-            // دالة عرض رسالة أمان
-            window.showSecurityAlert = function(message) {
-                const alert = document.createElement('div');
-                alert.className = 'security-alert';
-                alert.textContent = message;
-                document.body.appendChild(alert);
-                setTimeout(function() {
-                    alert.remove();
-                }, 3000);
-            };
-        })();
-
-        // ===== بيانات المستخدم (مؤقتة) =====
-        const currentUser = {
-            fullName: 'المهندس / محمود جميل',
-            role: 'president',
-            title: 'النقيب العام'
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
+            authDomain: "itws-system.firebaseapp.com",
+            databaseURL: "https://itws-system-default-rtdb.firebaseio.com",
+            projectId: "itws-system",
+            storageBucket: "itws-system.firebasestorage.app",
+            messagingSenderId: "770452248691",
+            appId: "1:770452248691:web:0e94e65e01298b398bb206"
         };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // ===== التحقق من تسجيل الدخول =====
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
 
         // ===== تحديث التاريخ والوقت =====
         function updateDateTime() {
@@ -952,13 +900,21 @@
                 case 'vice_president_first':
                     title = 'النائب الأول';
                     break;
+                case 'vice_president_second_manager':
+                    title = 'نائب ثاني - مدير اللجان';
+                    break;
+                case 'secretary_assistant_manager':
+                    title = 'مساعد الأمين العام - مدير الفروع';
+                    break;
                 default:
-                    title = currentUser.title;
+                    title = currentUser.positionName || 'عضو';
             }
 
             userInfo.innerHTML = `
                 <div class="user-avatar" onclick="window.location.href='profile.html'">
-                    <i class="fas fa-user-circle"></i>
+                    ${currentUser.profileImage ? 
+                        `<img src="${currentUser.profileImage}" alt="صورة المستخدم">` : 
+                        '<i class="fas fa-user-circle"></i>'}
                 </div>
                 <h3>${currentUser.fullName}</h3>
                 <p>${title}</p>
@@ -987,152 +943,348 @@
             }
         }, 60000);
 
-        // ===== تحميل البيانات (محاكاة) =====
-        function loadStats() {
-            // محاكاة تحميل البيانات
-            setTimeout(() => {
-                document.getElementById('totalMembers').textContent = '156';
-                document.getElementById('totalCommittees').textContent = '12';
-                document.getElementById('totalBranches').textContent = '8';
-                document.getElementById('pendingRequests').textContent = '5';
-                
+        // ===== تحميل الإحصائيات من Firebase =====
+        async function loadStats() {
+            try {
+                // جلب عدد الأعضاء
+                const usersSnapshot = await get(ref(database, 'users'));
+                const membersCount = usersSnapshot.exists() ? Object.keys(usersSnapshot.val()).length : 0;
+                document.getElementById('totalMembers').textContent = membersCount;
+
+                // جلب عدد اللجان
+                const committeesSnapshot = await get(ref(database, 'committees'));
+                const committeesCount = committeesSnapshot.exists() ? Object.keys(committeesSnapshot.val()).length : 0;
+                document.getElementById('totalCommittees').textContent = committeesCount;
+
+                // جلب عدد الفروع
+                const branchesSnapshot = await get(ref(database, 'branches'));
+                const branchesCount = branchesSnapshot.exists() ? Object.keys(branchesSnapshot.val()).length : 0;
+                document.getElementById('totalBranches').textContent = branchesCount;
+
+                // جلب عدد الطلبات المعلقة
+                const requestsSnapshot = await get(ref(database, 'pending_requests'));
+                let pendingRequests = 0;
+                if (requestsSnapshot.exists()) {
+                    const requests = requestsSnapshot.val();
+                    pendingRequests = Object.values(requests).filter(r => r.status === 'pending').length;
+                }
+                document.getElementById('pendingRequests').textContent = pendingRequests;
+
                 // تحديث الشارات
-                document.getElementById('requestsBadge').style.display = 'inline-block';
-                document.getElementById('requestsBadge').textContent = '5';
-                document.getElementById('messagesBadge').style.display = 'inline-block';
-                document.getElementById('messagesBadge').textContent = '3';
-            }, 1000);
-        }
-        loadStats();
+                if (pendingRequests > 0) {
+                    document.getElementById('requestsBadge').style.display = 'inline-block';
+                    document.getElementById('requestsBadge').textContent = pendingRequests;
+                }
 
-        // ===== تحميل آخر الأنشطة (محاكاة) =====
-        function loadRecentActivities() {
-            const activities = [
-                { icon: 'fa-user-plus', title: 'تسجيل عضو جديد', desc: 'أحمد محمد - عضو لجنة', time: 'منذ 5 دقائق' },
-                { icon: 'fa-check-circle', title: 'تم قبول طلب', desc: 'سارة علي - نقيب محافظة', time: 'منذ 15 دقيقة' },
-                { icon: 'fa-file-alt', title: 'تقرير جديد', desc: 'تقرير أداء اللجان', time: 'منذ ساعة' },
-                { icon: 'fa-exchange-alt', title: 'مراسلة واردة', desc: 'من فرع القاهرة', time: 'منذ ساعتين' }
-            ];
-
-            const container = document.getElementById('recentActivities');
-            container.innerHTML = activities.map(a => `
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas ${a.icon}"></i></div>
-                    <div class="activity-content">
-                        <h4>${a.title}</h4>
-                        <p>${a.desc}</p>
-                        <div class="activity-time">${a.time}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        loadRecentActivities();
-
-        // ===== تحميل الطلبات الواردة (محاكاة) =====
-        function loadIncomingRequests() {
-            const requests = [
-                { name: 'محمد علي', position: 'رئيس لجنة', time: 'منذ 10 دقائق' },
-                { name: 'فاطمة أحمد', position: 'نقيب محافظة', time: 'منذ 25 دقيقة' },
-                { name: 'خالد محمود', position: 'وكيل محافظة', time: 'منذ ساعة' }
-            ];
-
-            const container = document.getElementById('incomingRequests');
-            
-            if (currentUser.role === 'president') {
-                container.innerHTML = requests.map(r => `
-                    <div class="activity-item" onclick="window.location.href='requests.html'">
-                        <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
-                        <div class="activity-content">
-                            <h4>طلب عضوية جديد</h4>
-                            <p>${r.name} - ${r.position}</p>
-                            <span class="status-badge status-pending">في الانتظار</span>
-                            <div class="activity-time">${r.time}</div>
-                        </div>
-                    </div>
-                `).join('');
-            } else if (currentUser.role === 'vice_president_first') {
-                container.innerHTML = requests.map(r => `
-                    <div class="activity-item">
-                        <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
-                        <div class="activity-content">
-                            <h4>طلب عضوية جديد</h4>
-                            <p>${r.name} - ${r.position}</p>
-                            <span class="status-badge status-pending">في الانتظار</span>
-                            <div class="activity-time">${r.time}</div>
-                        </div>
-                    </div>
-                `).join('');
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                showMessage('حدث خطأ في تحميل الإحصائيات', 'error');
             }
         }
-        loadIncomingRequests();
 
-        // ===== تحميل المراسلات (محاكاة) =====
-        function loadTracking() {
-            const committeeToBranch = [
-                { from: 'لجنة التدريب', to: 'فرع القاهرة', status: 'completed' }
-            ];
+        // ===== تحميل آخر الأنشطة =====
+        function loadRecentActivities() {
+            const activitiesRef = ref(database, 'activities');
+            
+            onValue(activitiesRef, (snapshot) => {
+                const activities = snapshot.val();
+                const container = document.getElementById('recentActivities');
+                
+                if (!activities) {
+                    container.innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-info-circle"></i></div>
+                            <div class="activity-content">
+                                <h4>لا توجد أنشطة</h4>
+                                <p>...</p>
+                                <div class="activity-time">-</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
 
-            const branchToCommittee = [
-                { from: 'فرع الإسكندرية', to: 'لجنة العلاقات', status: 'pending' }
-            ];
+                // ترتيب الأنشطة من الأحدث للأقدم
+                const recent = Object.entries(activities)
+                    .sort((a, b) => new Date(b[1].timestamp) - new Date(a[1].timestamp))
+                    .slice(0, 5);
 
-            document.getElementById('committeeToBranch').innerHTML = committeeToBranch.map(c => `
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-arrow-right"></i></div>
-                    <div class="activity-content">
-                        <h4>طلب تدريب</h4>
-                        <p>من: ${c.from} | إلى: ${c.to}</p>
-                        <span class="status-badge status-${c.status}">${c.status === 'completed' ? 'مكتمل' : 'في الانتظار'}</span>
-                        <div class="activity-time">منذ ساعتين</div>
+                container.innerHTML = recent.map(([id, activity]) => `
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas ${activity.icon || 'fa-info-circle'}"></i></div>
+                        <div class="activity-content">
+                            <h4>${activity.title}</h4>
+                            <p>${activity.description}</p>
+                            <div class="activity-time">${formatTime(activity.timestamp)}</div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-
-            document.getElementById('branchToCommittee').innerHTML = branchToCommittee.map(b => `
-                <div class="activity-item">
-                    <div class="activity-icon"><i class="fas fa-arrow-left"></i></div>
-                    <div class="activity-content">
-                        <h4>تقرير نشاط</h4>
-                        <p>من: ${b.from} | إلى: ${b.to}</p>
-                        <span class="status-badge status-${b.status}">${b.status === 'completed' ? 'مكتمل' : 'في الانتظار'}</span>
-                        <div class="activity-time">منذ 5 ساعات</div>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            });
         }
-        loadTracking();
 
-        // ===== تحديث عدد المتصلين (محاكاة) =====
-        setInterval(function() {
-            const online = Math.floor(Math.random() * 10) + 15;
-            document.getElementById('onlineCount').textContent = online;
-        }, 10000);
+        // ===== تحميل الطلبات الواردة =====
+        function loadIncomingRequests() {
+            if (currentUser.role !== 'president' && currentUser.role !== 'vice_president_first') {
+                document.getElementById('incomingRequests').innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-lock"></i></div>
+                        <div class="activity-content">
+                            <h4>لا توجد صلاحية</h4>
+                            <p>ليس لديك صلاحية لمشاهدة الطلبات</p>
+                            <div class="activity-time">-</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const requestsRef = ref(database, 'pending_requests');
+            
+            onValue(requestsRef, (snapshot) => {
+                const requests = snapshot.val();
+                const container = document.getElementById('incomingRequests');
+                
+                if (!requests) {
+                    container.innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-inbox"></i></div>
+                            <div class="activity-content">
+                                <h4>لا توجد طلبات</h4>
+                                <p>جميع الطلبات تمت معالجتها</p>
+                                <div class="activity-time">-</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const pending = Object.entries(requests)
+                    .filter(([_, r]) => r.status === 'pending')
+                    .sort((a, b) => new Date(b[1].requestDate) - new Date(a[1].requestDate))
+                    .slice(0, 5);
+
+                if (pending.length === 0) {
+                    container.innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="activity-content">
+                                <h4>لا توجد طلبات معلقة</h4>
+                                <p>جميع الطلبات تمت معالجتها</p>
+                                <div class="activity-time">-</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = pending.map(([id, request]) => `
+                    <div class="activity-item" onclick="window.location.href='requests.html?id=${id}'">
+                        <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                        <div class="activity-content">
+                            <h4>طلب عضوية جديد</h4>
+                            <p>${request.fullName} - ${request.positionName || request.position}</p>
+                            <span class="status-badge status-pending">في الانتظار</span>
+                            <div class="activity-time">${formatTime(request.requestDate)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // ===== تحميل المراسلات =====
+        function loadTracking() {
+            const trackingRef = ref(database, 'tracking');
+            
+            onValue(trackingRef, (snapshot) => {
+                const tracking = snapshot.val();
+                
+                if (!tracking) {
+                    document.getElementById('committeeToBranch').innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-arrow-right"></i></div>
+                            <div class="activity-content">
+                                <h4>لا توجد مراسلات</h4>
+                                <p>-</p>
+                                <div class="activity-time">-</div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('branchToCommittee').innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-arrow-left"></i></div>
+                            <div class="activity-content">
+                                <h4>لا توجد مراسلات</h4>
+                                <p>-</p>
+                                <div class="activity-time">-</div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // من لجنة إلى فرع
+                const c2b = Object.entries(tracking)
+                    .filter(([_, t]) => t.fromType === 'committee' && t.toType === 'branch')
+                    .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
+                    .slice(0, 3);
+
+                document.getElementById('committeeToBranch').innerHTML = c2b.length ? c2b.map(([id, track]) => `
+                    <div class="activity-item" onclick="window.location.href='tracking.html?id=${id}'">
+                        <div class="activity-icon"><i class="fas fa-arrow-right"></i></div>
+                        <div class="activity-content">
+                            <h4>${track.title || 'مراسلة'}</h4>
+                            <p>من: ${track.fromName} | إلى: ${track.toName}</p>
+                            <span class="status-badge status-${track.status}">${getStatusText(track.status)}</span>
+                            <div class="activity-time">${formatTime(track.createdAt)}</div>
+                        </div>
+                    </div>
+                `).join('') : `
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-arrow-right"></i></div>
+                        <div class="activity-content">
+                            <h4>لا توجد مراسلات</h4>
+                            <p>-</p>
+                            <div class="activity-time">-</div>
+                        </div>
+                    </div>
+                `;
+
+                // من فرع إلى لجنة
+                const b2c = Object.entries(tracking)
+                    .filter(([_, t]) => t.fromType === 'branch' && t.toType === 'committee')
+                    .sort((a, b) => new Date(b[1].createdAt) - new Date(a[1].createdAt))
+                    .slice(0, 3);
+
+                document.getElementById('branchToCommittee').innerHTML = b2c.length ? b2c.map(([id, track]) => `
+                    <div class="activity-item" onclick="window.location.href='tracking.html?id=${id}'">
+                        <div class="activity-icon"><i class="fas fa-arrow-left"></i></div>
+                        <div class="activity-content">
+                            <h4>${track.title || 'مراسلة'}</h4>
+                            <p>من: ${track.fromName} | إلى: ${track.toName}</p>
+                            <span class="status-badge status-${track.status}">${getStatusText(track.status)}</span>
+                            <div class="activity-time">${formatTime(track.createdAt)}</div>
+                        </div>
+                    </div>
+                `).join('') : `
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-arrow-left"></i></div>
+                        <div class="activity-content">
+                            <h4>لا توجد مراسلات</h4>
+                            <p>-</p>
+                            <div class="activity-time">-</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ===== تحديث عدد المتصلين =====
+        function updateOnlineUsers() {
+            const usersRef = ref(database, 'users');
+            
+            onValue(usersRef, (snapshot) => {
+                const users = snapshot.val();
+                if (!users) return;
+
+                const online = Object.values(users).filter(u => u.online === true).length;
+                document.getElementById('onlineCount').textContent = online;
+            });
+        }
+
+        // ===== تحديث عدد الإشعارات =====
+        function updateNotifications() {
+            if (!currentUser) return;
+
+            const notificationsRef = ref(database, `notifications/${currentUser.userId}`);
+            
+            onValue(notificationsRef, (snapshot) => {
+                const notifications = snapshot.val();
+                if (!notifications) {
+                    document.getElementById('notificationCount').style.display = 'none';
+                    return;
+                }
+
+                const unread = Object.values(notifications).filter(n => !n.read).length;
+                if (unread > 0) {
+                    document.getElementById('notificationCount').textContent = unread;
+                    document.getElementById('notificationCount').style.display = 'flex';
+                } else {
+                    document.getElementById('notificationCount').style.display = 'none';
+                }
+            });
+        }
 
         // ===== دوال مساعدة =====
+        function formatTime(timestamp) {
+            if (!timestamp) return '-';
+            
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (minutes < 1) return 'الآن';
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            if (days < 7) return `منذ ${days} يوم`;
+            
+            return date.toLocaleDateString('ar-EG');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'في الانتظار',
+                'received': 'تم الاستلام',
+                'viewed': 'تم المشاهدة',
+                'processing': 'قيد المعالجة',
+                'completed': 'مكتمل',
+                'rejected': 'مرفوض'
+            };
+            return statusMap[status] || status;
+        }
+
         function showMessage(text, type) {
             const msgBox = document.getElementById('messageBox');
             msgBox.textContent = text;
             msgBox.className = `message-box ${type}`;
             msgBox.style.display = 'block';
-            setTimeout(function() {
+            setTimeout(() => {
                 msgBox.style.display = 'none';
             }, 3000);
         }
 
-        window.showNotifications = function() {
-            showMessage('لا توجد إشعارات جديدة', 'info');
-        };
-
+        // ===== دوال التنقل =====
         window.showPage = function(page) {
-            showMessage('جاري تحميل الصفحة...', 'info');
+            window.location.href = `${page}.html`;
         };
 
-        window.logout = function() {
-            showMessage('جاري تسجيل الخروج...', 'info');
-            setTimeout(function() {
-                window.location.href = 'index.html';
-            }, 1500);
+        window.showNotifications = function() {
+            window.location.href = 'messages.html';
         };
+
+        window.logout = async function() {
+            try {
+                await update(ref(database, `users/${currentUser.userId}`), {
+                    online: false,
+                    lastSeen: new Date().toISOString()
+                });
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            } catch (error) {
+                showMessage('حدث خطأ في تسجيل الخروج', 'error');
+            }
+        };
+
+        // ===== تحميل كل البيانات عند فتح الصفحة =====
+        loadStats();
+        loadRecentActivities();
+        loadIncomingRequests();
+        loadTracking();
+        updateOnlineUsers();
+        updateNotifications();
     </script>
 </body>
 </html>
