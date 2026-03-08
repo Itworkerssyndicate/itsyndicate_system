@@ -24,7 +24,7 @@
             overflow: hidden;
         }
 
-        /* شاشة البداية (Splash Screen) */
+        /* ===== شاشة البداية ===== */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -135,7 +135,7 @@
             font-size: 14px;
         }
 
-        /* شاشة تسجيل الدخول */
+        /* ===== شاشة تسجيل الدخول ===== */
         .login-wrapper {
             height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -252,24 +252,6 @@
         .subtitle {
             color: #666;
             font-size: 16px;
-        }
-
-        .itws-ai-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-            animation: pulse 2s infinite;
-        }
-
-        .itws-ai-badge i {
-            color: #ffd700;
         }
 
         .form-group {
@@ -412,6 +394,234 @@
             font-family: monospace;
         }
 
+        /* ===== نظام رفع الملفات المتطور ===== */
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            background: #e8f0fe;
+            border-color: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.2);
+        }
+
+        .upload-area i {
+            font-size: 50px;
+            color: #667eea;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover i {
+            transform: scale(1.1);
+            color: #764ba2;
+        }
+
+        .upload-area h4 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area .file-info {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            font-size: 13px;
+            border: 1px solid #667eea;
+        }
+
+        .upload-area .file-info i {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .upload-area input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-preview {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f0f2f5;
+            border-radius: 10px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .upload-preview i {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .upload-preview .preview-info {
+            flex: 1;
+        }
+
+        .upload-preview .preview-info h5 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .upload-preview .preview-info p {
+            color: #666;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .upload-preview .remove-file {
+            width: 30px;
+            height: 30px;
+            background: #ffebee;
+            border: none;
+            border-radius: 50%;
+            color: #f44336;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-preview .remove-file:hover {
+            background: #f44336;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== نافذة معاينة الطلب ===== */
+        .preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            backdrop-filter: blur(5px);
+        }
+
+        .preview-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .preview-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: white;
+            font-size: 30px;
+        }
+
+        .preview-header h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .preview-header p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .preview-body {
+            margin-bottom: 20px;
+        }
+
+        .preview-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .preview-label {
+            width: 100px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .preview-value {
+            flex: 1;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .preview-footer {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-footer .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
         /* ===== رسائل النظام ===== */
         .message-box {
             position: fixed;
@@ -482,6 +692,15 @@
             to {
                 opacity: 1;
                 transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
             }
         }
 
@@ -688,27 +907,53 @@
                         </select>
                     </div>
 
-                    <!-- الصورة الشخصية (إجبارية) -->
+                    <!-- رفع الصورة الشخصية (بشكل جديد) -->
                     <div class="form-group">
                         <label><i class="fas fa-camera"></i> الصورة الشخصية *</label>
-                        <div class="file-upload">
-                            <input type="file" id="profileImage" accept="image/*" required>
-                            <div class="file-upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                اختر صورة
+                        <div class="upload-area" id="profileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>اختر صورة شخصية</h4>
+                            <p>اسحب وأفلت الصورة هنا أو اضغط للاختيار</p>
+                            <div class="file-info" id="profileInfo" style="display: none;">
+                                <i class="fas fa-check-circle"></i>
+                                <span id="profileName"></span>
                             </div>
+                            <input type="file" id="profileImage" accept="image/*" required>
+                        </div>
+                        <div class="upload-preview" id="profilePreview" style="display: none;">
+                            <i class="fas fa-image"></i>
+                            <div class="preview-info">
+                                <h5 id="profilePreviewName"></h5>
+                                <p id="profilePreviewSize"></p>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeFile('profile')">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- قرار التعيين (اختياري) -->
+                    <!-- رفع قرار التعيين (بشكل جديد) -->
                     <div class="form-group">
-                        <label><i class="fas fa-file-pdf"></i> صورة قرار التعيين (اختياري)</label>
-                        <div class="file-upload">
-                            <input type="file" id="appointmentDoc" accept="image/*,.pdf">
-                            <div class="file-upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                رفع القرار (اختياري)
+                        <label><i class="fas fa-file-pdf"></i> صورة قرار التعيين</label>
+                        <div class="upload-area" id="docUploadArea">
+                            <i class="fas fa-file-pdf"></i>
+                            <h4>رفع قرار التعيين</h4>
+                            <p>PDF, JPG, PNG (اختياري)</p>
+                            <div class="file-info" id="docInfo" style="display: none;">
+                                <i class="fas fa-check-circle"></i>
+                                <span id="docName"></span>
                             </div>
+                            <input type="file" id="appointmentDoc" accept="image/*,.pdf">
+                        </div>
+                        <div class="upload-preview" id="docPreview" style="display: none;">
+                            <i class="fas fa-file-pdf"></i>
+                            <div class="preview-info">
+                                <h5 id="docPreviewName"></h5>
+                                <p id="docPreviewSize"></p>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeFile('doc')">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -726,6 +971,32 @@
         </div>
     </div>
 
+    <!-- نافذة معاينة الطلب -->
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-card">
+            <div class="preview-header">
+                <div class="preview-logo">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3>نقابة تكنولوجيا المعلومات والبرمجيات</h3>
+                <p>إيصال استلام طلب عضوية</p>
+            </div>
+            <div class="preview-body" id="previewBody">
+                <!-- المحتوى بيتعبى بالجافاسكريبت -->
+            </div>
+            <div class="preview-footer">
+                <button class="btn-outline" onclick="closePreview()">
+                    <i class="fas fa-times"></i>
+                    إغلاق
+                </button>
+                <button class="btn" onclick="confirmSubmission()">
+                    <i class="fas fa-check"></i>
+                    تأكيد الإرسال
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- رسائل النظام -->
     <div id="messageBox" class="message-box"></div>
 
@@ -736,16 +1007,71 @@
     </div>
 
     <script>
+        // نظام رفع الملفات المتطور
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            handleFileSelect('profile', e.target.files[0]);
+        });
+
+        document.getElementById('appointmentDoc').addEventListener('change', function(e) {
+            handleFileSelect('doc', e.target.files[0]);
+        });
+
+        function handleFileSelect(type, file) {
+            if (!file) return;
+
+            const uploadArea = document.getElementById(type + 'UploadArea');
+            const fileInfo = document.getElementById(type + 'Info');
+            const fileName = document.getElementById(type + 'Name');
+            const preview = document.getElementById(type + 'Preview');
+            const previewName = document.getElementById(type + 'PreviewName');
+            const previewSize = document.getElementById(type + 'PreviewSize');
+
+            // تحديث معلومات الملف
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'inline-flex';
+
+            // إخفاء النص الافتراضي
+            const defaultTexts = uploadArea.querySelectorAll('h4, p');
+            defaultTexts.forEach(el => el.style.display = 'none');
+
+            // عرض المعاينة
+            previewName.textContent = file.name;
+            previewSize.textContent = formatFileSize(file.size);
+            preview.style.display = 'flex';
+        }
+
+        window.removeFile = function(type) {
+            const fileInput = document.getElementById(type === 'profile' ? 'profileImage' : 'appointmentDoc');
+            const uploadArea = document.getElementById(type + 'UploadArea');
+            const fileInfo = document.getElementById(type + 'Info');
+            const preview = document.getElementById(type + 'Preview');
+
+            // إعادة تعيين input
+            fileInput.value = '';
+
+            // إخفاء المعلومات
+            fileInfo.style.display = 'none';
+            preview.style.display = 'none';
+
+            // إظهار النص الافتراضي
+            const defaultTexts = uploadArea.querySelectorAll('h4, p');
+            defaultTexts.forEach(el => el.style.display = 'block');
+        };
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
         // ===== نظام الأمان المتقدم =====
         (function() {
-            // منع الكليك اليمين
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
                 showSecurityAlert('🚫 القائمة محجوزة للنظام');
                 return false;
             });
 
-            // منع F12 وأدوات المطورين
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12' || 
                     (e.ctrlKey && e.shiftKey && e.key === 'I') ||
@@ -757,7 +1083,6 @@
                 }
             });
 
-            // منع النسخ واللصق
             document.addEventListener('copy', function(e) {
                 e.preventDefault();
                 showSecurityAlert('📋 النسخ غير مسموح');
@@ -777,7 +1102,6 @@
                 return false;
             });
 
-            // كشف أدوات المطورين
             setInterval(function() {
                 const widthThreshold = window.outerWidth - window.innerWidth > 160;
                 const heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -794,7 +1118,6 @@
                 }
             }, 1000);
 
-            // إضافة علامة مائية
             function addWatermark() {
                 const watermark = document.createElement('div');
                 watermark.className = 'security-watermark';
@@ -803,7 +1126,6 @@
             }
             addWatermark();
 
-            // دالة عرض رسالة أمان
             window.showSecurityAlert = function(message) {
                 const alert = document.createElement('div');
                 alert.className = 'security-alert';
@@ -826,7 +1148,6 @@
             document.getElementById('loginCard').style.display = 'block';
         };
 
-        // ===== دوال حقول الصفة =====
         window.togglePositionFields = function() {
             const position = document.getElementById('position').value;
             const committeeField = document.getElementById('committeeField');
@@ -851,6 +1172,99 @@
                 governorateField.style.display = 'none';
             }
         };
+
+        // ===== نافذة المعاينة =====
+        window.showPreview = function() {
+            const fullName = document.getElementById('fullName').value;
+            const nationalId = document.getElementById('nationalId').value;
+            const phone = document.getElementById('phone').value;
+            const position = document.getElementById('position');
+            const governorate = document.getElementById('governorateSelect').value;
+            
+            if (!fullName || !nationalId || !phone || !position.value) {
+                showMessage('يرجى إكمال البيانات المطلوبة أولاً', 'error');
+                return;
+            }
+
+            const profileImage = document.getElementById('profileImage').files[0];
+            if (!profileImage) {
+                showMessage('يرجى رفع الصورة الشخصية', 'error');
+                return;
+            }
+
+            // توليد رقم طلب عشوائي
+            const trackingNumber = 'MBR-' + new Date().getFullYear() + '-' + 
+                                   Math.floor(1000 + Math.random() * 9000);
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-EG');
+            const timeStr = now.toLocaleTimeString('ar-EG');
+
+            // الحصول على اسم الصفة
+            const positionName = position.options[position.selectedIndex].text;
+
+            const previewBody = document.getElementById('previewBody');
+            previewBody.innerHTML = `
+                <div class="preview-row">
+                    <span class="preview-label">رقم الطلب:</span>
+                    <span class="preview-value">${trackingNumber}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الاسم:</span>
+                    <span class="preview-value">${fullName}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الرقم القومي:</span>
+                    <span class="preview-value">${nationalId}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الصفة:</span>
+                    <span class="preview-value">${positionName}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">المحافظة:</span>
+                    <span class="preview-value">${governorate || 'غير محدد'}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">التاريخ:</span>
+                    <span class="preview-value">${dateStr}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الوقت:</span>
+                    <span class="preview-value">${timeStr}</span>
+                </div>
+            `;
+
+            document.getElementById('previewModal').classList.add('active');
+        };
+
+        window.closePreview = function() {
+            document.getElementById('previewModal').classList.remove('active');
+        };
+
+        window.confirmSubmission = function() {
+            closePreview();
+            showLoading(true);
+
+            setTimeout(function() {
+                showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
+                showLoading(false);
+                setTimeout(function() {
+                    showLogin();
+                    document.getElementById('registerForm').reset();
+                    
+                    // إعادة تعيين رفع الملفات
+                    removeFile('profile');
+                    removeFile('doc');
+                }, 2000);
+            }, 1500);
+        };
+
+        // ===== تعديل زر الإرسال =====
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showPreview();
+        });
 
         // ===== دوال عرض الرسائل =====
         function showMessage(text, type) {
@@ -893,43 +1307,6 @@
                     showLoading(false);
                 }
             }, 1000);
-        });
-
-        // ===== طلب تسجيل جديد =====
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const profileImage = document.getElementById('profileImage').files[0];
-            
-            // فقط الصورة الشخصية إجبارية
-            if (!profileImage) {
-                showMessage('يرجى رفع الصورة الشخصية', 'error');
-                return;
-            }
-
-            showLoading(true);
-
-            setTimeout(function() {
-                showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
-                showLoading(false);
-                setTimeout(function() {
-                    showLogin();
-                    document.getElementById('registerForm').reset();
-                }, 2000);
-            }, 1500);
-        });
-
-        // ===== معاينة الصور قبل الرفع =====
-        document.getElementById('profileImage').addEventListener('change', function(e) {
-            if (e.target.files[0]) {
-                showMessage('تم اختيار الصورة الشخصية', 'info');
-            }
-        });
-
-        document.getElementById('appointmentDoc').addEventListener('change', function(e) {
-            if (e.target.files[0]) {
-                showMessage('تم اختيار ملف قرار التعيين', 'info');
-            }
         });
 
         // ===== تحديث العلامة المائية =====
