@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نقابة تكنولوجيا المعلومات والبرمجيات - تسجيل الدخول</title>
+    <title>نقابة تكنولوجيا المعلومات والبرمجيات - منصة إدارة النقابة</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
     <style>
         * {
@@ -22,6 +25,84 @@
         body {
             min-height: 100vh;
             overflow: hidden;
+        }
+
+        /* ===== أنيميشنات مخصصة ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ===== شاشة البداية ===== */
@@ -52,17 +133,6 @@
             animation: zoomIn 1s ease;
         }
 
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .splash-logo {
             width: 150px;
             height: 150px;
@@ -85,23 +155,19 @@
             object-fit: contain;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
         .splash-title {
             font-size: 36px;
             font-weight: 800;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease;
         }
 
         .splash-subtitle {
             font-size: 18px;
             opacity: 0.9;
             margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.3s both;
         }
 
         .loading-bar {
@@ -133,9 +199,10 @@
             text-align: center;
             color: rgba(255,255,255,0.7);
             font-size: 14px;
+            animation: fadeIn 2s ease;
         }
 
-        /* ===== شاشة تسجيل الدخول ===== */
+        /* ===== شاشة تسجيل الدخول والتسجيل ===== */
         .login-wrapper {
             height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -186,21 +253,10 @@
 
         .login-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             position: relative;
             z-index: 1;
-            animation: slideUp 1s ease 3.5s both;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            animation: slideIn 1s ease 3.5s both;
         }
 
         .card {
@@ -236,6 +292,7 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
         }
 
         .logo-small:hover {
@@ -258,6 +315,47 @@
         .subtitle {
             color: #666;
             font-size: 16px;
+        }
+
+        .tab-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f0f2f5;
+            padding: 5px;
+            border-radius: 50px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            background: transparent;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .form-group {
@@ -291,7 +389,7 @@
             transition: all 0.3s ease;
         }
 
-        input {
+        input, select, textarea {
             width: 100%;
             padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
@@ -301,7 +399,7 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        input:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #667eea;
             outline: none;
             box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
@@ -350,6 +448,10 @@
             box-shadow: 0 10px 20px rgba(102,126,234,0.3);
         }
 
+        .btn:active {
+            transform: translateY(0);
+        }
+
         .toggle-link {
             text-align: center;
             margin-top: 20px;
@@ -368,6 +470,127 @@
         .toggle-link a:hover {
             color: #764ba2;
             text-decoration: underline;
+        }
+
+        /* ===== نظام رفع الملفات المتطور ===== */
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            background: #e8f0fe;
+            border-color: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.2);
+        }
+
+        .upload-area i {
+            font-size: 50px;
+            color: #667eea;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover i {
+            transform: scale(1.1);
+            color: #764ba2;
+        }
+
+        .upload-area h4 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .upload-area p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area .file-info {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            font-size: 13px;
+            border: 1px solid #667eea;
+        }
+
+        .upload-area input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-preview {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f0f2f5;
+            border-radius: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .upload-preview i {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .upload-preview .preview-info {
+            flex: 1;
+        }
+
+        .upload-preview .preview-info h5 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .upload-preview .preview-info p {
+            color: #666;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .upload-preview .remove-file {
+            width: 30px;
+            height: 30px;
+            background: #ffebee;
+            border: none;
+            border-radius: 50%;
+            color: #f44336;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-preview .remove-file:hover {
+            background: #f44336;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== قائمة المحافظات ===== */
+        .governorate-select {
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         /* ===== نظام الأمان المتقدم ===== */
@@ -403,6 +626,114 @@
             white-space: nowrap;
             user-select: none;
             font-family: monospace;
+        }
+
+        /* ===== نافذة معاينة الطلب ===== */
+        .preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            backdrop-filter: blur(5px);
+        }
+
+        .preview-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .preview-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: white;
+            font-size: 30px;
+        }
+
+        .preview-header h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .preview-header p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .preview-body {
+            margin-bottom: 20px;
+        }
+
+        .preview-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .preview-label {
+            width: 100px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .preview-value {
+            flex: 1;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .preview-footer {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-footer .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
         }
 
         /* ===== رسائل النظام ===== */
@@ -462,11 +793,6 @@
             font-size: 16px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -476,6 +802,26 @@
                 opacity: 1;
                 transform: translate(-50%, 0);
             }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        optgroup {
+            font-family: 'Cairo', sans-serif;
         }
     </style>
 </head>
@@ -497,7 +843,7 @@
         </div>
     </div>
 
-    <!-- شاشة تسجيل الدخول -->
+    <!-- شاشة تسجيل الدخول والتسجيل -->
     <div class="login-wrapper" id="loginWrapper" style="display: none;">
         <div class="animated-bg">
             <span></span><span></span><span></span><span></span><span></span>
@@ -511,8 +857,8 @@
                 <p>جاري التحميل...</p>
             </div>
 
-            <!-- بطاقة تسجيل الدخول -->
-            <div class="card" id="loginCard">
+            <!-- البطاقة الرئيسية -->
+            <div class="card">
                 <div class="header">
                     <div class="logo-small" id="loginLogo">
                         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23667eea'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EIT%3C/text%3E%3C/svg%3E" alt="شعار النقابة" id="loginLogoImg">
@@ -521,33 +867,238 @@
                     <p class="subtitle">منصة إدارة النقابة</p>
                 </div>
 
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> اسم المستخدم</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> كلمة المرور</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn">
-                        <i class="fas fa-sign-in-alt"></i>
-                        تسجيل الدخول
-                    </button>
-                </form>
-
-                <div class="toggle-link">
-                    <span>ليس لديك حساب؟</span>
-                    <a onclick="window.location.href='register.html'">تسجيل جديد</a>
+                <!-- أزرار التبديل -->
+                <div class="tab-switch">
+                    <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
+                    <button class="tab-btn" onclick="switchTab('register')">تسجيل جديد</button>
                 </div>
+
+                <!-- تسجيل الدخول -->
+                <div id="loginTab" class="tab-content active">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> اسم المستخدم</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="loginUsername" placeholder="أدخل اسم المستخدم" required autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            تسجيل الدخول
+                        </button>
+                    </form>
+                </div>
+
+                <!-- تسجيل جديد -->
+                <div id="registerTab" class="tab-content">
+                    <form id="registerForm">
+                        <!-- البيانات الأساسية -->
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> الاسم الكامل *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="fullName" placeholder="الاسم كما في البطاقة" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> رقم الهاتف *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="phone" placeholder="مثال: 01234567890" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> الرقم القومي *</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-id-card"></i>
+                                <input type="text" id="nationalId" placeholder="الرقم القومي 14 رقم" maxlength="14" required>
+                            </div>
+                        </div>
+
+                        <!-- الصفة والمنصب -->
+                        <div class="form-group">
+                            <label><i class="fas fa-briefcase"></i> الصفة *</label>
+                            <select id="position" required onchange="togglePositionFields()">
+                                <option value="">اختر الصفة</option>
+                                
+                                <!-- قيادة النقابة -->
+                                <optgroup label="قيادة النقابة">
+                                    <option value="president">نقيب عام</option>
+                                    <option value="vice_president_first">نائب أول</option>
+                                    <option value="vice_president_second_manager">نائب ثاني - مدير اللجان</option>
+                                    <option value="secretary_general">أمين عام</option>
+                                    <option value="secretary_assistant_manager">مساعد الأمين العام - مدير الفروع</option>
+                                    <option value="treasurer">أمين صندوق</option>
+                                    <option value="treasurer_assistant">مساعد أمين صندوق</option>
+                                </optgroup>
+                                
+                                <!-- اللجان -->
+                                <optgroup label="اللجان">
+                                    <option value="committee_head">رئيس لجنة</option>
+                                    <option value="committee_member">عضو لجنة</option>
+                                </optgroup>
+                                
+                                <!-- مجالس المحافظات -->
+                                <optgroup label="مجالس المحافظات">
+                                    <option value="governorate_president">نقيب محافظة</option>
+                                    <option value="governorate_vice_first">نائب أول محافظة</option>
+                                    <option value="governorate_vice_second">نائب ثاني محافظة</option>
+                                    <option value="governorate_secretary">أمين عام محافظة</option>
+                                    <option value="governorate_secretary_assistant">مساعد أمين عام محافظة</option>
+                                    <option value="governorate_treasurer">أمين صندوق محافظة</option>
+                                    <option value="governorate_treasurer_assistant">مساعد أمين صندوق محافظة</option>
+                                    <option value="governorate_council_member">عضو مجلس إدارة محافظة</option>
+                                </optgroup>
+                                
+                                <!-- وكلاء المحافظات -->
+                                <optgroup label="وكلاء المحافظات">
+                                    <option value="governorate_agent">وكيل محافظة</option>
+                                    <option value="governorate_assistant">مساعد وكيل محافظة</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <!-- حقل اللجنة -->
+                        <div class="form-group" id="committeeField" style="display: none;">
+                            <label><i class="fas fa-users"></i> اختر اللجنة *</label>
+                            <select id="committeeSelect" class="governorate-select">
+                                <option value="">اختر اللجنة</option>
+                                <option value="committee1">لجنة التدريب والتطوير</option>
+                                <option value="committee2">لجنة العلاقات العامة</option>
+                                <option value="committee3">لجنة الشؤون المالية</option>
+                                <option value="committee4">لجنة تكنولوجيا المعلومات</option>
+                                <option value="committee5">لجنة القبول والعضوية</option>
+                            </select>
+                        </div>
+
+                        <!-- حقل المحافظة -->
+                        <div class="form-group" id="governorateField" style="display: none;">
+                            <label><i class="fas fa-map-marker-alt"></i> اختر المحافظة *</label>
+                            <select id="governorateSelect" class="governorate-select">
+                                <option value="">اختر المحافظة</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="الدقهلية">الدقهلية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="القليوبية">القليوبية</option>
+                                <option value="المنوفية">المنوفية</option>
+                                <option value="الغربية">الغربية</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="السويس">السويس</option>
+                                <option value="شمال سيناء">شمال سيناء</option>
+                                <option value="جنوب سيناء">جنوب سيناء</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="المنيا">المنيا</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="قنا">قنا</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="الوادي الجديد">الوادي الجديد</option>
+                                <option value="مطروح">مطروح</option>
+                                <option value="البحر الأحمر">البحر الأحمر</option>
+                            </select>
+                        </div>
+
+                        <!-- رفع الصورة الشخصية -->
+                        <div class="form-group">
+                            <label><i class="fas fa-camera"></i> الصورة الشخصية *</label>
+                            <div class="upload-area" id="profileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>اختر صورة شخصية</h4>
+                                <p>اسحب وأفلت الصورة هنا أو اضغط للاختيار</p>
+                                <div class="file-info" id="profileInfo" style="display: none;">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span id="profileName"></span>
+                                </div>
+                                <input type="file" id="profileImage" accept="image/*" required>
+                            </div>
+                            <div class="upload-preview" id="profilePreview" style="display: none;">
+                                <i class="fas fa-image"></i>
+                                <div class="preview-info">
+                                    <h5 id="profilePreviewName"></h5>
+                                    <p id="profilePreviewSize"></p>
+                                </div>
+                                <button type="button" class="remove-file" onclick="removeFile('profile')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- رفع قرار التعيين -->
+                        <div class="form-group">
+                            <label><i class="fas fa-file-pdf"></i> صورة قرار التعيين</label>
+                            <div class="upload-area" id="docUploadArea">
+                                <i class="fas fa-file-pdf"></i>
+                                <h4>رفع قرار التعيين</h4>
+                                <p>PDF, JPG, PNG (اختياري)</p>
+                                <div class="file-info" id="docInfo" style="display: none;">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span id="docName"></span>
+                                </div>
+                                <input type="file" id="appointmentDoc" accept="image/*,.pdf">
+                            </div>
+                            <div class="upload-preview" id="docPreview" style="display: none;">
+                                <i class="fas fa-file-pdf"></i>
+                                <div class="preview-info">
+                                    <h5 id="docPreviewName"></h5>
+                                    <p id="docPreviewSize"></p>
+                                </div>
+                                <button type="button" class="remove-file" onclick="removeFile('doc')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">
+                            <i class="fas fa-paper-plane"></i>
+                            إرسال طلب التسجيل
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة الطلب -->
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-card">
+            <div class="preview-header">
+                <div class="preview-logo">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3>نقابة تكنولوجيا المعلومات والبرمجيات</h3>
+                <p>إيصال استلام طلب عضوية</p>
+            </div>
+            <div class="preview-body" id="previewBody">
+                <!-- المحتوى يتعبى بالجافاسكريبت -->
+            </div>
+            <div class="preview-footer">
+                <button class="btn-outline" onclick="closePreview()">
+                    <i class="fas fa-times"></i>
+                    إغلاق
+                </button>
+                <button class="btn" onclick="confirmSubmission()">
+                    <i class="fas fa-check"></i>
+                    تأكيد الإرسال
+                </button>
             </div>
         </div>
     </div>
@@ -561,17 +1112,15 @@
         <p>جاري التحميل...</p>
     </div>
 
-    <script type="module">
+    <script>
         // ===== نظام الأمان المتقدم =====
         (function() {
-            // منع الكليك اليمين
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
                 showSecurityAlert('🚫 القائمة محجوزة للنظام');
                 return false;
             });
 
-            // منع F12 وأدوات المطورين
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12' || 
                     (e.ctrlKey && e.shiftKey && e.key === 'I') ||
@@ -583,7 +1132,6 @@
                 }
             });
 
-            // منع النسخ واللصق
             document.addEventListener('copy', function(e) {
                 e.preventDefault();
                 showSecurityAlert('📋 النسخ غير مسموح');
@@ -603,7 +1151,6 @@
                 return false;
             });
 
-            // كشف أدوات المطورين
             setInterval(function() {
                 const widthThreshold = window.outerWidth - window.innerWidth > 160;
                 const heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -620,49 +1167,181 @@
                 }
             }, 1000);
 
-            // إضافة علامة مائية
-            function addWatermark() {
-                const watermark = document.createElement('div');
-                watermark.className = 'security-watermark';
-                watermark.textContent = 'زائر - ' + new Date().toLocaleDateString('ar-EG');
-                document.body.appendChild(watermark);
-            }
-            addWatermark();
-
-            // تحديث العلامة المائية كل دقيقة
-            setInterval(function() {
-                const watermark = document.querySelector('.security-watermark');
-                if (watermark) {
-                    watermark.textContent = 'زائر - ' + new Date().toLocaleDateString('ar-EG') + ' - ' + new Date().toLocaleTimeString('ar-EG');
-                }
-            }, 60000);
-
-            // دالة عرض رسالة أمان
-            window.showSecurityAlert = function(message) {
+            function showSecurityAlert(message) {
                 const alert = document.createElement('div');
                 alert.className = 'security-alert';
                 alert.textContent = message;
                 document.body.appendChild(alert);
                 setTimeout(() => alert.remove(), 3000);
-            };
+            }
         })();
 
-        // ===== استيراد Firebase =====
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCaPhRG_1c7Rsu5Ss_MUNqsE18Ky_nyEAA",
-            authDomain: "itws-system.firebaseapp.com",
-            databaseURL: "https://itws-system-default-rtdb.firebaseio.com",
-            projectId: "itws-system",
-            storageBucket: "itws-system.firebasestorage.app",
-            messagingSenderId: "770452248691",
-            appId: "1:770452248691:web:0e94e65e01298b398bb206"
+        // ===== دوال التبديل بين التبويبات =====
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
         };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        // ===== دوال حقول الصفة =====
+        window.togglePositionFields = function() {
+            const position = document.getElementById('position').value;
+            const committeeField = document.getElementById('committeeField');
+            const governorateField = document.getElementById('governorateField');
+            
+            const committeePositions = ['committee_head', 'committee_member'];
+            const governoratePositions = [
+                'governorate_president', 'governorate_vice_first', 'governorate_vice_second',
+                'governorate_secretary', 'governorate_secretary_assistant',
+                'governorate_treasurer', 'governorate_treasurer_assistant',
+                'governorate_council_member', 'governorate_agent', 'governorate_assistant'
+            ];
+            
+            if (committeePositions.includes(position)) {
+                committeeField.style.display = 'block';
+                governorateField.style.display = 'none';
+            } else if (governoratePositions.includes(position)) {
+                committeeField.style.display = 'none';
+                governorateField.style.display = 'block';
+            } else {
+                committeeField.style.display = 'none';
+                governorateField.style.display = 'none';
+            }
+        };
+
+        // ===== نظام رفع الملفات =====
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            handleFileSelect('profile', e.target.files[0]);
+        });
+
+        document.getElementById('appointmentDoc').addEventListener('change', function(e) {
+            handleFileSelect('doc', e.target.files[0]);
+        });
+
+        function handleFileSelect(type, file) {
+            if (!file) return;
+
+            const uploadArea = document.getElementById(type + 'UploadArea');
+            const fileInfo = document.getElementById(type + 'Info');
+            const fileName = document.getElementById(type + 'Name');
+            const preview = document.getElementById(type + 'Preview');
+            const previewName = document.getElementById(type + 'PreviewName');
+            const previewSize = document.getElementById(type + 'PreviewSize');
+
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'inline-flex';
+
+            const defaultTexts = uploadArea.querySelectorAll('h4, p');
+            defaultTexts.forEach(el => el.style.display = 'none');
+
+            previewName.textContent = file.name;
+            previewSize.textContent = formatFileSize(file.size);
+            preview.style.display = 'flex';
+        }
+
+        window.removeFile = function(type) {
+            const fileInput = document.getElementById(type === 'profile' ? 'profileImage' : 'appointmentDoc');
+            const uploadArea = document.getElementById(type + 'UploadArea');
+            const fileInfo = document.getElementById(type + 'Info');
+            const preview = document.getElementById(type + 'Preview');
+
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            preview.style.display = 'none';
+
+            const defaultTexts = uploadArea.querySelectorAll('h4, p');
+            defaultTexts.forEach(el => el.style.display = 'block');
+        };
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        // ===== نافذة المعاينة =====
+        window.showPreview = function() {
+            const fullName = document.getElementById('fullName').value;
+            const nationalId = document.getElementById('nationalId').value;
+            const phone = document.getElementById('phone').value;
+            const position = document.getElementById('position');
+            
+            if (!fullName || !nationalId || !phone || !position.value) {
+                showMessage('يرجى إكمال البيانات المطلوبة أولاً', 'error');
+                return;
+            }
+
+            const profileImage = document.getElementById('profileImage').files[0];
+            if (!profileImage) {
+                showMessage('يرجى رفع الصورة الشخصية', 'error');
+                return;
+            }
+
+            const trackingNumber = 'MBR-' + new Date().getFullYear() + '-' + 
+                                   Math.floor(1000 + Math.random() * 9000);
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-EG');
+            const timeStr = now.toLocaleTimeString('ar-EG');
+
+            const positionName = position.options[position.selectedIndex].text;
+
+            const previewBody = document.getElementById('previewBody');
+            previewBody.innerHTML = `
+                <div class="preview-row">
+                    <span class="preview-label">رقم الطلب:</span>
+                    <span class="preview-value">${trackingNumber}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الاسم:</span>
+                    <span class="preview-value">${fullName}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الرقم القومي:</span>
+                    <span class="preview-value">${nationalId}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الصفة:</span>
+                    <span class="preview-value">${positionName}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">التاريخ:</span>
+                    <span class="preview-value">${dateStr}</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">الوقت:</span>
+                    <span class="preview-value">${timeStr}</span>
+                </div>
+            `;
+
+            document.getElementById('previewModal').classList.add('active');
+        };
+
+        window.closePreview = function() {
+            document.getElementById('previewModal').classList.remove('active');
+        };
+
+        window.confirmSubmission = function() {
+            closePreview();
+            showLoading(true);
+
+            setTimeout(function() {
+                showMessage('تم إرسال طلبك بنجاح، بانتظار مراجعة النقيب', 'success');
+                showLoading(false);
+                setTimeout(function() {
+                    document.getElementById('registerForm').reset();
+                    removeFile('profile');
+                    removeFile('doc');
+                }, 2000);
+            }, 1500);
+        };
 
         // ===== بعد تحميل الصفحة =====
         setTimeout(function() {
@@ -671,7 +1350,7 @@
         }, 3500);
 
         // ===== تسجيل الدخول =====
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const username = document.getElementById('loginUsername').value;
@@ -679,80 +1358,23 @@
 
             showLoading(true);
 
-            try {
-                // البحث عن المستخدم
-                const usersRef = ref(database, 'users');
-                const snapshot = await get(usersRef);
-                
-                if (snapshot.exists()) {
-                    const users = snapshot.val();
-                    let foundUser = null;
-                    let userId = null;
-
-                    for (const [id, user] of Object.entries(users)) {
-                        if (user.fullName === username || user.username === username) {
-                            if (user.password === password || user.nationalId === password) {
-                                foundUser = user;
-                                userId = id;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (foundUser) {
-                        // التحقق من حالة المستخدم
-                        if (foundUser.status !== 'active') {
-                            showMessage('هذا الحساب غير نشط. يرجى التواصل مع الإدارة', 'error');
-                            showLoading(false);
-                            return;
-                        }
-
-                        // تحديث آخر دخول
-                        await update(ref(database, `users/${userId}`), {
-                            lastLogin: new Date().toISOString(),
-                            online: true
-                        });
-
-                        // حفظ في الجلسة
-                        sessionStorage.setItem('currentUser', JSON.stringify({
-                            userId: userId,
-                            ...foundUser
-                        }));
-
-                        showMessage('تم تسجيل الدخول بنجاح', 'success');
-                        setTimeout(() => window.location.href = 'dashboard.html', 1500);
-                    } else {
-                        // التحقق من وجود طلب معلق
-                        const pendingRef = ref(database, 'pending_requests');
-                        const pendingSnapshot = await get(pendingRef);
-                        
-                        let isPending = false;
-                        if (pendingSnapshot.exists()) {
-                            const requests = pendingSnapshot.val();
-                            for (const req of Object.values(requests)) {
-                                if (req.fullName === username && req.status === 'pending') {
-                                    isPending = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (isPending) {
-                            showMessage('طلبك قيد المراجعة، سيتم إشعارك عند الموافقة', 'info');
-                        } else {
-                            showMessage('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
-                        }
-                        showLoading(false);
-                    }
+            setTimeout(function() {
+                if (username === 'المهندس / محمود جميل' && password === '30010250202679') {
+                    showMessage('تم تسجيل الدخول بنجاح', 'success');
+                    setTimeout(function() {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
                 } else {
-                    showMessage('لا توجد بيانات مستخدمين', 'error');
+                    showMessage('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
                     showLoading(false);
                 }
-            } catch (error) {
-                console.error('Login error:', error);
-                showMessage('حدث خطأ في تسجيل الدخول', 'error');
-                showLoading(false);
-            }
+            }, 1000);
+        });
+
+        // ===== طلب تسجيل جديد =====
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showPreview();
         });
 
         // ===== دوال مساعدة =====
